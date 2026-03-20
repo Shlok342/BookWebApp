@@ -1,6 +1,7 @@
 import psycopg2
 import os
-
+from dotenv import load_dotenv
+load_dotenv()  # must be called BEFORE os.getenv()
 def get_connection():
     return psycopg2.connect(os.getenv("DATABASE_URL"))
 
@@ -23,5 +24,3 @@ def init_db():
     conn.commit()
     cursor.close()
     conn.close()
-
-init_db()

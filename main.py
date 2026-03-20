@@ -1,15 +1,21 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+import os
 import json
 from contextlib import contextmanager
-from database import init_db, get_connection
-from pydantic import BaseModel
 from typing import List
+
 from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 
 load_dotenv()
 
+from database import init_db, get_connection
+
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static" ), name="static")
 init_db()
 
 app.add_middleware(
@@ -19,6 +25,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+def serve_home():
+    return FileResponse("static/book_web_app.html")
 
 # ─── DB HELPER ───────────────────────────────────────────────────────────────
 @contextmanager
@@ -160,3 +170,8 @@ def delete_book(book_id: int):
         conn.commit()
 
     return {"message": "Book deleted"}
+
+@app.get("/test")
+def test():
+    import os
+    return {"files": os.listdir()}
