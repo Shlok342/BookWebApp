@@ -201,54 +201,45 @@ body {
 }
 
 /* ── Mountain background — behind everything ───────────── */
+/* ── Mountain background — behind everything ───────────── */
 .mountain-bg {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 320px;
+  height: 380px;
   pointer-events: none;
   z-index: 1;
   overflow: hidden;
+  /* Seamless top-fade into the cream page bg */
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 25%, black 50%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 25%, black 50%);
 }
 
-/* Layer 1 (far mountains - faded) */
-/* Layer 1 — far soft golden mountains */
+/* Layer 1 — Far mountains: tallest peaks, palest, most blurred */
 .mountain-bg::before {
   content: "";
   position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(to top, rgba(237,227,208,0.95), transparent 70%),
-    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470");
-
-  background-size: cover;
-  background-position: center bottom;
-
-  opacity: 0.25;
-  filter: sepia(80%) brightness(1.2) contrast(0.7) blur(8px);
+  inset: -20px; /* bleed edges so blur doesn't leave white fringe */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='gFar' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23c8b48a' stop-opacity='0.0'/%3E%3Cstop offset='45%25' stop-color='%23c8b48a' stop-opacity='0.55'/%3E%3Cstop offset='100%25' stop-color='%23bea87c' stop-opacity='0.75'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0,240 C60,205 140,172 240,178 C320,183 400,148 510,130 C620,112 710,138 820,122 C930,106 1030,132 1140,124 C1250,116 1360,140 1440,130 L1440,400 L0,400 Z' fill='url(%23gFar)'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  filter: blur(14px);
+  opacity: 0.65;
 }
 
-/* Layer 2 — mid warm mountains */
+/* Layer 2 — Mid mountains: lower, warmer, crisper */
 .mountain-bg::after {
   content: "";
   position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(to top, rgba(237,227,208,0.9), transparent 60%),
-    url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
-
-  background-size: cover;
-  background-position: center bottom;
-
-  opacity: 0.35;
-  filter: sepia(70%) brightness(1.15) contrast(0.8) blur(3px);
-}
-.mountain-bg::before,
-.mountain-bg::after {
-  mix-blend-mode: multiply;
+  inset: -10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='gMid' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23b09870' stop-opacity='0.0'/%3E%3Cstop offset='40%25' stop-color='%23b09870' stop-opacity='0.6'/%3E%3Cstop offset='100%25' stop-color='%23a08862' stop-opacity='0.85'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0,285 C70,258 170,235 290,244 C400,252 490,218 618,226 C746,234 848,256 968,248 C1088,240 1210,256 1320,248 C1390,243 1430,252 1440,248 L1440,400 L0,400 Z' fill='url(%23gMid)'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  filter: blur(5px);
+  opacity: 0.8;
 }
 /* ── Corner plants ─────────────────────────────────────── */
 .corner-plant {
