@@ -213,38 +213,42 @@ body {
 }
 
 /* Layer 1 (far mountains - faded) */
+/* Layer 1 — far soft golden mountains */
 .mountain-bg::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470");
+
+  background:
+    linear-gradient(to top, rgba(237,227,208,0.95), transparent 70%),
+    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470");
+
   background-size: cover;
   background-position: center bottom;
-  opacity: 0.18;
-  filter: blur(6px) sepia(40%);
+
+  opacity: 0.25;
+  filter: sepia(80%) brightness(1.2) contrast(0.7) blur(8px);
 }
 
-/* Layer 2 (mid mountains) */
+/* Layer 2 — mid warm mountains */
 .mountain-bg::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
+
+  background:
+    linear-gradient(to top, rgba(237,227,208,0.9), transparent 60%),
+    url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
+
   background-size: cover;
   background-position: center bottom;
+
   opacity: 0.35;
-  filter: blur(2px) sepia(30%);
-}
-.mountain-bg::after,
-.mountain-bg::before {
-  mask-image: linear-gradient(to top, black 60%, transparent 100%);
+  filter: sepia(70%) brightness(1.15) contrast(0.8) blur(3px);
 }
 .mountain-bg::before,
 .mountain-bg::after {
   mix-blend-mode: multiply;
-}
-.mountain-bg::after {
-  box-shadow: inset 0 -60px 80px rgba(237,227,208,0.9);
 }
 /* ── Corner plants ─────────────────────────────────────── */
 .corner-plant {
