@@ -1,3 +1,5 @@
 fastapi
-pydantic
+uvicorn
+psycopg2-binary
+python-dotenv
 gunicorn

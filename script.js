@@ -6,7 +6,7 @@ let activeBookId = null;
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 async function getBooks() {
   try {
-    const response = await fetch("http://127.0.0.1:8001/books");
+    const response = await fetch("/books");
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     books = await response.json();
     renderBooks();
@@ -93,7 +93,7 @@ function renderBooks() {
         return;
       }
       try {
-        const res = await fetch(`http://127.0.0.1:8001/books/${book.id}`, {
+         const res = await fetch(`/books/${book.id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ current_page: newPage })
@@ -118,7 +118,7 @@ function renderBooks() {
     deleteBtn.addEventListener("click", async () => {
       if (!confirm(`Delete "${book.title}"? This cannot be undone.`)) return;
       try {
-        const res = await fetch(`http://127.0.0.1:8001/books/${book.id}`, {
+        const res = await fetch(`/books/${book.id}`, {
           method: "DELETE"
         });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -177,7 +177,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
   quotes.push(text);
 
   try {
-    const res = await fetch(`http://127.0.0.1:8001/books/${activeBookId}/quotes`, {
+    const res = await fetch(`/books/${activeBookId}/quotes`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ quotes })
@@ -227,7 +227,7 @@ document.getElementById("saveNotesBtn").addEventListener("click", async () => {
   if (!activeBookId) return;
 
   try {
-    const res = await fetch(`http://127.0.0.1:8001/books/${activeBookId}/notes`, {
+    const res = await fetch(`/books/${activeBookId}/notes`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ notes })
@@ -316,7 +316,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
   }
 
   try {
-    const res = await fetch("http://127.0.0.1:8001/books", {
+    const res = await fetch("/books", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, total_pages: totalPages, current_page: currentPage })

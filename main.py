@@ -1,11 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import sqlite3
 import json
 from contextlib import contextmanager
-from database import init_db
+from database import init_db, get_connection
 from pydantic import BaseModel
 from typing import List
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 init_db()
@@ -21,14 +23,13 @@ app.add_middleware(
 # ─── DB HELPER ───────────────────────────────────────────────────────────────
 @contextmanager
 def get_db():
-    conn = sqlite3.connect("books.db")
-    conn.row_factory = sqlite3.Row
+    conn = get_connection()
     try:
         yield conn
     finally:
         conn.close()
 
-def row_to_book(row: tuple) -> dict:
+def row_to_book(row):
     return {
         "id":           row[0],
         "title":        row[1],
@@ -53,12 +54,14 @@ def get_book(book_id: int):
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, title, total_pages, current_page, quotes, notes FROM books WHERE id = ?",
+            "SELECT id, title, total_pages, current_page, quotes, notes FROM books WHERE id = %s",
             (book_id,)
         )
         row = cursor.fetchone()
+
     if not row:
         raise HTTPException(status_code=404, detail="Book not found")
+
     return row_to_book(row)
 
 # ─── ADD BOOK ────────────────────────────────────────────────────────────────
@@ -72,11 +75,12 @@ def add_book(book: Book):
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO books (title, total_pages, current_page, quotes, notes) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO books (title, total_pages, current_page, quotes, notes) VALUES (%s, %s, %s, %s, %s) RETURNING id",
             (book.title, book.total_pages, book.current_page, "[]", "")
         )
+        new_id = cursor.fetchone()[0]
         conn.commit()
-        new_id = cursor.lastrowid
+
     return {"message": "Book added", "id": new_id}
 
 # ─── UPDATE PROGRESS ─────────────────────────────────────────────────────────
@@ -87,17 +91,20 @@ class PageUpdate(BaseModel):
 def update_progress(book_id: int, update: PageUpdate):
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id FROM books WHERE id = ?", (book_id,))
+
+        cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Book not found")
+
         cursor.execute(
-            "UPDATE books SET current_page = ? WHERE id = ?",
+            "UPDATE books SET current_page = %s WHERE id = %s",
             (update.current_page, book_id)
         )
         conn.commit()
+
     return {"message": "Progress updated"}
 
-# ─── UPDATE QUOTES ────────────────────────────────────────────────────────────
+# ─── UPDATE QUOTES ───────────────────────────────────────────────────────────
 class QuotesUpdate(BaseModel):
     quotes: List[str]
 
@@ -105,14 +112,17 @@ class QuotesUpdate(BaseModel):
 def update_quotes(book_id: int, update: QuotesUpdate):
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id FROM books WHERE id = ?", (book_id,))
+
+        cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Book not found")
+
         cursor.execute(
-            "UPDATE books SET quotes = ? WHERE id = ?",
+            "UPDATE books SET quotes = %s WHERE id = %s",
             (json.dumps(update.quotes), book_id)
         )
         conn.commit()
+
     return {"message": "Quotes updated"}
 
 # ─── UPDATE NOTES ─────────────────────────────────────────────────────────────
@@ -123,14 +133,17 @@ class NotesUpdate(BaseModel):
 def update_notes(book_id: int, update: NotesUpdate):
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id FROM books WHERE id = ?", (book_id,))
+
+        cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Book not found")
+
         cursor.execute(
-            "UPDATE books SET notes = ? WHERE id = ?",
+            "UPDATE books SET notes = %s WHERE id = %s",
             (update.notes, book_id)
         )
         conn.commit()
+
     return {"message": "Notes updated"}
 
 # ─── DELETE BOOK ──────────────────────────────────────────────────────────────
@@ -138,9 +151,12 @@ def update_notes(book_id: int, update: NotesUpdate):
 def delete_book(book_id: int):
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id FROM books WHERE id = ?", (book_id,))
+
+        cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Book not found")
-        cursor.execute("DELETE FROM books WHERE id = ?", (book_id,))
+
+        cursor.execute("DELETE FROM books WHERE id = %s", (book_id,))
         conn.commit()
+
     return {"message": "Book deleted"}
