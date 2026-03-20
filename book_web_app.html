@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Botanical Library</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="leaf leaf-tr" aria-hidden="true">🍂🍁🍃</div>
+<div class="leaf leaf-bl" aria-hidden="true">🍂🍁🌿</div>
+<div class="leaf leaf-br" aria-hidden="true">🌾🍂🍁🍃</div>
+
+<nav class="topnav">
+  <div class="brand">
+  <span class="brand-name">
+    <span class="brand-sans">
+      <span class="brand-heart">❤</span> Botanical
+    </span>
+    <span class="brand-serif"> Library</span>
+  </span>
+</div>
+  <div class="nav-right">
+    <span class="tagline-pill">
+      <svg class="pill-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 22C12 22 4 16 4 9a8 8 0 0 1 16 0c0 7-8 13-8 13z" fill="#3d6234"/>
+        <path d="M12 9 Q15 5 20 6 Q18 12 12 12 Q6 12 4 6 Q9 5 12 9z" fill="#5a7a45"/>
+      </svg>
+      Cultivating knowledge
+    </span>
+  </div>
+</nav>
+<!-- Open Book Modal -->
+<div id="openBookModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="openBookClose">&times;</span>
+
+    <h2 id="openBookTitle"></h2>
+
+    <p id="openBookProgress"></p>
+
+    <h3>Quotes</h3>
+    <div id="openBookQuotes"></div>
+
+    <h3>Notes</h3>
+    <p id="openBookNotes"></p>
+  </div>
+</div>
+<div class="mountain-bg" aria-hidden="true">
+  <svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,280 L100,200 L200,240 L320,160 L440,220 L560,140 L680,200 L800,120 L920,190 L1040,150 L1160,210 L1280,160 L1440,200 L1440,320 L0,320Z" fill="rgba(165, 145, 105, 0.1)"/>
+    <path d="M0,295 L80,250 L180,268 L300,215 L420,258 L540,200 L660,248 L780,192 L900,238 L1020,205 L1140,248 L1260,218 L1380,248 L1440,230 L1440,320 L0,320Z" fill="rgba(145, 122, 85, 0.18)"/>
+    <path d="M0,310 L120,278 L240,292 L380,264 L500,282 L640,260 L760,278 L900,264 L1040,280 L1180,265 L1300,278 L1440,268 L1440,320 L0,320Z" fill="rgba(125, 103, 62, 0.22)"/>
+  </svg>
+</div>
+
+<div class="corner-plant corner-br" aria-hidden="true">🌾🍂🍃</div>
+<div class="corner-plant corner-bl" aria-hidden="true">🌿🍂🌾</div>
+
+<div class="sanctuary-panel">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="sanctuary-label-wrap">
+        <div class="sanctuary-icon-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M12 22C12 22 4 16 4 9a8 8 0 0 1 16 0c0 7-8 13-8 13z" fill="#3d6234"/>
+          </svg>
+        </div>
+        <p class="sanctuary-label">YOUR SANCTUARY</p>
+      </div>
+      <h1 class="hero-title">Curated Library</h1>
+      <div class="hero-meta">
+        <span id="storiesCount"><em>0 stories collected</em></span>
+        <span class="dot">·</span>
+        <span>🌸 <span id="bloomedCount">0</span> fully bloomed</span>
+      </div>
+      <button class="add-btn">📖 Add Book</button>
+    </div>
+  </section>
+
+  <main>
+    <div class="books-container"></div>
+  </main>
+
+</div><footer>
+  <p class="footer-quote">"A room without books is like a body without a soul."</p>
+</footer>
+
+<div id="addBookModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="addBookClose">&times;</span>
+    <div class="modal-badge">📖</div>
+    <h2>New Story</h2>
+    <p class="modal-sub">Add a book to your sanctuary</p>
+    <input id="titleInput" placeholder="Book title">
+    <input id="totalPagesInput" placeholder="Total pages" type="number">
+    <input id="currentPageInput" placeholder="Pages read so far (optional)" type="number">
+    <button id="saveBook">Save to Library</button>
+  </div>
+</div>
+
+<div id="notesModal" class="modal">
+  <div class="modal-content notes-modal-content">
+    <span class="close" id="notesClose">&times;</span>
+    <div class="modal-badge">📝</div>
+    <h2 id="notesModalTitle">Notes</h2>
+    <p class="notes-counter"><span id="notesWordCount">0</span> / 500 words</p>
+    <textarea id="notesInput" placeholder="Write your thoughts about this book..." rows="10"></textarea>
+    <button id="saveNotesBtn">Save Notes</button>
+  </div>
+</div>
+
+<div id="quotesModal" class="modal">
+  <div class="modal-content quotes-modal-content">
+    <span class="close" id="quotesClose">&times;</span>
+    <div class="modal-badge">✦</div>
+    <h2 id="quotesModalTitle">Cherished Quotes</h2>
+    <p class="quotes-counter"><span id="quotesCount">0</span> / 5</p>
+    <div id="quotesList"></div>
+    <div id="addQuoteArea">
+      <textarea id="quoteInput" placeholder="What words spoke to you?" rows="3"></textarea>
+      <button id="addQuoteBtn">+ Add Quote</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
