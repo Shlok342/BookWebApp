@@ -1,5 +1,4 @@
 fastapi
-json
 sqlite3
 contextlib
 pydantic
