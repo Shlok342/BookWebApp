@@ -253,10 +253,12 @@ body {
 .corner-bl { bottom: 20px; left: 50px; }
 
 /* ── Sanctuary Panel ───────────────────────────────────── */
+/* ── Sanctuary Panel ───────────────────────────────────── */
 .sanctuary-panel {
   position: relative;
   z-index: 5;
-  margin: 0 32px 60px;
+  margin: 0 auto 60px;
+  width: min(55%, 900px);        /* ← constrain width, centered */
   border-radius: 24px;
 
   background: rgba(250, 242, 225, 0.65);
@@ -272,8 +274,6 @@ body {
     linear-gradient(90deg, rgba(107,79,46,0.08) 1px, transparent 1px);
   background-size: 28px 28px;
 }
-
-
 /* ── Add Book Button ───────────────────────────────────── */
 .add-btn {
   display: inline-flex;
