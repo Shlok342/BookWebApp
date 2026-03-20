@@ -1,0 +1,670 @@
+/* ── CSS Variables ─────────────────────────────────────── */
+:root {
+  --cream:       #ede3d0;
+  --parchment:   #f5edd8;
+  --sand:        #d9c9a8;
+  --bark:        #6b4f2e;
+  --bark-light:  #8a6640;
+  --forest:      #2e4a28;
+  --forest-mid:  #3d6234;
+  --moss:        #5a7a45;
+  --card-bg:     #fdf8f0;
+  --text-dark:   #2a1f10;
+  --text-mid:    #5c4a30;
+  --text-muted:  #9a8870;
+  --progress-bg: #ddd0b8;
+  --shadow:      rgba(80, 55, 20, 0.12);
+  --radius-card: 18px;
+  --radius-btn:  50px;
+}
+
+/* ── Reset & Base ──────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Decorative Leaves ─────────────────────────────────── */
+.leaf {
+  position: fixed;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  animation: drift 8s ease-in-out infinite alternate;
+}
+.leaf-1 { top: 8%;  right: 4%;  font-size: 2.4rem; animation-delay: 0s;   transform: rotate(-15deg); }
+.leaf-2 { top: 18%; right: 12%; font-size: 1.6rem; animation-delay: 1.2s; transform: rotate(25deg); }
+.leaf-3 { top: 5%;  right: 22%; font-size: 1.8rem; animation-delay: 2.5s; transform: rotate(-8deg); }
+.leaf-4 { top: 35%; right: 2%;  font-size: 1.4rem; animation-delay: 0.8s; transform: rotate(40deg); }
+.leaf-5 { top: 12%; left: 3%;   font-size: 1.6rem; animation-delay: 1.8s; transform: rotate(-20deg); }
+.leaf-6 { top: 28%; left: 8%;   font-size: 1.2rem; animation-delay: 3s;   transform: rotate(15deg); }
+
+@keyframes drift {
+  from { transform: translateY(0) rotate(-15deg); }
+  to   { transform: translateY(-12px) rotate(-8deg); }
+}
+
+/* ── Top Nav ───────────────────────────────────────────── */
+.topnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 48px;
+  background: transparent;
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Hero ──────────────────────────────────────────────── */
+.hero {
+  padding: 36px 40px 10px;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  padding-bottom: 10px;
+}
+
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  font-family: 'DM Sans', sans-serif;
+}
+.hero-meta .dot { font-size: 1.2rem; color: var(--sand); }
+
+/* ── Brand typography ──────────────────────────────────── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon-wrap {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: rgba(90,122,69,0.12);
+  border: 1px solid rgba(90,122,69,0.22);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.brand-name {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  line-height: 1;
+}
+
+.brand-sans {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  letter-spacing: -0.01em;
+}
+
+.brand-serif {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  letter-spacing: 0;
+}
+
+/* ── Tagline pill ──────────────────────────────────────── */
+.tagline-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(200, 220, 190, 0.45);
+  border: 1px solid rgba(90, 122, 69, 0.28);
+  border-radius: 50px;
+  padding: 7px 16px 7px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--forest);
+  letter-spacing: 0.01em;
+}
+
+.pill-icon {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+/* ── Sanctuary Label ───────────────────────────────────── */
+.sanctuary-label-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sanctuary-icon-circle {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(200, 220, 190, 0.5);
+  border: 1px solid rgba(90,122,69,0.22);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.sanctuary-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--moss);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ── Mountain background — behind everything ───────────── */
+.mountain-bg {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 260px;
+  pointer-events: none;
+  z-index: 1;
+}
+.mountain-bg svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Corner plants ─────────────────────────────────────── */
+.corner-plant {
+  position: fixed;
+  font-size: 3rem;
+  opacity: 0.45;
+  z-index: 2;
+  pointer-events: none;
+}
+.corner-br { bottom: 20px; right: 60px; transform: scaleX(-1); }
+.corner-bl { bottom: 20px; left: 50px; }
+
+/* ── Sanctuary Panel ───────────────────────────────────── */
+.sanctuary-panel {
+  position: relative;
+  z-index: 5;
+  margin: 0 32px 60px;
+  border-radius: 24px;
+  background-color: rgba(250, 242, 225, 0.82);
+  border: 1px solid rgba(210, 190, 150, 0.35);
+  box-shadow: 0 2px 32px rgba(80,55,20,0.08);
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+  /* The + dot pattern */
+  background-image:
+    linear-gradient(rgba(107,79,46,0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107,79,46,0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-color: rgba(250, 242, 225, 0.88);
+}
+
+
+/* ── Add Book Button ───────────────────────────────────── */
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 26px;
+  background: var(--forest);
+  color: #f0ead8;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 18px rgba(46, 74, 40, 0.3);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  position: relative;
+  z-index: 2;
+}
+.add-btn:hover {
+  background: var(--forest-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(46, 74, 40, 0.38);
+}
+
+/* ── Books Container / Grid ────────────────────────────── */
+main {
+  position: relative;
+  z-index: 5;
+  padding: 0 28px 36px;
+}
+
+.books-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding-top: 16px;
+}
+
+
+/* ── Book Card ─────────────────────────────────────────── */
+.book-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  padding: 24px 22px 20px;
+  box-shadow: 0 4px 24px var(--shadow), 0 1px 4px rgba(80,55,20,0.06);
+  border: 1px solid rgba(200,180,140,0.35);
+  transition: transform 0.22s, box-shadow 0.22s;
+  position: relative;
+  overflow: hidden;
+}
+
+.book-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--forest), var(--moss));
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 36px rgba(80,55,20,0.16), 0 2px 8px rgba(80,55,20,0.08);
+}
+
+.book-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+/* ── Reading Progress Section ──────────────────────────── */
+.reading-progress-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.pages-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.pages-row .current-page {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.pages-row .total-pages {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
+.pages-row .pct-badge {
+  background: var(--cream);
+  border: 1px solid var(--sand);
+  border-radius: 50px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--bark);
+}
+
+/* ── Progress Bar ──────────────────────────────────────── */
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--progress-bg);
+  border-radius: 4px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--forest), var(--moss));
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ── Card Buttons ──────────────────────────────────────── */
+.card-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.open-btn,
+.quotes-btn,
+.notes-btn,
+.update-btn {
+  padding: 7px 15px;
+  border-radius: var(--radius-btn);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+  border: 1.5px solid transparent;
+  letter-spacing: 0.01em;
+}
+
+/* Open → outlined natural */
+.open-btn {
+  background: transparent;
+  border-color: var(--sand);
+  color: var(--text-mid);
+}
+.open-btn:hover {
+  background: var(--cream);
+  border-color: var(--bark-light);
+  color: var(--bark);
+}
+
+/* Quotes → outlined */
+.quotes-btn {
+  background: transparent;
+  border-color: var(--sand);
+  color: var(--text-mid);
+}
+.quotes-btn:hover {
+  background: var(--cream);
+  border-color: var(--bark-light);
+  color: var(--bark);
+}
+
+/* Update Progress → dashed ghost with moss accent */
+.update-btn {
+  background: transparent;
+  border: 1.5px dashed var(--moss);
+  color: var(--moss);
+  font-style: italic;
+  position: relative;
+  overflow: hidden;
+}
+.update-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--moss);
+  opacity: 0;
+  transition: opacity 0.18s;
+  border-radius: inherit;
+}
+.update-btn:hover {
+  color: #f0ead8;
+  border-style: solid;
+  border-color: var(--moss);
+  transform: translateY(-1px);
+}
+.update-btn:hover::before {
+  opacity: 1;
+}
+.update-btn .btn-label {
+  position: relative;
+  z-index: 1;
+}
+
+/* Notes → forest filled */
+.notes-btn {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #f0ead8;
+}
+.notes-btn:hover {
+  background: var(--forest-mid);
+  border-color: var(--forest-mid);
+  transform: translateY(-1px);
+}
+.delete-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ff4d4d);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #ff4d4d, #cc0000);
+}
+/* ── Quote count hint ──────────────────────────────────── */
+.quote-count-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* ── Modal Overlay ─────────────────────────────────────── */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(42, 31, 16, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: var(--parchment);
+  border: 1px solid rgba(200,180,140,0.4);
+  border-radius: 20px;
+  padding: 32px 28px;
+  width: 340px;
+  margin: 12% auto;
+  box-shadow: 0 20px 60px rgba(42,31,16,0.22);
+  position: relative;
+  animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(-16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-badge {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1px solid var(--sand);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  margin: 0 auto 14px;
+}
+
+.modal-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.modal-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.close {
+  position: absolute;
+  top: 16px; right: 20px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  line-height: 1;
+  transition: color 0.15s;
+}
+.close:hover { color: var(--bark); }
+
+/* ── Inputs ────────────────────────────────────────────── */
+input, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  margin: 7px 0;
+  border: 1.5px solid var(--sand);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  background: rgba(255,255,255,0.7);
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--moss);
+  box-shadow: 0 0 0 3px rgba(90,122,69,0.12);
+}
+
+/* ── Modal Primary Button ──────────────────────────────── */
+#saveBook, #saveNotesBtn, #addQuoteBtn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 11px;
+  background: var(--forest);
+  color: #f0ead8;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  letter-spacing: 0.02em;
+}
+#saveBook:hover, #saveNotesBtn:hover, #addQuoteBtn:hover {
+  background: var(--forest-mid);
+  transform: translateY(-1px);
+}
+
+/* ── Quotes modal ──────────────────────────────────────── */
+.quotes-modal-content {
+  width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  margin: 8% auto;
+}
+
+.quotes-modal-content h2, .notes-modal-content h2 {
+  text-align: left;
+}
+
+.quotes-counter, .notes-counter {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 2px 0 16px;
+}
+
+.quote-item {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-size: 0.98rem;
+  color: var(--text-mid);
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(200,180,140,0.3);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  line-height: 1.7;
+}
+
+.no-quotes {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-style: italic;
+  margin-bottom: 14px;
+}
+
+#addQuoteArea {
+  border: 1.5px dashed var(--sand);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 6px;
+}
+
+#addQuoteBtn {
+  width: auto;
+  margin-left: auto;
+  margin-right: 0;
+  display: block;
+  padding: 8px 20px;
+}
+
+/* ── Notes modal ───────────────────────────────────────── */
+.notes-modal-content {
+  width: 500px;
+  margin: 8% auto;
+}
+
+/* ── No books message ──────────────────────────────────── */
+.no-books-msg {
+  grid-column: 1/-1;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  padding: 60px 0;
+}
+
+/* ── Footer ────────────────────────────────────────────── */
+footer {
+  text-align: center;
+  padding: 28px 40px;
+  position: relative;
+  z-index: 5;
+}
+
+.footer-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+}
