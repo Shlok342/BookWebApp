@@ -191,3 +191,13 @@ def delete_book(book_id: int):
 @app.get("/test")
 def test():
     return {"files": os.listdir()}
+
+from database import get_connection
+
+conn = get_connection()
+cursor = conn.cursor()
+cursor.execute("ALTER TABLE books ADD COLUMN author TEXT DEFAULT ''")
+conn.commit()
+cursor.close()
+conn.close()
+print("Done!")
