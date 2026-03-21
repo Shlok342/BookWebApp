@@ -12,7 +12,7 @@ from pydantic import BaseModel
 
 load_dotenv()
 
-from database import init_db, get_connection
+from backend.database import init_db, get_connection
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/")
 def serve_home():
-    return FileResponse("static/book_web_app.html")
+    return FileResponse("../static/book_web_app.html")
 
 
 # ─── DB HELPER ───────────────────────────────────────────────────────────────
