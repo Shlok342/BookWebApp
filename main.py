@@ -15,7 +15,7 @@ load_dotenv()
 from database import init_db, get_connection
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static" ), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 init_db()
 
 app.add_middleware(
@@ -26,9 +26,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def serve_home():
     return FileResponse("static/book_web_app.html")
+
 
 # ─── DB HELPER ───────────────────────────────────────────────────────────────
 @contextmanager
@@ -39,24 +41,28 @@ def get_db():
     finally:
         conn.close()
 
+
 def row_to_book(row):
     return {
-        "id":           row[0],
-        "title":        row[1],
-        "total_pages":  row[2],
-        "current_page": row[3],
-        "quotes":       json.loads(row[4]) if row[4] else [],
-        "notes":        row[5] if row[5] else ""
+        "id": row[0],
+        "title": row[1],
+        "author": row[2] if row[2] else "",
+        "total_pages": row[3],
+        "current_page": row[4],
+        "quotes": json.loads(row[5]) if row[5] else [],
+        "notes": row[6] if row[6] else ""
     }
+
 
 # ─── GET ALL BOOKS ───────────────────────────────────────────────────────────
 @app.get("/books")
 def get_books():
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, title, total_pages, current_page, quotes, notes FROM books")
+        cursor.execute("SELECT id, title, author, total_pages, current_page, quotes, notes FROM books")
         rows = cursor.fetchall()
     return [row_to_book(row) for row in rows]
+
 
 # ─── GET SINGLE BOOK ─────────────────────────────────────────────────────────
 @app.get("/books/{book_id}")
@@ -64,7 +70,7 @@ def get_book(book_id: int):
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, title, total_pages, current_page, quotes, notes FROM books WHERE id = %s",
+            "SELECT id, title, author, total_pages, current_page, quotes, notes FROM books WHERE id = %s",
             (book_id,)
         )
         row = cursor.fetchone()
@@ -74,28 +80,33 @@ def get_book(book_id: int):
 
     return row_to_book(row)
 
+
 # ─── ADD BOOK ────────────────────────────────────────────────────────────────
 class Book(BaseModel):
     title: str
+    author: str = ""
     total_pages: int
     current_page: int = 0
+
 
 @app.post("/books", status_code=201)
 def add_book(book: Book):
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO books (title, total_pages, current_page, quotes, notes) VALUES (%s, %s, %s, %s, %s) RETURNING id",
-            (book.title, book.total_pages, book.current_page, "[]", "")
+            "INSERT INTO books (title, author, total_pages, current_page, quotes, notes) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id",
+            (book.title, book.author, book.total_pages, book.current_page, "[]", "")
         )
         new_id = cursor.fetchone()[0]
         conn.commit()
 
     return {"message": "Book added", "id": new_id}
 
+
 # ─── UPDATE PROGRESS ─────────────────────────────────────────────────────────
 class PageUpdate(BaseModel):
     current_page: int
+
 
 @app.patch("/books/{book_id}")
 def update_progress(book_id: int, update: PageUpdate):
@@ -114,9 +125,11 @@ def update_progress(book_id: int, update: PageUpdate):
 
     return {"message": "Progress updated"}
 
+
 # ─── UPDATE QUOTES ───────────────────────────────────────────────────────────
 class QuotesUpdate(BaseModel):
     quotes: List[str]
+
 
 @app.patch("/books/{book_id}/quotes")
 def update_quotes(book_id: int, update: QuotesUpdate):
@@ -135,9 +148,11 @@ def update_quotes(book_id: int, update: QuotesUpdate):
 
     return {"message": "Quotes updated"}
 
-# ─── UPDATE NOTES ─────────────────────────────────────────────────────────────
+
+# ─── UPDATE NOTES ────────────────────────────────────────────────────────────
 class NotesUpdate(BaseModel):
     notes: str
+
 
 @app.patch("/books/{book_id}/notes")
 def update_notes(book_id: int, update: NotesUpdate):
@@ -156,7 +171,8 @@ def update_notes(book_id: int, update: NotesUpdate):
 
     return {"message": "Notes updated"}
 
-# ─── DELETE BOOK ──────────────────────────────────────────────────────────────
+
+# ─── DELETE BOOK ─────────────────────────────────────────────────────────────
 @app.delete("/books/{book_id}")
 def delete_book(book_id: int):
     with get_db() as conn:
@@ -171,7 +187,7 @@ def delete_book(book_id: int):
 
     return {"message": "Book deleted"}
 
+
 @app.get("/test")
 def test():
-    import os
     return {"files": os.listdir()}
