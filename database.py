@@ -27,11 +27,3 @@ def init_db():
     cursor.close()
     conn.close()
 
-# Run once, then remove
-def migrate_db():
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("ALTER TABLE books ADD COLUMN IF NOT EXISTS author TEXT DEFAULT ''")
-    conn.commit()
-    cursor.close()
-    conn.close()

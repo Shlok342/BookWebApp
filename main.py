@@ -46,7 +46,7 @@ def row_to_book(row):
     return {
         "id": row[0],
         "title": row[1],
-        "author": row[2] if row[2] else "",
+        "author":       row[2] if row[2] else "",  # ← must be here,
         "total_pages": row[3],
         "current_page": row[4],
         "quotes": json.loads(row[5]) if row[5] else [],
