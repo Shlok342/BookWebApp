@@ -174,10 +174,7 @@ body {
 }
 
 /* ── Sanctuary Label ───────────────────────────────────── */
-.modal-content {
-    max-height: 90vh;
-    overflow-y: auto;
-}
+
 .sanctuary-label-wrap {
   display: flex;
   align-items: center;
@@ -546,8 +543,9 @@ main {
   box-shadow: 0 20px 60px rgba(42,31,16,0.22);
   position: relative;
   animation: modalIn 0.25s ease;
+  max-height: 90vh;
+  overflow-y: auto;
 }
-
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(-16px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
