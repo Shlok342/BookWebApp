@@ -24,7 +24,8 @@ function renderBooks() {
     container.innerHTML = "<p>No books found. Add one!</p>";
     return;
   }
-   const storiesEl = document.getElementById("storiesCount");
+
+  const storiesEl = document.getElementById("storiesCount");
   if (storiesEl) {
     storiesEl.innerHTML = `<em>${books.length} ${books.length === 1 ? "story" : "stories"} collected</em>`;
   }
@@ -45,6 +46,10 @@ function renderBooks() {
     // ── Build card with DOM methods only — no innerHTML conflict ──
     const title = document.createElement("h2");
     title.textContent = book.title;
+
+    const author = document.createElement("p");
+    author.classList.add("book-author");
+    author.textContent = book.author ? `by ${book.author}` : "";
 
     const progressLabel = document.createElement("p");
     progressLabel.classList.add("reading-progress-label");
@@ -93,7 +98,7 @@ function renderBooks() {
         return;
       }
       try {
-         const res = await fetch(`/books/${book.id}`, {
+        const res = await fetch(`/books/${book.id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ current_page: newPage })
@@ -136,7 +141,7 @@ function renderBooks() {
     quoteHint.textContent = `${quoteCount} / 5 quotes saved`;
 
     // ── Append everything to card in one clean chain ──
-    card.append(title, progressLabel, pagesRow, progressBar, buttonsDiv, quoteHint);
+    card.append(title, author, progressLabel, pagesRow, progressBar, buttonsDiv, quoteHint);
     container.appendChild(card);
   });
 }
@@ -241,40 +246,36 @@ document.getElementById("saveNotesBtn").addEventListener("click", async () => {
     alert("Could not save notes. Is the server running?");
   }
 });
-// OPEN BOOK MODAL:
+
+// ─── OPEN BOOK MODAL ──────────────────────────────────────────────────────────
 const openBookModalEl = document.getElementById("openBookModal");
 
 function openBookModal(book) {
-  // Title
   document.getElementById("openBookTitle").textContent = book.title;
+  document.getElementById("openBookAuthor").textContent =
+    book.author ? `by ${book.author}` : "";
 
-  // Progress
   const current = book.current_page ?? 0;
-  const total = book.total_pages ?? 0;
-  document.getElementById("openBookProgress").textContent =
-    `${current} / ${total} pages`;
+  const total   = book.total_pages  ?? 0;
+  document.getElementById("openBookProgress").textContent = `${current} / ${total} pages`;
 
-  // Quotes
   const quotesDiv = document.getElementById("openBookQuotes");
   if (!book.quotes || book.quotes.length === 0) {
     quotesDiv.innerHTML = "<p>No quotes yet.</p>";
   } else {
-    quotesDiv.innerHTML = book.quotes
-      .map(q => `<p>“${q}”</p>`)
-      .join("");
+    quotesDiv.innerHTML = book.quotes.map(q => `<p>"${q}"</p>`).join("");
   }
 
-  // Notes
   const notes = book.notes?.trim();
-  document.getElementById("openBookNotes").textContent =
-    notes ? notes : "No notes yet.";
+  document.getElementById("openBookNotes").textContent = notes ? notes : "No notes yet.";
 
-  // SHOW MODAL
   openBookModalEl.style.display = "block";
 }
-  document.getElementById("openBookClose").addEventListener("click", () => {
+
+document.getElementById("openBookClose").addEventListener("click", () => {
   openBookModalEl.style.display = "none";
 });
+
 // ─── ADD BOOK MODAL ───────────────────────────────────────────────────────────
 document.querySelector(".add-btn").addEventListener("click", () => {
   addBookModal.style.display = "block";
@@ -296,13 +297,14 @@ window.addEventListener("click", (event) => {
     activeBookId = null;
   }
   if (event.target === openBookModalEl) {
-  openBookModalEl.style.display = "none";
-}
+    openBookModalEl.style.display = "none";
+  }
 });
 
 // ─── ADD BOOK ─────────────────────────────────────────────────────────────────
 document.getElementById("saveBook").addEventListener("click", async () => {
   const title       = document.getElementById("titleInput").value.trim();
+  const author      = document.getElementById("authorInput").value.trim();
   const totalPages  = parseInt(document.getElementById("totalPagesInput").value);
   const currentPage = parseInt(document.getElementById("currentPageInput").value) || 0;
 
@@ -319,11 +321,12 @@ document.getElementById("saveBook").addEventListener("click", async () => {
     const res = await fetch("/books", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, total_pages: totalPages, current_page: currentPage })
+      body: JSON.stringify({ title, author, total_pages: totalPages, current_page: currentPage })
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
     document.getElementById("titleInput").value = "";
+    document.getElementById("authorInput").value = "";
     document.getElementById("totalPagesInput").value = "";
     document.getElementById("currentPageInput").value = "";
     addBookModal.style.display = "none";
