@@ -27,9 +27,6 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def serve_home():
-    return FileResponse("static/book_web_app.html")
 
 
 # ─── DB HELPER ───────────────────────────────────────────────────────────────
