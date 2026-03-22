@@ -103,9 +103,3 @@ GitHub
 Render
         ↓
 Live App 🌍
-
-If you want next step 👇
-I can:
-
-Review your code and say “Phase-1 complete or not”
-Or help you write a killer GitHub description + portfolio version 😏
