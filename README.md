@@ -100,7 +100,7 @@ Cursor / PyCharm
         ↓
 GitHub
         ↓
-Railway
+Render
         ↓
 Live App 🌍
 
