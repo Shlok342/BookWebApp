@@ -15,7 +15,7 @@ load_dotenv()
 from backend.database import init_db, get_connection
 
 app = FastAPI()
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 init_db()
 
 app.add_middleware(
@@ -28,6 +28,10 @@ app.add_middleware(
 
 
 
+
+@app.get("/")
+def home():
+    return FileResponse("static/index.html")
 
 # ─── DB HELPER ───────────────────────────────────────────────────────────────
 @contextmanager
