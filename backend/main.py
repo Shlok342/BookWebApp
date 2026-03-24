@@ -1,6 +1,7 @@
 import os
 import json
 from contextlib import contextmanager
+from datetime import date
 from typing import List
 
 from dotenv import load_dotenv
@@ -27,8 +28,6 @@ app.add_middleware(
 )
 
 
-
-
 @app.get("/")
 def home():
     return FileResponse("static/index.html")
@@ -45,13 +44,15 @@ def get_db():
 
 def row_to_book(row):
     return {
-        "id": row[0],
-        "title": row[1],
-        "author":       row[2] if row[2] else "",  # ← must be here,
-        "total_pages": row[3],
+        "id":           row[0],
+        "title":        row[1],
+        "author":       row[2] if row[2] else "",
+        "total_pages":  row[3],
         "current_page": row[4],
-        "quotes": json.loads(row[5]) if row[5] else [],
-        "notes": row[6] if row[6] else ""
+        "quotes":       json.loads(row[5]) if row[5] else [],
+        "notes":        row[6] if row[6] else "",
+        "last_read_date": str(row[7]) if row[7] else None,   # ← new
+        "streak_count": row[8] if row[8] else 0              # ← new
     }
 
 
@@ -60,7 +61,9 @@ def row_to_book(row):
 def get_books():
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, title, author, total_pages, current_page, quotes, notes FROM books")
+        cursor.execute(
+            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count FROM books"
+        )
         rows = cursor.fetchall()
     return [row_to_book(row) for row in rows]
 
@@ -71,7 +74,7 @@ def get_book(book_id: int):
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, title, author, total_pages, current_page, quotes, notes FROM books WHERE id = %s",
+            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count FROM books WHERE id = %s",
             (book_id,)
         )
         row = cursor.fetchone()
@@ -104,7 +107,7 @@ def add_book(book: Book):
     return {"message": "Book added", "id": new_id}
 
 
-# ─── UPDATE PROGRESS ─────────────────────────────────────────────────────────
+# ─── UPDATE PROGRESS (+ STREAK LOGIC) ────────────────────────────────────────
 class PageUpdate(BaseModel):
     current_page: int
 
@@ -114,17 +117,39 @@ def update_progress(book_id: int, update: PageUpdate):
     with get_db() as conn:
         cursor = conn.cursor()
 
-        cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
-        if not cursor.fetchone():
+        cursor.execute(
+            "SELECT last_read_date, streak_count FROM books WHERE id = %s",
+            (book_id,)
+        )
+        row = cursor.fetchone()
+        if not row:
             raise HTTPException(status_code=404, detail="Book not found")
 
+        last_read_date, streak_count = row
+        today = date.today()
+
+        # ── Streak calculation ──────────────────────────────────────────────
+        if last_read_date is None:
+            # First time ever reading this book
+            new_streak = 1
+        elif last_read_date == today:
+            # Already logged a session today — don't change the streak
+            new_streak = streak_count
+        elif (today - last_read_date).days == 1:
+            # Read yesterday — keep the chain going
+            new_streak = streak_count + 1
+        else:
+            # Gap of 2+ days — streak resets
+            new_streak = 1
+        # ────────────────────────────────────────────────────────────────────
+
         cursor.execute(
-            "UPDATE books SET current_page = %s WHERE id = %s",
-            (update.current_page, book_id)
+            "UPDATE books SET current_page = %s, last_read_date = %s, streak_count = %s WHERE id = %s",
+            (update.current_page, today, new_streak, book_id)
         )
         conn.commit()
 
-    return {"message": "Progress updated"}
+    return {"message": "Progress updated", "streak_count": new_streak}
 
 
 # ─── UPDATE QUOTES ───────────────────────────────────────────────────────────
@@ -192,4 +217,3 @@ def delete_book(book_id: int):
 @app.get("/test")
 def test():
     return {"files": os.listdir()}
-

@@ -51,6 +51,17 @@ function renderBooks() {
     author.classList.add("book-author");
     author.textContent = book.author ? `by ${book.author}` : "";
 
+    // ── Streak badge — insert AFTER the author element ──
+    const streakBadge = document.createElement("div");
+    streakBadge.classList.add("streak-badge");
+    const streakCount = book.streak_count ?? 0;
+    if (streakCount > 0) {
+      streakBadge.textContent = `🔥 ${streakCount}-day streak`;
+    } else {
+      streakBadge.textContent = "Start your streak today";
+      streakBadge.classList.add("streak-badge--cold");
+    }
+
     const progressLabel = document.createElement("p");
     progressLabel.classList.add("reading-progress-label");
     progressLabel.textContent = "READING PROGRESS";
@@ -141,7 +152,7 @@ function renderBooks() {
     quoteHint.textContent = `${quoteCount} / 5 quotes saved`;
 
     // ── Append everything to card in one clean chain ──
-    card.append(title, author, progressLabel, pagesRow, progressBar, buttonsDiv, quoteHint);
+    card.append(title, author, streakBadge, progressLabel, pagesRow, progressBar, buttonsDiv, quoteHint);
     container.appendChild(card);
   });
 }
@@ -188,7 +199,11 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
       body: JSON.stringify({ quotes })
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();                         // ← new
 
+    if (data.streak_count > 1) {                          // ← new
+    alert(`🔥 ${data.streak_count}-day reading streak!`); // ← new
+    }
     document.getElementById("quoteInput").value = "";
     await getBooks();
     const updated = books.find(b => b.id === activeBookId);

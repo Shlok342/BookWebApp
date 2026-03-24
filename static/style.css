@@ -685,7 +685,39 @@ main {
   font-family: 'Cormorant Garamond', serif;
   letter-spacing: 0.01em;
 }
+/* ── Streak Badge ──────────────────────────────────────── */
+.streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(120deg, rgba(255, 200, 100, 0.28), rgba(255, 160, 60, 0.20));
+  border: 1px solid rgba(210, 130, 40, 0.35);
+  border-radius: 50px;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #8a5010;
+  letter-spacing: 0.03em;
+  margin-bottom: 13px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 2px 6px rgba(180, 100, 20, 0.10);
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.22s ease, border-color 0.22s ease;
+}
 
+.streak-badge--cold {
+  background: linear-gradient(120deg, rgba(200, 200, 200, 0.20), rgba(180, 180, 180, 0.14));
+  border-color: rgba(160, 150, 130, 0.30);
+  color: var(--text-faint);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.book-card:hover .streak-badge:not(.streak-badge--cold) {
+  background: linear-gradient(120deg, rgba(255, 200, 100, 0.40), rgba(255, 160, 60, 0.30));
+  border-color: rgba(210, 130, 40, 0.50);
+}
 /* ── Modal Overlay ─────────────────────────────────────── */
 .modal {
   display: none;
