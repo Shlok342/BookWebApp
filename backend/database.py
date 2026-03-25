@@ -39,6 +39,23 @@ def init_db():
         ADD COLUMN IF NOT EXISTS streak_count INTEGER DEFAULT 0
     """)
 
+    # ── Global streak table ───────────────────────────────────────────────────
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS user_streak (
+        id INTEGER PRIMARY KEY DEFAULT 1,
+        last_read_date DATE DEFAULT NULL,
+        streak_count INTEGER DEFAULT 0
+    )
+    """)
+
+    # Seed the single row if it doesn't exist yet
+    cursor.execute("""
+    INSERT INTO user_streak (id, last_read_date, streak_count)
+    VALUES (1, NULL, 0)
+    ON CONFLICT (id) DO NOTHING
+    """)
+    # ─────────────────────────────────────────────────────────────────────────
+
     conn.commit()
     cursor.close()
     conn.close()
