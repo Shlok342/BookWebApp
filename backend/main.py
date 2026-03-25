@@ -15,7 +15,7 @@ from pydantic import BaseModel
 # Ensure environment variables are loaded from `backend/.env` regardless of CWD.
 load_dotenv(dotenv_path=Path(__file__).with_name(".env"))
 
-from database import init_db, get_connection
+from backend.database import init_db, get_connection
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
