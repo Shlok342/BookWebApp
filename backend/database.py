@@ -1,10 +1,13 @@
-import psycopg2
 import os
+from pathlib import Path
 from dotenv import load_dotenv
-load_dotenv()
+from psycopg2 import connect 
+# Load the .env that sits next to this file (not based on current working directory).
+load_dotenv(dotenv_path=Path(__file__).with_name(".env"))
 
 def get_connection():
-    return psycopg2.connect(os.getenv("DATABASE_URL"))
+    # `psycopg2` isn't imported directly; we import `connect` above.
+    return connect(os.getenv("DATABASE_URL"))
 
 def init_db():
     conn = get_connection()
@@ -39,5 +42,3 @@ def init_db():
     conn.commit()
     cursor.close()
     conn.close()
-
-init_db()

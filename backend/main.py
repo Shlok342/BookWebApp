@@ -1,5 +1,6 @@
 import os
 import json
+from pathlib import Path
 from contextlib import contextmanager
 from datetime import date
 from typing import List
@@ -11,9 +12,10 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-load_dotenv()
+# Ensure environment variables are loaded from `backend/.env` regardless of CWD.
+load_dotenv(dotenv_path=Path(__file__).with_name(".env"))
 
-from backend.database import init_db, get_connection
+from database import init_db, get_connection
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
