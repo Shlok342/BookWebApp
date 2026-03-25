@@ -16,6 +16,31 @@ async function getBooks() {
   }
 }
 
+// ─── FETCH GLOBAL STREAK ──────────────────────────────────────────────────────
+async function getGlobalStreak() {
+  try {
+    const res = await fetch("/streak");
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();
+    renderGlobalStreak(data.streak_count);
+  } catch (err) {
+    console.error("Failed to fetch global streak:", err);
+  }
+}
+
+// ─── RENDER GLOBAL STREAK ─────────────────────────────────────────────────────
+function renderGlobalStreak(count) {
+  const el = document.getElementById("globalStreak");
+  if (!el) return;
+  if (count > 0) {
+    el.textContent = `🔥 ${count} day streak`;
+    el.classList.remove("global-streak-badge--cold");
+  } else {
+    el.textContent = "No streak yet — read something today!";
+    el.classList.add("global-streak-badge--cold");
+  }
+}
+
 // ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
 function renderBooks() {
   container.innerHTML = "";
@@ -56,7 +81,7 @@ function renderBooks() {
     streakBadge.classList.add("streak-badge");
     const streakCount = book.streak_count ?? 0;
     if (streakCount > 0) {
-      streakBadge.textContent = `🔥 ${streakCount}-day streak`;
+      streakBadge.textContent = `🔥 ${streakCount}-days for this Book!`;
     } else {
       streakBadge.textContent = "Start your streak today";
       streakBadge.classList.add("streak-badge--cold");
@@ -115,6 +140,11 @@ function renderBooks() {
           body: JSON.stringify({ current_page: newPage })
         });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const data = await res.json();                              // ← new
+        renderGlobalStreak(data.global_streak);                    // ← new
+        if (data.global_streak > 1) {                              // ← new
+          alert(`🔥 ${data.global_streak}-day global reading streak!`); // ← new
+        }                                                          // ← new
         await getBooks();
       } catch (err) {
         console.error("Failed to update progress:", err);
@@ -199,10 +229,10 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
       body: JSON.stringify({ quotes })
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    const data = await res.json();                         // ← new
+    const data = await res.json();
 
-    if (data.streak_count > 1) {                          // ← new
-    alert(`🔥 ${data.streak_count}-day reading streak!`); // ← new
+    if (data.streak_count > 1) {
+    alert(`🔥 ${data.streak_count}-day reading streak!`);
     }
     document.getElementById("quoteInput").value = "";
     await getBooks();
@@ -354,3 +384,4 @@ document.getElementById("saveBook").addEventListener("click", async () => {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 getBooks();
+getGlobalStreak();                                                 // ← new

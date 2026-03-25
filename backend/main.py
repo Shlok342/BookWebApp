@@ -53,8 +53,8 @@ def row_to_book(row):
         "current_page": row[4],
         "quotes":       json.loads(row[5]) if row[5] else [],
         "notes":        row[6] if row[6] else "",
-        "last_read_date": str(row[7]) if row[7] else None,   # ← new
-        "streak_count": row[8] if row[8] else 0              # ← new
+        "last_read_date": str(row[7]) if row[7] else None,
+        "streak_count": row[8] if row[8] else 0
     }
 
 
@@ -130,18 +130,14 @@ def update_progress(book_id: int, update: PageUpdate):
         last_read_date, streak_count = row
         today = date.today()
 
-        # ── Streak calculation ──────────────────────────────────────────────
+        # ── Per-book streak calculation ─────────────────────────────────────
         if last_read_date is None:
-            # First time ever reading this book
             new_streak = 1
         elif last_read_date == today:
-            # Already logged a session today — don't change the streak
             new_streak = streak_count
         elif (today - last_read_date).days == 1:
-            # Read yesterday — keep the chain going
             new_streak = streak_count + 1
         else:
-            # Gap of 2+ days — streak resets
             new_streak = 1
         # ────────────────────────────────────────────────────────────────────
 
@@ -149,9 +145,51 @@ def update_progress(book_id: int, update: PageUpdate):
             "UPDATE books SET current_page = %s, last_read_date = %s, streak_count = %s WHERE id = %s",
             (update.current_page, today, new_streak, book_id)
         )
+
+        # ── Global streak calculation ─────────────────────────────────────
+        cursor.execute(
+            "SELECT last_read_date, streak_count FROM user_streak WHERE id = 1"
+        )
+        g = cursor.fetchone()
+        g_last, g_streak = g
+
+        if g_last is None:
+            new_global_streak = 1
+        elif g_last == today:
+            new_global_streak = g_streak        # frozen — already read today
+        elif (today - g_last).days == 1:
+            new_global_streak = g_streak + 1   # consecutive day
+        else:
+            new_global_streak = 1              # gap — reset
+
+        cursor.execute(
+            "UPDATE user_streak SET last_read_date = %s, streak_count = %s WHERE id = 1",
+            (today, new_global_streak)
+        )
+        # ─────────────────────────────────────────────────────────────────
+
         conn.commit()
 
-    return {"message": "Progress updated", "streak_count": new_streak}
+    return {
+        "message": "Progress updated",
+        "streak_count": new_streak,
+        "global_streak": new_global_streak      # ← new
+    }
+
+
+# ─── GET GLOBAL STREAK ───────────────────────────────────────────────────────
+@app.get("/streak")
+def get_streak():
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT last_read_date, streak_count FROM user_streak WHERE id = 1"
+        )
+        row = cursor.fetchone()
+    return {
+        "last_read_date": str(row[0]) if row[0] else None,
+        "streak_count":   row[1] if row[1] else 0
+    }
 
 
 # ─── UPDATE QUOTES ───────────────────────────────────────────────────────────
