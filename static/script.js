@@ -1,26 +1,9 @@
-const BASE_URL = window.location.origin;
 const container = document.querySelector(".books-container");
 
 let books = [];
 let activeBookId = null;
 
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
-async function getStats() {
-  try {
-    const res = await fetch(`${BASE_URL}/stats`);
-    if (!res.ok) throw new Error("Failed to fetch stats");
-
-    const data = await res.json();
-
-    document.getElementById("totalBooks").textContent = data.total_books;
-    document.getElementById("totalPages").textContent = data.total_pages_read;
-    document.getElementById("monthlyPages").textContent = data.pages_this_month;
-    document.getElementById("avgPages").textContent = data.avg_pages_per_month;
-
-  } catch (err) {
-    console.error("Stats error:", err);
-  }
-}
 async function getBooks() {
   try {
     const response = await fetch("/books");
@@ -30,6 +13,26 @@ async function getBooks() {
   } catch (error) {
     console.error("Failed to fetch books:", error);
     container.innerHTML = "<p>Could not load books. Is the server running?</p>";
+  }
+}
+
+// ─── FETCH STATS ──────────────────────────────────────────────────────────────
+// FIX: was using `${BASE_URL}/stats` (full origin URL) — everything else uses
+//      a relative path, so this was inconsistent and would break behind a proxy.
+async function getStats() {
+  try {
+    const res = await fetch("/stats");
+    if (!res.ok) throw new Error("Failed to fetch stats");
+
+    const data = await res.json();
+
+    document.getElementById("totalBooks").textContent    = data.total_books;
+    document.getElementById("totalPages").textContent    = data.total_pages_read;
+    document.getElementById("monthlyPages").textContent  = data.pages_this_month;
+    document.getElementById("avgPages").textContent      = data.avg_pages_per_month;
+
+  } catch (err) {
+    console.error("Stats error:", err);
   }
 }
 
@@ -67,13 +70,17 @@ function renderBooks() {
     return;
   }
 
+  const bloomedCount = books.filter(
+    b => b.total_pages > 0 && b.current_page >= b.total_pages
+  ).length;
+
+  document.getElementById("bloomedCount").textContent = bloomedCount;
+
+  // FIX: was called twice back-to-back (redundant DOM write + wasted call)
   const storiesEl = document.getElementById("storiesCount");
   if (storiesEl) {
     storiesEl.innerHTML = `<em>${books.length} ${books.length === 1 ? "story" : "stories"} collected</em>`;
   }
-  const bloomedCount = books.filter(b => b.total_pages > 0 && b.current_page >= b.total_pages).length;
-  document.getElementById("bloomedCount").textContent = bloomedCount;
-  document.getElementById("storiesCount").innerHTML = `<em>${books.length} ${books.length === 1 ? "story" : "stories"} collected</em>`;
 
   books.forEach(book => {
     const currentPage = book.current_page ?? 0;
@@ -85,7 +92,6 @@ function renderBooks() {
     const card = document.createElement("div");
     card.classList.add("book-card");
 
-    // ── Build card with DOM methods only — no innerHTML conflict ──
     const title = document.createElement("h2");
     title.textContent = book.title;
 
@@ -93,7 +99,6 @@ function renderBooks() {
     author.classList.add("book-author");
     author.textContent = book.author ? `by ${book.author}` : "";
 
-    // ── Streak badge — insert AFTER the author element ──
     const streakBadge = document.createElement("div");
     streakBadge.classList.add("streak-badge");
     const streakCount = book.streak_count ?? 0;
@@ -157,11 +162,11 @@ function renderBooks() {
           body: JSON.stringify({ current_page: newPage })
         });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const data = await res.json();                              // ← new
-        renderGlobalStreak(data.global_streak);                    // ← new
-        if (data.global_streak > 1) {                              // ← new
-          alert(`🔥 ${data.global_streak}-day global reading streak!`); // ← new
-        }                                                          // ← new
+        const data = await res.json();
+        renderGlobalStreak(data.global_streak);
+        if (data.global_streak > 1) {
+          alert(`🔥 ${data.global_streak}-day global reading streak!`);
+        }
         await getBooks();
         await getStats();
       } catch (err) {
@@ -175,16 +180,13 @@ function renderBooks() {
     notesBtn.textContent = "Notes";
     notesBtn.addEventListener("click", () => openNotesModal(book));
 
-    // ── Delete button — listener attached HERE, inside forEach ──
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
     deleteBtn.textContent = "Delete";
     deleteBtn.addEventListener("click", async () => {
       if (!confirm(`Delete "${book.title}"? This cannot be undone.`)) return;
       try {
-        const res = await fetch(`/books/${book.id}`, {
-          method: "DELETE"
-        });
+        const res = await fetch(`/books/${book.id}`, { method: "DELETE" });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         await getBooks();
         await getStats();
@@ -200,7 +202,6 @@ function renderBooks() {
     quoteHint.classList.add("quote-count-hint");
     quoteHint.textContent = `${quoteCount} / 5 quotes saved`;
 
-    // ── Append everything to card in one clean chain ──
     card.append(title, author, streakBadge, progressLabel, pagesRow, progressBar, buttonsDiv, quoteHint);
     container.appendChild(card);
   });
@@ -251,7 +252,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
     const data = await res.json();
 
     if (data.streak_count > 1) {
-    alert(`🔥 ${data.streak_count}-day reading streak!`);
+      alert(`🔥 ${data.streak_count}-day reading streak!`);
     }
     document.getElementById("quoteInput").value = "";
     await getBooks();
@@ -315,23 +316,20 @@ document.getElementById("saveNotesBtn").addEventListener("click", async () => {
 const openBookModalEl = document.getElementById("openBookModal");
 
 function openBookModal(book) {
-  document.getElementById("openBookTitle").textContent = book.title;
-  document.getElementById("openBookAuthor").textContent =
-    book.author ? `by ${book.author}` : "";
+  document.getElementById("openBookTitle").textContent  = book.title;
+  document.getElementById("openBookAuthor").textContent = book.author ? `by ${book.author}` : "";
 
   const current = book.current_page ?? 0;
   const total   = book.total_pages  ?? 0;
   document.getElementById("openBookProgress").textContent = `${current} / ${total} pages`;
 
   const quotesDiv = document.getElementById("openBookQuotes");
-  if (!book.quotes || book.quotes.length === 0) {
-    quotesDiv.innerHTML = "<p>No quotes yet.</p>";
-  } else {
-    quotesDiv.innerHTML = book.quotes.map(q => `<p>"${q}"</p>`).join("");
-  }
+  quotesDiv.innerHTML = !book.quotes || book.quotes.length === 0
+    ? "<p>No quotes yet.</p>"
+    : book.quotes.map(q => `<p>"${q}"</p>`).join("");
 
   const notes = book.notes?.trim();
-  document.getElementById("openBookNotes").textContent = notes ? notes : "No notes yet.";
+  document.getElementById("openBookNotes").textContent = notes || "No notes yet.";
 
   openBookModalEl.style.display = "block";
 }
@@ -389,11 +387,16 @@ document.getElementById("saveBook").addEventListener("click", async () => {
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
-    document.getElementById("titleInput").value = "";
-    document.getElementById("authorInput").value = "";
-    document.getElementById("totalPagesInput").value = "";
+    // FIX: backend now returns global_streak on add — update the badge immediately
+    const data = await res.json();
+    renderGlobalStreak(data.global_streak);
+
+    document.getElementById("titleInput").value       = "";
+    document.getElementById("authorInput").value      = "";
+    document.getElementById("totalPagesInput").value  = "";
     document.getElementById("currentPageInput").value = "";
     addBookModal.style.display = "none";
+
     await getBooks();
     await getStats();
   } catch (err) {
@@ -405,4 +408,4 @@ document.getElementById("saveBook").addEventListener("click", async () => {
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 getBooks();
 getStats();
-getGlobalStreak();                                                 // ← new
+getGlobalStreak();
