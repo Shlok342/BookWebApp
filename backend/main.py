@@ -110,6 +110,9 @@ def add_book(book: Book):
 
 
 # ─── UPDATE PROGRESS (+ STREAK LOGIC) ────────────────────────────────────────
+from datetime import date
+from fastapi import HTTPException
+
 class PageUpdate(BaseModel):
     current_page: int
 
@@ -119,18 +122,22 @@ def update_progress(book_id: int, update: PageUpdate):
     with get_db() as conn:
         cursor = conn.cursor()
 
+        # ── Get current state (ADD current_page here) ──
         cursor.execute(
-            "SELECT last_read_date, streak_count FROM books WHERE id = %s",
+            "SELECT current_page, last_read_date, streak_count FROM books WHERE id = %s",
             (book_id,)
         )
         row = cursor.fetchone()
         if not row:
             raise HTTPException(status_code=404, detail="Book not found")
 
-        last_read_date, streak_count = row
+        current_page_old, last_read_date, streak_count = row
         today = date.today()
 
-        # ── Per-book streak calculation ─────────────────────────────────────
+        # ── Calculate pages read (NEW) ──
+        pages_read = max(0, update.current_page - current_page_old)
+
+        # ── Per-book streak calculation (UNCHANGED) ──
         if last_read_date is None:
             new_streak = 1
         elif last_read_date == today:
@@ -139,14 +146,28 @@ def update_progress(book_id: int, update: PageUpdate):
             new_streak = streak_count + 1
         else:
             new_streak = 1
-        # ────────────────────────────────────────────────────────────────────
 
+        # ── Update book ──
         cursor.execute(
-            "UPDATE books SET current_page = %s, last_read_date = %s, streak_count = %s WHERE id = %s",
+            """
+            UPDATE books 
+            SET current_page = %s, last_read_date = %s, streak_count = %s 
+            WHERE id = %s
+            """,
             (update.current_page, today, new_streak, book_id)
         )
 
-        # ── Global streak calculation ─────────────────────────────────────
+        # ── INSERT reading session (NEW CORE FEATURE) ──
+        if pages_read > 0:
+            cursor.execute(
+                """
+                INSERT INTO reading_sessions (book_id, pages_read)
+                VALUES (%s, %s)
+                """,
+                (book_id, pages_read)
+            )
+
+        # ── Global streak (UNCHANGED) ──
         cursor.execute(
             "SELECT last_read_date, streak_count FROM user_streak WHERE id = 1"
         )
@@ -156,24 +177,24 @@ def update_progress(book_id: int, update: PageUpdate):
         if g_last is None:
             new_global_streak = 1
         elif g_last == today:
-            new_global_streak = g_streak        # frozen — already read today
+            new_global_streak = g_streak
         elif (today - g_last).days == 1:
-            new_global_streak = g_streak + 1   # consecutive day
+            new_global_streak = g_streak + 1
         else:
-            new_global_streak = 1              # gap — reset
+            new_global_streak = 1
 
         cursor.execute(
             "UPDATE user_streak SET last_read_date = %s, streak_count = %s WHERE id = 1",
             (today, new_global_streak)
         )
-        # ─────────────────────────────────────────────────────────────────
 
         conn.commit()
 
     return {
         "message": "Progress updated",
+        "pages_logged": pages_read,        # 👈 NEW (useful for debugging/UI)
         "streak_count": new_streak,
-        "global_streak": new_global_streak      # ← new
+        "global_streak": new_global_streak
     }
 
 
@@ -253,7 +274,44 @@ def delete_book(book_id: int):
 
     return {"message": "Book deleted"}
 
+from datetime import datetime
 
+@app.get("/stats")
+def get_stats():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        # total books
+        cursor.execute("SELECT COUNT(*) FROM books")
+        total_books = cursor.fetchone()[0]
+
+        # total pages read
+        cursor.execute("SELECT COALESCE(SUM(pages_read), 0) FROM reading_sessions")
+        total_pages = cursor.fetchone()[0]
+
+        # pages this month
+        cursor.execute("""
+            SELECT COALESCE(SUM(pages_read), 0)
+            FROM reading_sessions
+            WHERE DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)
+        """)
+        monthly_pages = cursor.fetchone()[0]
+
+        # months active (VERY IMPORTANT)
+        cursor.execute("""
+            SELECT COUNT(DISTINCT DATE_TRUNC('month', created_at))
+            FROM reading_sessions
+        """)
+        months_active = cursor.fetchone()[0] or 1
+
+        avg_pages = total_pages / months_active
+
+    return {
+        "total_books": total_books,
+        "total_pages_read": total_pages,
+        "pages_this_month": monthly_pages,
+        "avg_pages_per_month": round(avg_pages, 2)
+    }
 @app.get("/test")
 def test():
     return {"files": os.listdir()}

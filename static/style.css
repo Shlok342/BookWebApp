@@ -1291,7 +1291,31 @@ footer {
     font-size: 1.08rem;
   }
 }
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin: 20px;
+}
 
+.stat-card {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 14px;
+  color: #666;
+}
+
+.stat-card p {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 5px;
+}
 /* ═══════════════════════════════════════════════════════
    RESPONSIVE — Small Mobile (≤ 480px)
 ═══════════════════════════════════════════════════════ */

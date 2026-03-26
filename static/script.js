@@ -1,9 +1,26 @@
+const BASE_URL = window.location.origin;
 const container = document.querySelector(".books-container");
 
 let books = [];
 let activeBookId = null;
 
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
+async function getStats() {
+  try {
+    const res = await fetch(`${BASE_URL}/stats`);
+    if (!res.ok) throw new Error("Failed to fetch stats");
+
+    const data = await res.json();
+
+    document.getElementById("totalBooks").textContent = data.total_books;
+    document.getElementById("totalPages").textContent = data.total_pages_read;
+    document.getElementById("monthlyPages").textContent = data.pages_this_month;
+    document.getElementById("avgPages").textContent = data.avg_pages_per_month;
+
+  } catch (err) {
+    console.error("Stats error:", err);
+  }
+}
 async function getBooks() {
   try {
     const response = await fetch("/books");
@@ -146,6 +163,7 @@ function renderBooks() {
           alert(`🔥 ${data.global_streak}-day global reading streak!`); // ← new
         }                                                          // ← new
         await getBooks();
+        await getStats();
       } catch (err) {
         console.error("Failed to update progress:", err);
         alert("Could not update progress. Is the server running?");
@@ -169,6 +187,7 @@ function renderBooks() {
         });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         await getBooks();
+        await getStats();
       } catch (err) {
         console.error("Failed to delete book:", err);
         alert("Could not delete book. Is the server running?");
@@ -376,6 +395,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
     document.getElementById("currentPageInput").value = "";
     addBookModal.style.display = "none";
     await getBooks();
+    await getStats();
   } catch (err) {
     console.error("Failed to add book:", err);
     alert("Could not save book. Is the server running?");
@@ -384,4 +404,5 @@ document.getElementById("saveBook").addEventListener("click", async () => {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 getBooks();
+getStats();
 getGlobalStreak();                                                 // ← new

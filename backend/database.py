@@ -38,7 +38,14 @@ def init_db():
     ALTER TABLE books
         ADD COLUMN IF NOT EXISTS streak_count INTEGER DEFAULT 0
     """)
-
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS reading_sessions (
+        id SERIAL PRIMARY KEY,
+        book_id INTEGER REFERENCES books(id) ON DELETE CASCADE,
+        pages_read INTEGER,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
     # ── Global streak table ───────────────────────────────────────────────────
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS user_streak (
