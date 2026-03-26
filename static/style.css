@@ -137,7 +137,57 @@ body::after {
   position: relative;
   z-index: 10;
 }
+/* 1. The Base Badge */
+.global-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 50px; /* The "pill" shape */
+  
+  /* Font matching your brand-sans style */
+  font-family: 'Inter', system-ui, sans-serif; 
+  font-size: 13px;
+  font-weight: 600;
+  
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1.5px solid transparent;
+}
 
+/* 2. The "Cold" State (No streak) */
+.global-streak-badge--cold {
+  background-color: #f5f5f5;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+}
+
+/* 3. The "Active" State (When you remove the --cold class) */
+/* This mimics the warm cream/orange look from your screenshot */
+.global-streak-badge:not(.global-streak-badge--cold) {
+  background-color: #fdfaf2;
+  color: #c2410c;
+  border-color: #fde68a;
+}
+
+/* 4. Adding the Emoji via CSS */
+.global-streak-badge::before {
+  content: '🔥'; /* Default fire */
+  font-size: 16px;
+}
+
+.global-streak-badge--cold::before {
+  content: '🌑'; /* Changes icon when cold/empty */
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+/* 5. Hover Animation */
+.global-streak-badge:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+}
 /* ── Brand ─────────────────────────────────────────────── */
 .brand {
   display: flex;
@@ -338,19 +388,7 @@ body::after {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Hover Animation */
-.global-streak-badge:hover {
-  transform: translateY(-3px); /* Lifts the badge slightly */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08); /* Deepens the shadow */
-  background-color: #ffffff;
-  border-color: #ff9d00; /* Optional: adds a "fire" glow to the border */
-}
 
-/* Icon Styling (Assuming you use a span or emoji) */
-.global-streak-badge .icon {
-  font-size: 1.2rem;
-  line-height: 1;
-}
 /* ── Corner plants ─────────────────────────────────────── */
 .corner-plant {
   position: fixed;
