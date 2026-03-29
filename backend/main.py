@@ -65,7 +65,7 @@ def get_books():
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, title,author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at FROM books"
+            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at FROM books"
         )
         rows = cursor.fetchall()
     return [row_to_book(row) for row in rows]

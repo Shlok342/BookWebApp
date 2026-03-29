@@ -252,15 +252,19 @@ if (sortValue === "progress-desc") {
 
 // 🕒 DATE (THIS IS WHAT YOU WANTED)
 if (sortValue === "date-desc") {
-  filtered.sort((a, b) =>
-    new Date(b.created_at || 0) - new Date(a.created_at || 0)
-  );
+  filtered.sort((a, b) => {
+    const dateA = new Date(a.created_at || 0).getTime();
+    const dateB = new Date(b.created_at || 0).getTime();
+    return dateB - dateA;
+  });
 }
 
 if (sortValue === "date-asc") {
-  filtered.sort((a, b) =>
-    new Date(a.created_at || 0) - new Date(b.created_at || 0)
-  );
+  filtered.sort((a, b) => {
+    const dateA = new Date(a.created_at || 0).getTime();
+    const dateB = new Date(b.created_at || 0).getTime();
+    return dateA - dateB;
+  });
 }
 
   renderBooks(filtered);
