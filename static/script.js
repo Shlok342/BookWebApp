@@ -84,11 +84,14 @@ function renderBooks(filteredBooks = books) {
 
   // ✅ MAIN CHANGE HERE
   filteredBooks.forEach(book => {
-    const currentPage = book.current_page ?? 0;
-    const totalPages  = book.total_pages  ?? 0;
-    const progress    = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
+    const currentPage = Number(book.current_page) || 0;
+    const totalPages  = Number(book.total_pages) || 0;
+
+    const progress = totalPages > 0
+      ? (currentPage / totalPages) * 100
+      : 0;
     const quoteCount  = (book.quotes || []).length;
-    const pct         = Math.round(progress);
+    const pct = isNaN(progress) ? 0 : Math.round(progress);;
 
     const card = document.createElement("div");
     card.classList.add("book-card");
