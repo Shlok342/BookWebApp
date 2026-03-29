@@ -54,7 +54,8 @@ def row_to_book(row):
         "quotes":       json.loads(row[5]) if row[5] else [],
         "notes":        row[6] if row[6] else "",
         "last_read_date": str(row[7]) if row[7] else None,
-        "streak_count": row[8] if row[8] else 0
+        "streak_count": row[8] if row[8] else 0,
+        "created_at":   str(row[9]) if len(row) > 9 and row[9] else None  # 🔥 ADD THIS
     }
 
 
@@ -64,7 +65,7 @@ def get_books():
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count FROM books"
+            "SELECT id, title, total_pages, current_page, quotes, notes, created_at, last_read_date, streak_count FROM books"
         )
         rows = cursor.fetchall()
     return [row_to_book(row) for row in rows]

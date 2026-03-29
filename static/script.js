@@ -228,17 +228,37 @@ function applyFilters() {
   });
 
   // 🔥 SORTING LOGIC
-  if (sortValue === "progress") {
-    filtered.sort((a, b) => {
-      const progA = a.total_pages > 0 ? a.current_page / a.total_pages : 0;
-      const progB = b.total_pages > 0 ? b.current_page / b.total_pages : 0;
-      return progA - progB; // least → most
-    });
-  }
+  // 🔥 SORTING
 
-  if (sortValue === "date") {
-    filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-  }
+// 📊 PROGRESS
+if (sortValue === "progress-asc") {
+  filtered.sort((a, b) => {
+    const progA = (a.current_page || 0) / (a.total_pages || 1);
+    const progB = (b.current_page || 0) / (b.total_pages || 1);
+    return progA - progB;
+  });
+}
+
+if (sortValue === "progress-desc") {
+  filtered.sort((a, b) => {
+    const progA = (a.current_page || 0) / (a.total_pages || 1);
+    const progB = (b.current_page || 0) / (b.total_pages || 1);
+    return progB - progA;
+  });
+}
+
+// 🕒 DATE (THIS IS WHAT YOU WANTED)
+if (sortValue === "date-desc") {
+  filtered.sort((a, b) =>
+    new Date(b.created_at || 0) - new Date(a.created_at || 0)
+  );
+}
+
+if (sortValue === "date-asc") {
+  filtered.sort((a, b) =>
+    new Date(a.created_at || 0) - new Date(b.created_at || 0)
+  );
+}
 
   renderBooks(filtered);
 }
