@@ -211,27 +211,34 @@ function renderBooks(filteredBooks = books) {
 function applyFilters() {
   const searchValue = document.getElementById("searchInput").value.toLowerCase();
   const filterValue = document.getElementById("statusFilter").value;
+  const sortValue   = document.getElementById("sortOption").value;
 
   let filtered = books.filter(book => {
 
-    // 🔍 SEARCH LOGIC
     const matchesSearch = book.title.toLowerCase().includes(searchValue);
 
-    // 📊 STATUS LOGIC
     let status = "not-started";
-
-    if (book.current_page === 0) {
-      status = "not-started";
-    } else if (book.current_page === book.total_pages) {
-      status = "completed";
-    } else {
-      status = "in-progress";
-    }
+    if (book.current_page === 0) status = "not-started";
+    else if (book.current_page === book.total_pages) status = "completed";
+    else status = "in-progress";
 
     const matchesFilter = filterValue === "all" || status === filterValue;
 
     return matchesSearch && matchesFilter;
   });
+
+  // 🔥 SORTING LOGIC
+  if (sortValue === "progress") {
+    filtered.sort((a, b) => {
+      const progA = a.total_pages > 0 ? a.current_page / a.total_pages : 0;
+      const progB = b.total_pages > 0 ? b.current_page / b.total_pages : 0;
+      return progA - progB; // least → most
+    });
+  }
+
+  if (sortValue === "date") {
+    filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  }
 
   renderBooks(filtered);
 }
@@ -435,6 +442,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("searchInput").addEventListener("input", applyFilters);
   document.getElementById("statusFilter").addEventListener("change", applyFilters);
+  document.getElementById("sortOption").addEventListener("change", applyFilters);
 });
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 getBooks();

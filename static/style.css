@@ -193,7 +193,11 @@ body::after {
   gap: 10px;
   margin-bottom: 20px;
 }
-
+.controls input,
+.controls select {
+  padding: 8px;
+  border-radius: 6px;
+}
 #searchInput, #statusFilter {
   padding: 8px;
   border-radius: 6px;

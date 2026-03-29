@@ -115,16 +115,23 @@
   <main>
     <div class="controls">
       <input type="text" id="searchInput" placeholder="Search books...">
-    
+  
       <select id="statusFilter">
         <option value="all">All</option>
         <option value="completed">Completed</option>
         <option value="in-progress">In Progress</option>
         <option value="not-started">Not Started</option>
       </select>
+  
+      <select id="sortOption">
+        <option value="none">No Sorting</option>
+        <option value="progress">Progress (Least → Most)</option>
+        <option value="date">Newest First</option>
+      </select>
     </div>
+  
     <div class="books-container"></div>
-  </main>
+</main>
 
 </div>
 
