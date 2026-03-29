@@ -9,7 +9,7 @@ async function getBooks() {
     const response = await fetch("/books");
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     books = await response.json();
-    renderBooks();
+    applyFilters();
   } catch (error) {
     console.error("Failed to fetch books:", error);
     container.innerHTML = "<p>Could not load books. Is the server running?</p>";
@@ -62,27 +62,28 @@ function renderGlobalStreak(count) {
 }
 
 // ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
-function renderBooks() {
+function renderBooks(filteredBooks = books) {
   container.innerHTML = "";
 
-  if (!books || books.length === 0) {
+  if (!filteredBooks || filteredBooks.length === 0) {
     container.innerHTML = "<p>No books found. Add one!</p>";
     return;
   }
 
-  const bloomedCount = books.filter(
+  // ✅ FIX: use filteredBooks instead of books
+  const bloomedCount = filteredBooks.filter(
     b => b.total_pages > 0 && b.current_page >= b.total_pages
   ).length;
 
   document.getElementById("bloomedCount").textContent = bloomedCount;
 
-  // FIX: was called twice back-to-back (redundant DOM write + wasted call)
   const storiesEl = document.getElementById("storiesCount");
   if (storiesEl) {
-    storiesEl.innerHTML = `<em>${books.length} ${books.length === 1 ? "story" : "stories"} collected</em>`;
+    storiesEl.innerHTML = `<em>${filteredBooks.length} ${filteredBooks.length === 1 ? "story" : "stories"} collected</em>`;
   }
 
-  books.forEach(book => {
+  // ✅ MAIN CHANGE HERE
+  filteredBooks.forEach(book => {
     const currentPage = book.current_page ?? 0;
     const totalPages  = book.total_pages  ?? 0;
     const progress    = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
@@ -206,7 +207,34 @@ function renderBooks() {
     container.appendChild(card);
   });
 }
+// Function Aplly filters: 
+function applyFilters() {
+  const searchValue = document.getElementById("searchInput").value.toLowerCase();
+  const filterValue = document.getElementById("statusFilter").value;
 
+  let filtered = books.filter(book => {
+
+    // 🔍 SEARCH LOGIC
+    const matchesSearch = book.title.toLowerCase().includes(searchValue);
+
+    // 📊 STATUS LOGIC
+    let status = "not-started";
+
+    if (book.current_page === 0) {
+      status = "not-started";
+    } else if (book.current_page === book.total_pages) {
+      status = "completed";
+    } else {
+      status = "in-progress";
+    }
+
+    const matchesFilter = filterValue === "all" || status === filterValue;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  renderBooks(filtered);
+}
 // ─── QUOTES MODAL ─────────────────────────────────────────────────────────────
 const quotesModal  = document.getElementById("quotesModal");
 const addBookModal = document.getElementById("addBookModal");
@@ -404,7 +432,10 @@ document.getElementById("saveBook").addEventListener("click", async () => {
     alert("Could not save book. Is the server running?");
   }
 });
-
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("searchInput").addEventListener("input", applyFilters);
+  document.getElementById("statusFilter").addEventListener("change", applyFilters);
+});
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 getBooks();
 getStats();
