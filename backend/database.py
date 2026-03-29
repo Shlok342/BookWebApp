@@ -69,7 +69,7 @@ def init_db():
     VALUES (1, NULL, 0)
     ON CONFLICT (id) DO NOTHING
     """)
-
+    
     conn.commit()
     cursor.close()
     conn.close()

@@ -4,6 +4,21 @@ let books = [];
 let activeBookId = null;
 
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
+// Grab our shiny button
+const toggleBtn = document.getElementById('dark-mode-toggle');
+
+// Listen for the click!
+toggleBtn.addEventListener('click', () => {
+  // Tell the whole webpage body to put on its shades 😎
+  document.body.classList.toggle('dark-theme');
+  
+  // A little silly extra: flip the button text!
+  if (document.body.classList.contains('dark-theme')) {
+    toggleBtn.textContent = '☀️ My eyes! Go back!';
+  } else {
+    toggleBtn.textContent = '🌙 Go Dark!';
+  }
+});
 async function getBooks() {
   try {
     const response = await fetch("/books");

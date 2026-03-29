@@ -1139,7 +1139,60 @@ footer {
   background: rgba(90, 122, 69, 0.20);
   color: var(--text-dark);
 }
+/* ── Midnight Woods Dark Mode 🦇✨ ─────────────────────── */
+body.dark-theme {
+  /* Swapping out the sun for the moon! */
+  --cream:         #1a221d;
+  --parchment:     #121814;
+  --parchment-mid: #18201a;
+  --sand:          #36453b;
+  --sand-light:    #46594c;
+  --bark:          #b5c4ad; 
+  --bark-light:    #99a891;
+  --bark-pale:     #5e6e58;
+  --forest:        #7a9e6c; 
+  --forest-mid:    #658558;
+  --moss:          #8bb07d;
+  --moss-light:    #a3c993;
+  --sage:          #243026;
+  --sage-pale:     #1b241c;
 
+  /* Surfaces */
+  --card-bg:       #151c17;
+  --card-bg-alt:   #19211c;
+  --modal-bg:      #151c17;
+
+  /* Text */
+  --text-dark:     #e2ebd9;
+  --text-mid:      #b8c7af;
+  --text-muted:    #82917a;
+  --text-faint:    #556350;
+
+  /* Misc */
+  --progress-bg:   #253327;
+  
+  /* Overriding the hardcoded body background so it doesn't blind us! */
+  background-color: #0c120e;
+  background-image:
+    linear-gradient(160deg, rgba(20,26,22,0.85) 0%, rgba(12,18,14,0.95) 55%, rgba(10,14,11,0.90) 100%),
+    url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+}
+
+/* Dimming those background decorations so they match the vibe */
+body.dark-theme::before, 
+body.dark-theme::after {
+  opacity: 0.2;
+}
+
+body.dark-theme .mountain-bg {
+  opacity: 0.3;
+  filter: brightness(0.5) sepia(0.3) hue-rotate(90deg);
+}
+
+body.dark-theme .sanctuary-panel {
+  background: rgba(20, 26, 22, 0.68);
+  border-color: rgba(90, 110, 90, 0.3);
+}
 /* ═══════════════════════════════════════════════════════
    RESPONSIVE — Tablet (≤ 1024px)
 ═══════════════════════════════════════════════════════ */
