@@ -103,9 +103,22 @@ def add_book(book: Book):
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO books (title, author, total_pages, current_page, quotes, notes) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id",
-            (book.title, book.author, book.total_pages, book.current_page, "[]", "")
-        )
+            """
+            INSERT INTO books 
+            (title, author, total_pages, current_page, quotes, notes, cover_url) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s) 
+            RETURNING id
+            """,
+            (
+                book.title,
+                book.author,
+                book.total_pages,
+                book.current_page,
+                "[]",
+                "",
+                book.cover_url  # 🔥 THIS IS THE FIX
+            )
+        )   
         new_id = cursor.fetchone()[0]
         conn.commit()
 

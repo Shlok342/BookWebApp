@@ -477,6 +477,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
   const title       = document.getElementById("titleInput").value.trim();
   const author      = document.getElementById("authorInput").value.trim();
   const cover = document.getElementById("coverInput").value.trim();
+  console.log("COVER INPUT:", cover);
   const totalPages  = parseInt(document.getElementById("totalPagesInput").value);
   const currentPage = parseInt(document.getElementById("currentPageInput").value) || 0;
 
