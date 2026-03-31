@@ -187,7 +187,7 @@ function renderBooks(filteredBooks = books) {
     const progressFill = document.createElement("div");
     progressFill.classList.add("progress");
     progressFill.style.width = `${progress}%`;
-    progressFill.style.backgroundColor = getProgressColor(pct);
+    progressFill.style.background = getProgressColor(pct);
     progressBar.appendChild(progressFill);
 
     const buttonsDiv = document.createElement("div");
