@@ -83,9 +83,18 @@ function applyThemeFromCover(book) {
   const modal = document.querySelectorAll(".modal-content");
 
   modal.forEach(m => {
-    m.style.backgroundImage = `url(${book.cover_url})`;
+    m.style.backgroundImage = `
+    linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
+    url(${book.cover_url})
+  `;
     m.style.backgroundSize = "cover";
     m.style.backgroundPosition = "center";
+    m.style.backgroundRepeat = "no-repeat";
+    m.style.backgroundAttachment = "fixed";
+    m.style.backgroundBlendMode = "overlay";
+    m.style.backgroundOpacity = "0.7";
+    m.style.backgroundFilter = "blur(8px)";
+  
   });
 }
 

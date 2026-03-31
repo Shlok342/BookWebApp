@@ -1205,9 +1205,26 @@ body.dark-theme .sanctuary-panel {
 
 /* ─── MODAL THEME OVERLAY ───────────────── */
 .modal-content {
-  background-color: rgba(0,0,0,0.6);
-  backdrop-filter: blur(8px);
+  position: relative;
   color: white;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* 🔥 BLUR + DARK OVERLAY */
+.modal-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 0;
+}
+
+/* 🔥 KEEP TEXT ABOVE */
+.modal-content > * {
+  position: relative;
+  z-index: 1;
 }
 /* ═══════════════════════════════════════════════════════
    RESPONSIVE — Tablet (≤ 1024px)
