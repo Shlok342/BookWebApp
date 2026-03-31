@@ -19,6 +19,13 @@ toggleBtn.addEventListener('click', () => {
     toggleBtn.textContent = '🌙 Go Dark!';
   }
 });
+function getProgressColor(pct) {
+  if (pct < 25)  return "#4CAF50";   // 🟢 Green  — just getting started
+  if (pct < 50)  return "#FFC107";   // 🟡 Yellow — quarter way through
+  if (pct < 75)  return "#FF9800";   // 🟠 Orange — halfway there
+  if (pct < 100) return "#F44336";   // 🔴 Red    — almost done!
+  return "#9C27B0";                  // 🟣 Purple — finished! 🎉
+}
 async function getBooks() {
   try {
     const response = await fetch("/books");
@@ -180,6 +187,7 @@ function renderBooks(filteredBooks = books) {
     const progressFill = document.createElement("div");
     progressFill.classList.add("progress");
     progressFill.style.width = `${progress}%`;
+    progressFill.style.backgroundColor = getProgressColor(pct);
     progressBar.appendChild(progressFill);
 
     const buttonsDiv = document.createElement("div");
