@@ -134,7 +134,7 @@ function renderBooks(filteredBooks = books) {
       coverDiv.style.backgroundImage = `url(${book.cover_url})`;
       card.appendChild(coverDiv);
     }
-
+    console.log("book", book);
     const title = document.createElement("h2");
     title.textContent = book.title;
 
@@ -454,7 +454,7 @@ document.getElementById("addBookClose").addEventListener("click", () => {
 });
 
 window.addEventListener("click", (event) => {
-  if (event.target === addBookModal) addBookModal.style.display = "none";
+  if (event.target === addBookModal) {addBookModal.style.display = "none";clearTheme(); }
   if (event.target === quotesModal) {
     quotesModal.style.display = "none";
     activeBookId = null;
