@@ -55,7 +55,8 @@ def row_to_book(row):
         "notes":        row[6] if row[6] else "",
         "last_read_date": str(row[7]) if row[7] else None,
         "streak_count": row[8] if row[8] else 0,
-        "created_at":   str(row[9]) if len(row) > 9 and row[9] else None  # 🔥 ADD THIS
+        "created_at":   str(row[9]) if len(row) > 9 and row[9] else None,
+        "cover_url":    row[10] if len(row) > 10 and row[10] else ""
     }
 
 
@@ -65,7 +66,7 @@ def get_books():
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at FROM books"
+            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at, cover_url FROM books"
         )
         rows = cursor.fetchall()
     return [row_to_book(row) for row in rows]
@@ -77,7 +78,7 @@ def get_book(book_id: int):
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count FROM books WHERE id = %s",
+            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at, cover_url FROM books WHERE id = %s",
             (book_id,)
         )
         row = cursor.fetchone()
@@ -94,6 +95,7 @@ class Book(BaseModel):
     author: str = ""
     total_pages: int
     current_page: int = 0
+    cover_url: str = ""
 
 
 @app.post("/books", status_code=201)

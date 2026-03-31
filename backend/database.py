@@ -34,6 +34,10 @@ def init_db():
     ALTER TABLE books
         ADD COLUMN IF NOT EXISTS last_read_date DATE DEFAULT NULL
     """)
+    cursor.execute("""
+    ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_url TEXT DEFAULT '';
+    """)
+    
 
     cursor.execute("""
     ALTER TABLE books

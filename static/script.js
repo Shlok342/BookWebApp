@@ -77,6 +77,23 @@ function renderGlobalStreak(count) {
 }
 
 // ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
+function applyThemeFromCover(book) {
+  if (!book.cover_url) return;
+
+  const modal = document.querySelectorAll(".modal-content");
+
+  modal.forEach(m => {
+    m.style.backgroundImage = `url(${book.cover_url})`;
+    m.style.backgroundSize = "cover";
+    m.style.backgroundPosition = "center";
+  });
+}
+
+function clearTheme() {
+  document.querySelectorAll(".modal-content").forEach(m => {
+    m.style.backgroundImage = "none";
+  });
+}
 function renderBooks(filteredBooks = books) {
   container.innerHTML = "";
 
@@ -110,6 +127,13 @@ function renderBooks(filteredBooks = books) {
 
     const card = document.createElement("div");
     card.classList.add("book-card");
+    // 🖼️ BOOK COVER
+    if (book.cover_url) {
+      const coverDiv = document.createElement("div");
+      coverDiv.classList.add("book-cover");
+      coverDiv.style.backgroundImage = `url(${book.cover_url})`;
+      card.appendChild(coverDiv);
+    }
 
     const title = document.createElement("h2");
     title.textContent = book.title;
@@ -292,6 +316,7 @@ function openQuotesModal(book) {
   activeBookId = book.id;
   document.getElementById("quotesModalTitle").textContent = book.title;
   renderQuotesList(book.quotes || []);
+  applyThemeFromCover(book);
   quotesModal.style.display = "block";
 }
 
@@ -304,6 +329,7 @@ function renderQuotesList(quotes) {
 }
 
 document.getElementById("quotesClose").addEventListener("click", () => {
+  clearTheme();
   quotesModal.style.display = "none";
   activeBookId = null;
   document.getElementById("quoteInput").value = "";
@@ -354,6 +380,7 @@ function openNotesModal(book) {
   const existing = book.notes || "";
   document.getElementById("notesInput").value = existing;
   document.getElementById("notesWordCount").textContent = countWords(existing);
+  applyThemeFromCover(book);
   notesModal.style.display = "block";
 }
 
@@ -365,6 +392,7 @@ document.getElementById("notesInput").addEventListener("input", () => {
 });
 
 document.getElementById("notesClose").addEventListener("click", () => {
+  clearTheme()
   notesModal.style.display = "none";
   activeBookId = null;
 });
@@ -395,7 +423,7 @@ const openBookModalEl = document.getElementById("openBookModal");
 function openBookModal(book) {
   document.getElementById("openBookTitle").textContent  = book.title;
   document.getElementById("openBookAuthor").textContent = book.author ? `by ${book.author}` : "";
-
+  applyThemeFromCover(book);
   const current = book.current_page ?? 0;
   const total   = book.total_pages  ?? 0;
   document.getElementById("openBookProgress").textContent = `${current} / ${total} pages`;
@@ -412,6 +440,7 @@ function openBookModal(book) {
 }
 
 document.getElementById("openBookClose").addEventListener("click", () => {
+  clearTheme();
   openBookModalEl.style.display = "none";
 });
 
@@ -430,13 +459,16 @@ window.addEventListener("click", (event) => {
     quotesModal.style.display = "none";
     activeBookId = null;
     document.getElementById("quoteInput").value = "";
+    clearTheme();
   }
   if (event.target === notesModal) {
     notesModal.style.display = "none";
     activeBookId = null;
+    clearTheme();
   }
   if (event.target === openBookModalEl) {
     openBookModalEl.style.display = "none";
+    clearTheme();
   }
 });
 
@@ -444,6 +476,7 @@ window.addEventListener("click", (event) => {
 document.getElementById("saveBook").addEventListener("click", async () => {
   const title       = document.getElementById("titleInput").value.trim();
   const author      = document.getElementById("authorInput").value.trim();
+  const cover = document.getElementById("coverInput").value.trim();
   const totalPages  = parseInt(document.getElementById("totalPagesInput").value);
   const currentPage = parseInt(document.getElementById("currentPageInput").value) || 0;
 
@@ -460,7 +493,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
     const res = await fetch("/books", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, author, total_pages: totalPages, current_page: currentPage })
+      body: JSON.stringify({ title, author, total_pages: totalPages, current_page: currentPage, cover_url: cover  })
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
