@@ -249,8 +249,10 @@ function renderBooks(filteredBooks = books) {
     progressFill.offsetWidth;
 
     // 🔴 STEP 4: now animate
-    progressFill.style.width = `${progress}%`;
-    progressFill.style.backgroundColor = getProgressColor(pct);
+    requestAnimationFrame(() => {
+      progressFill.style.width = `${progress}%`;
+      progressFill.style.backgroundColor = getProgressColor(pct);
+    });
 
     const buttonsDiv = document.createElement("div");
     buttonsDiv.classList.add("card-buttons");
