@@ -93,7 +93,7 @@ async function getGlobalStreak() {
 }
 
 
-  
+
 //FUNCTION GLOBAL STREAK WARNING:
 function renderGlobalStreak(count, lastReadDate) {
   const el = document.getElementById("globalStreak");
@@ -232,13 +232,13 @@ function renderBooks(filteredBooks = books) {
       </span>
       <span class="pct-badge">${pct}%</span>
     `;
-
+    console.log("Current Progress:", pct, "Color:", getProgressColor(pct));
     const progressBar = document.createElement("div");
     progressBar.classList.add("progress-bar");
     const progressFill = document.createElement("div");
     progressFill.classList.add("progress");
     progressFill.style.width = `${progress}%`;
-    progressFill.style.background = getProgressColor(pct);
+    progressFill.style.backgroundColor = getProgressColor(pct);
     progressBar.appendChild(progressFill);
 
     const buttonsDiv = document.createElement("div");
