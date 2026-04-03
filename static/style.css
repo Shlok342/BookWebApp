@@ -144,18 +144,7 @@ body::after {
   gap: 8px;
   padding: 6px 16px;
   border-radius: 50px; /* The "pill" shape */
-  
-.global-streak-warning {
-  color: #ff5252;
-  font-weight: bold;
-  animation: pulse 1s infinite;
-  }
-  
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.6; }
-  100% { opacity: 1; }
-  }
+
   /* Font matching your brand-sans style */
   font-family: 'Inter', system-ui, sans-serif; 
   font-size: 13px;
@@ -164,6 +153,18 @@ body::after {
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: 1.5px solid transparent;
+}
+
+.global-streak-warning {
+  color: #ff5252;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
 }
 
 /* 2. The "Cold" State (No streak) */
@@ -615,7 +616,8 @@ main {
 }
 
 /* ── Progress Bar ──────────────────────────────────────── */
-.progress-bar {
+.progress-bar,
+.progressBar {
   /* Using CSS variables makes this highly reusable and easy to theme */
   --track-bg: #eee;
   --bar-radius: 999px;
@@ -631,7 +633,8 @@ main {
   /* box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); */
 }
 
-.progress {
+.progress,
+.prgoress {
   height: 100%;
   /* Inherits from the parent so you only have to change it in one place */
   border-radius: inherit; 
