@@ -20,11 +20,8 @@ toggleBtn.addEventListener('click', () => {
   }
 });
 function getProgressColor(pct) {
-  if (pct < 25)  return "#4CAF50";   // 🟢 Green  — just getting started
-  if (pct < 50)  return "#FFC107";   // 🟡 Yellow — quarter way through
-  if (pct < 75)  return "#FF9800";   // 🟠 Orange — halfway there
-  if (pct < 100) return "#F44336";   // 🔴 Red    — almost done!
-  return "#9C27B0";                  // 🟣 Purple — finished! 🎉
+  const hue = (pct / 100) * 270; // 0 → 270 (green → purple-ish)
+  return `hsl(${hue}, 80%, 50%)`;
 }
 async function getBooks() {
   try {
@@ -235,11 +232,25 @@ function renderBooks(filteredBooks = books) {
     console.log("Current Progress:", pct, "Color:", getProgressColor(pct));
     const progressBar = document.createElement("div");
     progressBar.classList.add("progress-bar");
+
     const progressFill = document.createElement("div");
     progressFill.classList.add("progress");
+
+    // 🟡 STEP 1: initial state
+    progressFill.style.width = "0%";
+    progressFill.style.backgroundColor = getProgressColor(0);
+
+    progressBar.appendChild(progressFill);
+
+    // 🟢 STEP 2: add to DOM (IMPORTANT)
+    container.appendChild(progressBar); // use your actual container
+
+    // 🔵 STEP 3: FORCE browser to register initial state
+    progressFill.offsetWidth;
+
+    // 🔴 STEP 4: now animate
     progressFill.style.width = `${progress}%`;
     progressFill.style.backgroundColor = getProgressColor(pct);
-    progressBar.appendChild(progressFill);
 
     const buttonsDiv = document.createElement("div");
     buttonsDiv.classList.add("card-buttons");

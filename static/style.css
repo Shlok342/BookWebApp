@@ -492,7 +492,6 @@ body::after {
 /* ── Main ──────────────────────────────────────────────── */
 main {
   position: relative;
-  z-index: 5;
   padding: 0 32px 36px;
 }
 
