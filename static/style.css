@@ -145,6 +145,17 @@ body::after {
   padding: 6px 16px;
   border-radius: 50px; /* The "pill" shape */
   
+.global-streak-warning {
+  color: #ff5252;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+  }
+  
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+  }
   /* Font matching your brand-sans style */
   font-family: 'Inter', system-ui, sans-serif; 
   font-size: 13px;
