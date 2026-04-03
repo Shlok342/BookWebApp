@@ -616,34 +616,28 @@ main {
 
 /* ── Progress Bar ──────────────────────────────────────── */
 .progress-bar {
+  /* Using CSS variables makes this highly reusable and easy to theme */
+  --track-bg: #eee;
+  --bar-radius: 999px;
+  
   width: 100%;
-  height: 6px;
-  background: var(--progress-bg);
-  border-radius: 50px;
-  margin-bottom: 18px;
+  height: 10px;
+  background-color: var(--track-bg);
+  border-radius: var(--bar-radius);
+  margin: 10px 0;
   overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(100,70,30,0.10);
+  
+  /* Moved shadow to the container (optional inset looks great for tracks) */
+  /* box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); */
 }
 
 .progress {
   height: 100%;
-  background: linear-gradient(90deg,
-    var(--forest) 0%,
-    var(--moss) 65%,
-    var(--moss-light) 100%);
-  border-radius: 50px;
-  transition: width 0.50s var(--ease-out);
-  box-shadow: 0 1px 4px rgba(50,90,40,0.28);
-  position: relative;
-}
-
-/* Sheen on progress fill */
-.progress::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 100%);
-  border-radius: inherit;
+  /* Inherits from the parent so you only have to change it in one place */
+  border-radius: inherit; 
+  
+  /* Targeted transition: background-color is safer to animate than the shorthand 'background' */
+  transition: width 0.6s ease, background-color 0.6s ease;
 }
 
 /* ── Card Buttons ──────────────────────────────────────── */
