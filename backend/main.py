@@ -210,7 +210,8 @@ def update_progress(book_id: int, update: PageUpdate):
         "message": "Progress updated",
         "pages_logged": pages_read,        # 👈 NEW (useful for debugging/UI)
         "streak_count": new_streak,
-        "global_streak": new_global_streak
+        "global_streak": new_global_streak,
+        "last_read_date": str(today)
     }
 
 
