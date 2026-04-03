@@ -64,25 +64,47 @@ async function getGlobalStreak() {
     const res = await fetch("/streak");
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
-    renderGlobalStreak(data.streak_count);
+    renderGlobalStreak(data.streak_count, data.last_read_date);
   } catch (err) {
     console.error("Failed to fetch global streak:", err);
   }
 }
 
-// ─── RENDER GLOBAL STREAK ─────────────────────────────────────────────────────
-function renderGlobalStreak(count) {
+
+
+//FUNCTION GLOBAL STREAK WARNING:
+function renderGlobalStreak(count, lastReadDate) {
   const el = document.getElementById("globalStreak");
   if (!el) return;
+
+  const today = new Date();
+  const last = new Date(lastReadDate);
+  if (!lastReadDate) {
+    el.textContent = "Start your streak today!";
+    return;
+  }
+
+  const diffTime = today - last;
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  // 🚨 CASE 1: DID NOT READ TODAY
+  if (diffDays >= 1) {
+    el.textContent = "⚠️ Not read today? Read to continue your streak!";
+    el.classList.add("global-streak-warning");
+    return;
+  }
+
+  // 🔥 CASE 2: ACTIVE STREAK
   if (count > 0) {
     el.textContent = `🔥 ${count} day streak`;
-    el.classList.remove("global-streak-badge--cold");
-  } else {
+    el.classList.remove("global-streak-warning");
+  } 
+  // 🧊 CASE 3: NO STREAK
+  else {
     el.textContent = "No streak yet — read something today!";
     el.classList.add("global-streak-badge--cold");
   }
 }
-
 // ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
 function applyThemeFromCover(book) {
   if (!book.cover_url) return;
