@@ -638,6 +638,7 @@ main {
   
   /* Targeted transition: background-color is safer to animate than the shorthand 'background' */
   transition: width 0.6s ease, background-color 0.6s ease;
+  will-change: width, background-color;
 }
 
 /* ── Card Buttons ──────────────────────────────────────── */
