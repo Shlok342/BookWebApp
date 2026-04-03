@@ -182,29 +182,32 @@ def update_progress(book_id: int, update: PageUpdate):
                 """,
                 (book_id, pages_read)
             )
-
-        # ── Global streak (UNCHANGED) ──
         cursor.execute(
             "SELECT last_read_date, streak_count FROM user_streak WHERE id = 1"
         )
         g = cursor.fetchone()
         g_last, g_streak = g
+        # ── Global streak (UNCHANGED) ──
+        if pages_read>0:
+            
 
-        if g_last is None:
-            new_global_streak = 1
-        elif g_last == today:
-            new_global_streak = g_streak
-        elif (today - g_last).days == 1:
-            new_global_streak = g_streak + 1
+            if g_last is None:
+                new_global_streak = 1
+            elif g_last == today:
+                new_global_streak = g_streak
+            elif (today - g_last).days == 1:
+                new_global_streak = g_streak + 1
+            else:
+                new_global_streak = 1
+
+            cursor.execute(
+                "UPDATE user_streak SET last_read_date = %s, streak_count = %s WHERE id = 1",
+                (today, new_global_streak)
+            )
+
+            conn.commit()
         else:
-            new_global_streak = 1
-
-        cursor.execute(
-            "UPDATE user_streak SET last_read_date = %s, streak_count = %s WHERE id = 1",
-            (today, new_global_streak)
-        )
-
-        conn.commit()
+            new_global_streak=g_streak
 
     return {
         "message": "Progress updated",

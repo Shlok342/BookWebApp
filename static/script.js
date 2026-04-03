@@ -57,7 +57,29 @@ async function getStats() {
     console.error("Stats error:", err);
   }
 }
+//CHECKS IF THE DAY HAS CHANGED 
+function scheduleMidnightCheck() {
+  function scheduleNext() {
+    const now = new Date();
 
+    const nextMidnight = new Date();
+    nextMidnight.setHours(24, 0, 0, 0);
+
+    const delay = nextMidnight - now;
+
+    setTimeout(async () => {
+      console.log("🌙 Midnight hit — updating streak");
+
+      await getGlobalStreak();
+
+      // 🔁 Reschedule again (SMART)
+      scheduleNext();
+
+    }, delay);
+  }
+
+  scheduleNext();
+}
 // ─── FETCH GLOBAL STREAK ──────────────────────────────────────────────────────
 async function getGlobalStreak() {
   try {
@@ -71,37 +93,44 @@ async function getGlobalStreak() {
 }
 
 
-
+  
 //FUNCTION GLOBAL STREAK WARNING:
 function renderGlobalStreak(count, lastReadDate) {
   const el = document.getElementById("globalStreak");
   if (!el) return;
 
-  const today = new Date();
-  const last = new Date(lastReadDate);
+  // 🧊 No streak yet
   if (!lastReadDate) {
     el.textContent = "Start your streak today!";
+    el.classList.add("global-streak-badge--cold");
+    el.classList.remove("global-streak-warning");
     return;
   }
+  
+  const today = new Date();
+  const last = new Date(lastReadDate);
 
-  const diffTime = today - last;
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  // ⚠️ Normalize dates (VERY IMPORTANT)
+  today.setHours(0,0,0,0);
+  last.setHours(0,0,0,0);
 
-  // 🚨 CASE 1: DID NOT READ TODAY
+  const diffDays = (today - last) / (1000 * 60 * 60 * 24);
+
+  // 🚨 MISSED TODAY
   if (diffDays >= 1) {
     el.textContent = "⚠️ Not read today? Read to continue your streak!";
     el.classList.add("global-streak-warning");
+    el.classList.remove("global-streak-badge--cold");
     return;
   }
 
-  // 🔥 CASE 2: ACTIVE STREAK
+  // 🔥 ACTIVE STREAK
   if (count > 0) {
     el.textContent = `🔥 ${count} day streak`;
     el.classList.remove("global-streak-warning");
-  } 
-  // 🧊 CASE 3: NO STREAK
-  else {
-    el.textContent = "No streak yet — read something today!";
+    el.classList.remove("global-streak-badge--cold");
+  } else {
+    el.textContent = "Start your streak today!";
     el.classList.add("global-streak-badge--cold");
   }
 }
@@ -563,3 +592,4 @@ document.addEventListener("DOMContentLoaded", () => {
 getBooks();
 getStats();
 getGlobalStreak();
+scheduleMidnightCheck();
