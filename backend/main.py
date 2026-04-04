@@ -196,7 +196,14 @@ def update_progress(book_id: int, update: PageUpdate):
             "SELECT last_read_date, streak_count FROM user_streak WHERE id = 1"
         )
         g = cursor.fetchone()
-        g_last, g_streak = g
+        if g is None:
+            # Row doesn't exist yet, create it
+            cursor.execute(
+                "INSERT INTO user_streak (id, last_read_date, streak_count) VALUES (1, NULL, 0)"
+            )
+            g_last, g_streak = None, 0
+        else:
+            g_last, g_streak = g
 
         # ── Global streak (FIXED with min pages rule) ──
         if pages_read >= MIN_PAGES_FOR_STREAK:
