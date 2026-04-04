@@ -19,6 +19,17 @@ toggleBtn.addEventListener('click', () => {
     toggleBtn.textContent = '🌙 Go Dark!';
   }
 });
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.textContent = message;
+  toast.style.cssText = `
+    position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
+    background:#333; color:white; padding:12px 20px; border-radius:8px;
+    font-size:14px; z-index:9999; opacity:1; transition:opacity 0.5s;
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = "0"; setTimeout(() => toast.remove(), 500); }, 3000);
+}
 function getProgressColor(pct) {
   const hue = (pct / 100) * 270; // 0 → 270 (green → purple-ish)
   return `hsl(${hue}, 80%, 50%)`;
@@ -54,29 +65,7 @@ async function getStats() {
     console.error("Stats error:", err);
   }
 }
-//CHECKS IF THE DAY HAS CHANGED 
-function scheduleMidnightCheck() {
-  function scheduleNext() {
-    const now = new Date();
 
-    const nextMidnight = new Date();
-    nextMidnight.setHours(24, 0, 0, 0);
-
-    const delay = nextMidnight - now;
-
-    setTimeout(async () => {
-      console.log("🌙 Midnight hit — updating streak");
-
-      await getGlobalStreak();
-
-      // 🔁 Reschedule again (SMART)
-      scheduleNext();
-
-    }, delay);
-  }
-
-  scheduleNext();
-}
 // ─── FETCH GLOBAL STREAK ──────────────────────────────────────────────────────
 async function getGlobalStreak() {
   try {
@@ -89,7 +78,28 @@ async function getGlobalStreak() {
   }
 }
 
+// CHECKS IF THE DAY HAS CHANGED (reschedule at next local midnight)
+function scheduleMidnightCheck() {
+  function scheduleNext() {
+    const now = new Date();
+    const nextMidnight = new Date(now);
+    nextMidnight.setDate(nextMidnight.getDate() + 1);
+    nextMidnight.setHours(0, 0, 0, 0);
 
+    const delay = Math.max(0, nextMidnight - now);
+
+    setTimeout(async () => {
+      try {
+        console.log("🌙 Midnight hit — updating streak");
+        await getGlobalStreak();
+      } finally {
+        scheduleNext();
+      }
+    }, delay);
+  }
+
+  scheduleNext();
+}
 
 //FUNCTION GLOBAL STREAK WARNING:
 function renderGlobalStreak(count, lastReadDate) {
@@ -582,9 +592,9 @@ document.getElementById("saveBook").addEventListener("click", async () => {
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
-    // FIX: backend now returns global_streak on add — update the badge immediately
-    const data = await res.json();
-    renderGlobalStreak(data.global_streak);
+    await res.json();
+
+    await getGlobalStreak();
 
     document.getElementById("titleInput").value       = "";
     document.getElementById("authorInput").value      = "";

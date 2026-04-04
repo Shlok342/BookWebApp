@@ -59,7 +59,6 @@ def row_to_book(row):
         "cover_url":    row[10] if len(row) > 10 and row[10] else ""
     }
 
-
 # ─── GET ALL BOOKS ───────────────────────────────────────────────────────────
 @app.get("/books")
 def get_books():
