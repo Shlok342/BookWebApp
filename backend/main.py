@@ -135,10 +135,12 @@ class PageUpdate(BaseModel):
 
 @app.patch("/books/{book_id}")
 def update_progress(book_id: int, update: PageUpdate):
+    MIN_PAGES_FOR_STREAK = 2
+
     with get_db() as conn:
         cursor = conn.cursor()
 
-        # ── Get current state (ADD current_page here) ──
+        # ── Get current state ──
         cursor.execute(
             "SELECT current_page, last_read_date, streak_count FROM books WHERE id = %s",
             (book_id,)
@@ -150,18 +152,24 @@ def update_progress(book_id: int, update: PageUpdate):
         current_page_old, last_read_date, streak_count = row
         today = date.today()
 
-        # ── Calculate pages read (NEW) ──
+        # ── Calculate pages read ──
         pages_read = max(0, update.current_page - current_page_old)
 
-        # ── Per-book streak calculation (UNCHANGED) ──
-        if last_read_date is None:
-            new_streak = 1
-        elif last_read_date == today:
-            new_streak = streak_count
-        elif (today - last_read_date).days == 1:
-            new_streak = streak_count + 1
+        # ── Per-book streak (FIXED with min pages rule) ──
+        if pages_read >= MIN_PAGES_FOR_STREAK:
+            if last_read_date is None:
+                new_streak = 1
+            elif last_read_date == today:
+                new_streak = streak_count
+            elif (today - last_read_date).days == 1:
+                new_streak = streak_count + 1
+            else:
+                new_streak = 1
+
+            new_last_read_date = today
         else:
-            new_streak = 1
+            new_streak = streak_count  # ❌ no fake streak
+            new_last_read_date = last_read_date  # ⚠️ DO NOT update date
 
         # ── Update book ──
         cursor.execute(
@@ -170,10 +178,10 @@ def update_progress(book_id: int, update: PageUpdate):
             SET current_page = %s, last_read_date = %s, streak_count = %s 
             WHERE id = %s
             """,
-            (update.current_page, today, new_streak, book_id)
+            (update.current_page, new_last_read_date, new_streak, book_id)
         )
 
-        # ── INSERT reading session (NEW CORE FEATURE) ──
+        # ── Insert reading session ──
         if pages_read > 0:
             cursor.execute(
                 """
@@ -182,14 +190,16 @@ def update_progress(book_id: int, update: PageUpdate):
                 """,
                 (book_id, pages_read)
             )
+
+        # ── Get global streak ──
         cursor.execute(
             "SELECT last_read_date, streak_count FROM user_streak WHERE id = 1"
         )
         g = cursor.fetchone()
         g_last, g_streak = g
-        # ── Global streak (UNCHANGED) ──
-        if pages_read>0:
-            
+
+        # ── Global streak (FIXED with min pages rule) ──
+        if pages_read >= MIN_PAGES_FOR_STREAK:
 
             if g_last is None:
                 new_global_streak = 1
@@ -200,21 +210,24 @@ def update_progress(book_id: int, update: PageUpdate):
             else:
                 new_global_streak = 1
 
+            new_global_last_read = today
+
             cursor.execute(
                 "UPDATE user_streak SET last_read_date = %s, streak_count = %s WHERE id = 1",
-                (today, new_global_streak)
+                (new_global_last_read, new_global_streak)
             )
-
-            conn.commit()
         else:
-            new_global_streak=g_streak
+            new_global_streak = g_streak  # ❌ no update
+
+        conn.commit()
 
     return {
         "message": "Progress updated",
-        "pages_logged": pages_read,        # 👈 NEW (useful for debugging/UI)
+        "pages_logged": pages_read,
         "streak_count": new_streak,
         "global_streak": new_global_streak,
-        "last_read_date": str(today)
+        "last_read_date": str(today) if pages_read >= MIN_PAGES_FOR_STREAK else None,
+        "qualified_for_streak": pages_read >= MIN_PAGES_FOR_STREAK
     }
 
 

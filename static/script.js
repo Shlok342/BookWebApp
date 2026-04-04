@@ -84,6 +84,9 @@ async function getGlobalStreak() {
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
     renderGlobalStreak(data.streak_count, data.last_read_date);
+    if (!data.qualified_for_streak) {
+      alert("📖 Read at least 2 pages to count for streak!");
+    }
   } catch (err) {
     console.error("Failed to fetch global streak:", err);
   }
