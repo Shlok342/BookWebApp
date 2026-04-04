@@ -103,6 +103,7 @@ function scheduleMidnightCheck() {
 
 //FUNCTION GLOBAL STREAK WARNING:
 function renderGlobalStreak(count, lastReadDate) {
+  
   const el = document.getElementById("globalStreak");
   if (!el) return;
 
@@ -125,9 +126,10 @@ function renderGlobalStreak(count, lastReadDate) {
 
   // 🚨 MISSED TODAY
   if (diffDays >= 1) {
-    el.textContent = "⚠️ Not read today? Read to continue your streak!";
     el.classList.add("global-streak-warning");
     el.classList.remove("global-streak-badge--cold");
+  
+    updateTimeLeft(lastReadDate); // 🔥 ADD THIS
     return;
   }
 
@@ -139,6 +141,35 @@ function renderGlobalStreak(count, lastReadDate) {
   } else {
     el.textContent = "Start your streak today!";
     el.classList.add("global-streak-badge--cold");
+  }
+}
+function updateTimeLeft(lastReadDate) {
+  const el = document.getElementById("globalStreak");
+  if (!el) return;
+
+  if (!lastReadDate) return;
+
+  const now = new Date();
+  const last = new Date(lastReadDate);
+
+  now.setHours(0,0,0,0);
+  last.setHours(0,0,0,0);
+
+  const diffDays = (now - last) / (1000 * 60 * 60 * 24);
+
+  // 👉 Only show timer if user has NOT read today
+  if (diffDays >= 1) {
+    const current = new Date();
+
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
+
+    const msLeft = midnight - current;
+
+    const hours = Math.floor(msLeft / (1000 * 60 * 60));
+    const minutes = Math.floor((msLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+    el.textContent = `⏳ ${hours}h ${minutes}m left to save your streak`;
   }
 }
 // ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
@@ -615,6 +646,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("sortOption").addEventListener("change", applyFilters);
 });
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+setInterval(async () => {
+  await getGlobalStreak(); // refresh every minute
+}, 60000);
 getBooks();
 getStats();
 getGlobalStreak();
