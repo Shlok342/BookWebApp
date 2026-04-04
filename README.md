@@ -18,14 +18,14 @@ JavaScript (Vanilla)
 Backend
 Python (FastAPI)
 Database
-SQLite (built-in with Python)
+Neon DB
 📁 Project Structure
 book-tracker/
 
 backend/
     main.py          # FastAPI routes & logic
     database.py      # Database setup
-    books.db         # SQLite database (auto-created)
+    books.db         # Neon DB database (auto-created)
 
 frontend/
     index.html       # UI layout
@@ -36,7 +36,7 @@ requirements.txt
 ⚙️ How It Works
 Backend (FastAPI)
 Handles API requests
-Connects to SQLite database
+Connects to Neon Database using API-KEYS
 Stores books, quotes, and notes
 
 Key endpoints:
