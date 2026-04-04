@@ -28,7 +28,7 @@
   --text-dark:     #251c0d;
   --text-mid:      #5c4530;
   --text-muted:    #9a8060;
-  --text-faint:    #c4ae90;
+  --text-faint:    #030303;
 
   /* Misc */
   --progress-bg:   #ddd0b5;
@@ -880,6 +880,29 @@ main {
   text-align: center;
   margin-bottom: 5px;
   letter-spacing: -0.01em;
+}
+.modal-content {
+  color: #f5f5f5; /* 🔥 makes ALL text white */
+}
+.modal-content input,
+.modal-content textarea {
+  color: rgba(255,255,255,0.7);
+  background: rgba(0, 0, 0, 0.65); /* 🔥 dark glass effect */
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.modal-content textarea::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+.modal-content h1,
+.modal-content h2,
+.modal-content h3,
+.modal-content p,
+.modal-content span {
+  color: #f5f5f5;
+}
+.modal-content {
+  backdrop-filter: blur(12px);
 }
 
 .modal-sub {
