@@ -84,9 +84,6 @@ async function getGlobalStreak() {
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
     renderGlobalStreak(data.streak_count, data.last_read_date);
-    if (!data.qualified_for_streak) {
-      alert("📖 Read at least 2 pages to count for streak!");
-    }
   } catch (err) {
     console.error("Failed to fetch global streak:", err);
   }
@@ -290,7 +287,10 @@ function renderBooks(filteredBooks = books) {
         });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        renderGlobalStreak(data.global_streak);
+        if (!data.qualified_for_streak) {
+          showToast("📖 Read at least 2 pages to count for streak!");
+        }
+        await getGlobalStreak(); // fetches fresh streak_count + last_read_date together
         if (data.global_streak > 1) {
           alert(`🔥 ${data.global_streak}-day global reading streak!`);
         }

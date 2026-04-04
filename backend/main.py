@@ -226,7 +226,7 @@ def update_progress(book_id: int, update: PageUpdate):
         "pages_logged": pages_read,
         "streak_count": new_streak,
         "global_streak": new_global_streak,
-        "last_read_date": str(today) if pages_read >= MIN_PAGES_FOR_STREAK else None,
+        "last_read_date": str(new_last_read_date) if new_last_read_date else None,
         "qualified_for_streak": pages_read >= MIN_PAGES_FOR_STREAK
     }
 
