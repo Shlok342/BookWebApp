@@ -1230,7 +1230,26 @@ footer {
   background: rgba(90, 122, 69, 0.20);
   color: var(--text-dark);
 }
+.modal-content input,
+.modal-content textarea {
+  color: #f5f5f5;
+  background: rgba(0, 0, 0, 0.5); /* 🔥 dark glass effect */
+  border: 1px solid rgba(255,255,255,0.2);
+}
 
+.modal-content textarea::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+.modal-content h1,
+.modal-content h2,
+.modal-content h3,
+.modal-content p,
+.modal-content span {
+  color: #f5f5f5;
+}
+.modal-content {
+  backdrop-filter: blur(12px);
+}
 /* ── Midnight Woods Dark Mode 🦇✨ ─────────────────────── */
 body.dark-theme {
   /* Swapping out the sun for the moon! */
