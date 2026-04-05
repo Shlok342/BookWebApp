@@ -18,8 +18,8 @@ class PageUpdate(BaseModel):
     current_page: int
 from backend.database import init_db, get_connection
 app=FastAPI()
-BASE_DIR = Path(__file__).resolve().parent
-app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+
+app.mount("/static", StaticFiles(directory= "static"), name="static")
 init_db()
 
 app.add_middleware(
@@ -33,9 +33,15 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    BASE_DIR = Path(__file__).resolve().parent
-    return FileResponse(BASE_DIR/"static/index.html")
-
+    
+    return FileResponse("static/index.html")
+class Book(BaseModel):
+    title: str
+    author: str = ""
+    total_pages: int
+    current_page: int = 0
+    genre: str = ""
+    cover_url: str = ""
 # ─── DB HELPER ───────────────────────────────────────────────────────────────
 @contextmanager
 def get_db():
@@ -45,20 +51,20 @@ def get_db():
     finally:
         conn.close()
 
-
 def row_to_book(row):
     return {
-        "id":           row[0],
-        "title":        row[1],
-        "author":       row[2] if row[2] else "",
-        "total_pages":  row[3],
-        "current_page": row[4],
-        "quotes":       json.loads(row[5]) if row[5] else [],
-        "notes":        row[6] if row[6] else "",
+        "id":             row[0],
+        "title":          row[1],
+        "author":         row[2] if row[2] else "",
+        "total_pages":    row[3],
+        "current_page":   row[4],
+        "quotes":         json.loads(row[5]) if row[5] else [],
+        "notes":          row[6] if row[6] else "",
         "last_read_date": str(row[7]) if row[7] else None,
-        "streak_count": row[8] if row[8] else 0,
-        "created_at":   str(row[9]) if len(row) > 9 and row[9] else None,
-        "cover_url":    row[10] if len(row) > 10 and row[10] else ""
+        "streak_count":   row[8] if row[8] else 0,
+        "created_at":     str(row[9]) if row[9] else None,
+        "genre":          row[10] if row[10] else "",
+        "cover_url":      row[11] if row[11] else ""
     }
 
 # ─── GET ALL BOOKS ───────────────────────────────────────────────────────────
@@ -67,11 +73,24 @@ def get_books():
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at, cover_url FROM books"
+            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at, genre,  cover_url FROM books"
         )
         rows = cursor.fetchall()
     return [row_to_book(row) for row in rows]
 
+@app.post("/books")
+def add_book(book: Book):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO books (title, author, total_pages, current_page, genre, cover_url)
+            VALUES (%s, %s, %s, 0, %s, %s)
+            """,
+            (book.title, book.author, book.total_pages, book.genre, book.cover_url)
+        )
+        conn.commit()
+    return {"message": "Book added"}
 
 # ─── GET SINGLE BOOK ─────────────────────────────────────────────────────────
 @app.patch("/books/{book_id}")
