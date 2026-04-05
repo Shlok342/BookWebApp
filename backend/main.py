@@ -72,66 +72,6 @@ def get_books():
 
 
 # ─── GET SINGLE BOOK ─────────────────────────────────────────────────────────
-@app.get("/books/{book_id}")
-def get_book(book_id: int):
-    with get_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at, cover_url FROM books WHERE id = %s",
-            (book_id,)
-        )
-        row = cursor.fetchone()
-
-    if not row:
-        raise HTTPException(status_code=404, detail="Book not found")
-
-    return row_to_book(row)
-
-
-# ─── ADD BOOK ────────────────────────────────────────────────────────────────
-class Book(BaseModel):
-    title: str
-    author: str = ""
-    total_pages: int
-    current_page: int = 0
-    cover_url: str = ""
-
-
-@app.post("/books", status_code=201)
-def add_book(book: Book):
-    with get_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            """
-            INSERT INTO books 
-            (title, author, total_pages, current_page, quotes, notes, cover_url) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s) 
-            RETURNING id
-            """,
-            (
-                book.title,
-                book.author,
-                book.total_pages,
-                book.current_page,
-                "[]",
-                "",
-                book.cover_url  # 🔥 THIS IS THE FIX
-            )
-        )   
-        new_id = cursor.fetchone()[0]
-        conn.commit()
-
-    return {"message": "Book added", "id": new_id}
-
-
-# ─── UPDATE PROGRESS (+ STREAK LOGIC) ────────────────────────────────────────
-from datetime import date
-from fastapi import HTTPException
-
-class PageUpdate(BaseModel):
-    current_page: int
-
-
 @app.patch("/books/{book_id}")
 def update_progress(book_id: int, update: PageUpdate):
     MIN_PAGES_FOR_STREAK = 2
@@ -154,7 +94,7 @@ def update_progress(book_id: int, update: PageUpdate):
         # ── Calculate pages read ──
         pages_read = max(0, update.current_page - current_page_old)
 
-        # ── Per-book streak (FIXED with min pages rule) ──
+        # ── Per-book streak ──
         if pages_read >= MIN_PAGES_FOR_STREAK:
             if last_read_date is None:
                 new_streak = 1
@@ -163,12 +103,12 @@ def update_progress(book_id: int, update: PageUpdate):
             elif (today - last_read_date).days == 1:
                 new_streak = streak_count + 1
             else:
-                new_streak = 1
+                new_streak = streak_count   # 🔥 FREEZE
 
             new_last_read_date = today
         else:
-            new_streak = streak_count  # ❌ no fake streak
-            new_last_read_date = last_read_date  # ⚠️ DO NOT update date
+            new_streak = streak_count
+            new_last_read_date = last_read_date
 
         # ── Update book ──
         cursor.execute(
@@ -192,38 +132,52 @@ def update_progress(book_id: int, update: PageUpdate):
 
         # ── Get global streak ──
         cursor.execute(
-            "SELECT last_read_date, streak_count FROM user_streak WHERE id = 1"
+            "SELECT last_read_date, streak_count, freeze_count FROM user_streak WHERE id = 1"
         )
         g = cursor.fetchone()
+
         if g is None:
-            # Row doesn't exist yet, create it
             cursor.execute(
-                "INSERT INTO user_streak (id, last_read_date, streak_count) VALUES (1, NULL, 0)"
+                "INSERT INTO user_streak (id, last_read_date, streak_count, freeze_count) VALUES (1, NULL, 0, 2)"
             )
-            g_last, g_streak = None, 0
+            g_last, g_streak, g_freeze = None, 0, 2
         else:
-            g_last, g_streak = g
+            g_last, g_streak, g_freeze = g  # ✅ FIXED unpacking
 
-        # ── Global streak (FIXED with min pages rule) ──
+        # ── Global streak ──
         if pages_read >= MIN_PAGES_FOR_STREAK:
-
             if g_last is None:
                 new_global_streak = 1
+
             elif g_last == today:
                 new_global_streak = g_streak
+
             elif (today - g_last).days == 1:
                 new_global_streak = g_streak + 1
+
             else:
-                new_global_streak = 1
+                # ❄️ MISSED DAY
+                if g_freeze > 0:
+                    new_global_streak = g_streak + 1
+                    g_freeze -= 1
+                else:
+                    new_global_streak = g_streak
 
             new_global_last_read = today
 
-            cursor.execute(
-                "UPDATE user_streak SET last_read_date = %s, streak_count = %s WHERE id = 1",
-                (new_global_last_read, new_global_streak)
-            )
         else:
-            new_global_streak = g_streak  # ❌ no update
+            new_global_streak = g_streak
+            new_global_last_read = g_last  # ⚠️ DON'T overwrite date
+
+        # ── Update global streak ──
+        cursor.execute(
+            """
+            UPDATE user_streak 
+            SET last_read_date = %s, streak_count = %s, freeze_count = %s 
+            WHERE id = 1
+            """,
+            (new_global_last_read, new_global_streak, g_freeze)
+        )
 
         conn.commit()
 
@@ -233,9 +187,9 @@ def update_progress(book_id: int, update: PageUpdate):
         "streak_count": new_streak,
         "global_streak": new_global_streak,
         "last_read_date": str(new_last_read_date) if new_last_read_date else None,
-        "qualified_for_streak": pages_read >= MIN_PAGES_FOR_STREAK
-    }
-
+        "qualified_for_streak": pages_read >= MIN_PAGES_FOR_STREAK,
+        "freeze_count":g_freeze}
+        
 
 # ─── GET GLOBAL STREAK ───────────────────────────────────────────────────────
 @app.get("/streak")
