@@ -133,7 +133,7 @@ function renderGlobalStreak(count, lastReadDate) {
     return;
   }
 
-  // 🔥 ACTIVE STREAK
+  // 🔥 ACTIVE STREAKz
   if (count > 0) {
     el.textContent = `🔥 ${count} day streak`;
     el.classList.remove("global-streak-warning");
@@ -608,6 +608,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
   console.log("COVER INPUT:", cover);
   const totalPages  = parseInt(document.getElementById("totalPagesInput").value);
   const currentPage = parseInt(document.getElementById("currentPageInput").value) || 0;
+  const genre = document.getElementById("genreInput").value;
 
   if (!title || isNaN(totalPages)) {
     alert("Please enter a valid title and total pages.");
@@ -622,7 +623,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
     const res = await fetch("/books", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, author, total_pages: totalPages, current_page: currentPage, cover_url: cover  })
+      body: JSON.stringify({ title, author, total_pages: totalPages, current_page: currentPage, cover_url: cover, genre  })
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 

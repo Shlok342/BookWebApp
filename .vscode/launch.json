@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "msedge",
+        "request": "launch",
+        "name": "1. Launch Edge",
+        "url": "https://bookwebapp-dtfb.onrender.com/", 
+        "webRoot": "${workspaceFolder}",
+        "runtimeArgs": [
+          "--remote-debugging-port=9222",
+          "--user-data-dir=${workspaceFolder}/.edge-profile"
+        ]
+      },
+      {
+        "type": "vscode-edge-devtools.debug",
+        "request": "attach",
+        "name": "2. Open Edge DevTools",
+        "url": "https://bookwebapp-dtfb.onrender.com/",
+        "port": 9223
+      }
+    ],
+    "compounds": [
+      {
+        "name": "Launch Edge with DevTools",
+        "configurations": ["1. Launch Edge", "2. Open Edge DevTools"]
+      }
+    ]
+  }

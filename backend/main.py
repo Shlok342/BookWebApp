@@ -14,11 +14,12 @@ from pydantic import BaseModel
 
 # Ensure environment variables are loaded from `backend/.env` regardless of CWD.
 load_dotenv(dotenv_path=Path(__file__).with_name(".env"))
-
+class PageUpdate(BaseModel):
+    current_page: int
 from backend.database import init_db, get_connection
-
-app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app=FastAPI()
+BASE_DIR = Path(__file__).resolve().parent
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 init_db()
 
 app.add_middleware(
@@ -32,7 +33,8 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return FileResponse("static/index.html")
+    BASE_DIR = Path(__file__).resolve().parent
+    return FileResponse(BASE_DIR/"static/index.html")
 
 # ─── DB HELPER ───────────────────────────────────────────────────────────────
 @contextmanager
@@ -92,7 +94,11 @@ def update_progress(book_id: int, update: PageUpdate):
         today = date.today()
 
         # ── Calculate pages read ──
-        pages_read = max(0, update.current_page - current_page_old)
+        if update.current_page >= current_page_old:
+            pages_read = update.current_page - current_page_old
+        else:
+            # User corrected mistake — no reading happened
+            pages_read = 0
 
         # ── Per-book streak ──
         if pages_read >= MIN_PAGES_FOR_STREAK:
@@ -200,10 +206,16 @@ def get_streak():
             "SELECT last_read_date, streak_count FROM user_streak WHERE id = 1"
         )
         row = cursor.fetchone()
-    return {
-        "last_read_date": str(row[0]) if row[0] else None,
-        "streak_count":   row[1] if row[1] else 0
-    }
+        if not row:
+            return {
+                "last_read_date": None,
+                "streak_count": 0
+            }
+        else:
+            return {
+                "last_read_date": str(row[0]) if row[0] else None,
+                "streak_count":   row[1] if row[1] else 0
+            }
 
 
 # ─── UPDATE QUOTES ───────────────────────────────────────────────────────────
@@ -271,7 +283,7 @@ from datetime import datetime
 
 @app.get("/stats")
 def get_stats():
-    with get_connection() as conn:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         # total books
