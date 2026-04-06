@@ -1030,6 +1030,38 @@ textarea:focus {
     0 2px 8px rgba(86, 117, 74, 0.08);
   background: rgba(255, 253, 248, 0.95);
 }
+#genreInput {
+  width: 100%;
+  padding: 11px 15px;
+  margin: 7px 0;
+  border: 1.5px solid var(--sand-light);
+  border-radius: var(--radius-input);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.90rem;
+  color: var(--text-dark);
+  background: rgba(255, 252, 245, 0.80);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2356754a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 10px;
+  cursor: pointer;
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background-color 0.22s ease;
+  box-sizing: border-box;
+}
+
+#genreInput:focus {
+  border-color: var(--moss);
+  box-shadow:
+    0 0 0 3px rgba(86, 117, 74, 0.13),
+    0 2px 8px rgba(86, 117, 74, 0.08);
+  background-color: rgba(255, 253, 248, 0.95);
+}
 
 /* ── Modal Primary Buttons ─────────────────────────────── */
 #saveBook,
