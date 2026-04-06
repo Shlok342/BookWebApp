@@ -222,19 +222,30 @@ def get_streak():
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT last_read_date, streak_count FROM user_streak WHERE id = 1"
+            "SELECT last_read_date, streak_count, freeze_count FROM user_streak WHERE id = 1"
         )
         row = cursor.fetchone()
+
         if not row:
             return {
                 "last_read_date": None,
-                "streak_count": 0
+                "streak_count": 0,
+                "freeze_count": 0
             }
-        else:
-            return {
-                "last_read_date": str(row[0]) if row[0] else None,
-                "streak_count":   row[1] if row[1] else 0
-            }
+
+        last_read, streak, freeze = row
+
+        # 💀 AUTO RESET CHECK (VERY IMPORTANT)
+        if last_read:
+            diff_days = (date.today() - last_read).days
+            if diff_days >= 2:
+                streak = 0
+
+        return {
+            "last_read_date": str(last_read) if last_read else None,
+            "streak_count": streak or 0,
+            "freeze_count": freeze or 0
+        }
 
 
 # ─── UPDATE QUOTES ───────────────────────────────────────────────────────────
