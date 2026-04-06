@@ -387,7 +387,7 @@ function applyFilters() {
   let filtered = books.filter(book => {
     console.log(books.map(b => ({ title: b.title, genre: b.genre })));
     const matchesSearch = book.title.toLowerCase().includes(searchValue);
-    const matchesGenre = !genreValue || (book.genre || "") === genreValue;
+    const matchesGenre = !genreValue || (book.genre || "").toLowerCase() === genreValue.toLowerCase();
 
     let status = "not-started";
     if (book.current_page === 0) status = "not-started";
