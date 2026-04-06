@@ -385,7 +385,7 @@ function applyFilters() {
   const genreValue = document.getElementById("genreFilter").value.toLowerCase();
 
   let filtered = books.filter(book => {
-
+    console.log(books.map(b => ({ title: b.title, genre: b.genre })));
     const matchesSearch = book.title.toLowerCase().includes(searchValue);
     const matchesGenre = !genreValue || (book.genre || "") === genreValue;
 
