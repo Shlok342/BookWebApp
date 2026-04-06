@@ -27,9 +27,10 @@ def init_db():
                 last_read_date DATE DEFAULT NULL,
                 streak_count INTEGER DEFAULT 0,
                 genre TEXT DEFAULT '',
+                cover_url TEXT DEFAULT '',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
-            """)
+        """)
 
             # ─── SAFE MIGRATIONS (for existing DB) ───────────────────
             cursor.execute("""
