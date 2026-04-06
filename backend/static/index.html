@@ -122,6 +122,21 @@
         <option value="completed">Completed</option>
         <option value="in-progress">In Progress</option>
         <option value="not-started">Not Started</option>
+        <select id="genreFilter" onchange="applyFilters()">
+          <option value="">All Genres</option>
+          <option value="Fiction">Fiction</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Sci-Fi">Sci-Fi</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Thriller">Thriller</option>
+          <option value="Romance">Romance</option>
+          <option value="Non-Fiction">Non-Fiction</option>
+          <option value="Biography">Biography</option>
+          <option value="Self-Help">Self-Help</option>
+          <option value="Philosophy">Philosophy</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Classics">Classics</option>
+        </select>
       </select>
   
       <select id="sortOption">
@@ -164,6 +179,9 @@
       <option value="Non-Fiction">Non-Fiction</option>
       <option value="Biography">Biography</option>
       <option value="Self-Help">Self-Help</option>
+      <option value="Philosophy">Philosophy</option>
+      <option value="Adventure">Adventure</option>
+      <option value="Classics">Classics</option>
     </select>
     <button id="saveBook">Save to Library</button>
   </div>
