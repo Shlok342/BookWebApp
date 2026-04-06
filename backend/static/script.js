@@ -102,7 +102,7 @@ function scheduleMidnightCheck() {
 }
 
 //FUNCTION GLOBAL STREAK WARNING:
-function renderGlobalStreak(count, lastReadDate) {
+function renderGlobalStreak(count, lastReadDate, freezeCount) {
   
   const el = document.getElementById("globalStreak");
   if (!el) return;
@@ -125,13 +125,40 @@ function renderGlobalStreak(count, lastReadDate) {
   const diffDays = (today - last) / (1000 * 60 * 60 * 24);
 
   // 🚨 MISSED TODAY
-  if (diffDays >= 1) {
-    el.classList.add("global-streak-warning");
-    el.classList.remove("global-streak-badge--cold");
+  // ❌ Streak LOST (missed more than 1 day)
   
-    updateTimeLeft(lastReadDate); // 🔥 ADD THIS
-    return;
+
+  // ❌ LOST
+if (diffDays >= 2) {
+  el.textContent = "💀 Streak lost. Start again!";
+  if (freezeCount > 0) {
+    el.textContent += ` 🧊 ${freezeCount}`;
   }
+  el.classList.remove("global-streak-warning");
+  el.classList.add("global-streak-badge--cold");
+  return;
+}
+
+// ⚠️ LAST CHANCE
+if (diffDays >= 1 && diffDays < 2) {
+  el.classList.add("global-streak-warning");
+  el.classList.remove("global-streak-badge--cold");
+
+  updateTimeLeft(lastReadDate);
+
+  if (freezeCount > 0) {
+    el.textContent += ` 🧊 ${freezeCount}`;
+  }
+  return;
+}
+
+// 🔥 ACTIVE
+if (count > 0) {
+  el.textContent = `🔥 ${count} day streak`;
+  if (freezeCount > 0) {
+    el.textContent += ` 🧊 ${freezeCount}`;
+  }
+}
 
   // 🔥 ACTIVE STREAKz
   if (count > 0) {
@@ -145,7 +172,7 @@ function renderGlobalStreak(count, lastReadDate) {
   if (freezeCount > 0) {
     el.textContent += ` 🧊 ${freezeCount} freeze${freezeCount > 1 ? "s" : ""}`;
   }
-}
+} 
 function updateTimeLeft(lastReadDate) {
   const el = document.getElementById("globalStreak");
   if (!el) return;
