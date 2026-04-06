@@ -41,7 +41,8 @@ def init_db():
             ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_url TEXT DEFAULT '';
             """)
             
-
+            cursor.execute("ALTER TABLE books ADD COLUMN IF NOT EXISTS genre TEXT DEFAULT ''")
+            cursor.execute("ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_url TEXT DEFAULT ''")
             
 
             cursor.execute("""
