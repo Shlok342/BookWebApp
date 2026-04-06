@@ -11,15 +11,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent
 # Ensure environment variables are loaded from `backend/.env` regardless of CWD.
 load_dotenv(dotenv_path=Path(__file__).with_name(".env"))
 class PageUpdate(BaseModel):
     current_page: int
 from backend.database import init_db, get_connection
 app=FastAPI()
-
-app.mount("/static", StaticFiles(directory= "static"), name="static")
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 init_db()
 
 app.add_middleware(
@@ -33,8 +34,7 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    
-    return FileResponse("static/index.html")
+    return FileResponse(BASE_DIR / "static" / "index.html")
 class Book(BaseModel):
     title: str
     author: str = ""
