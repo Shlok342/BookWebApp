@@ -623,7 +623,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
     const res = await fetch("/books", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, author, total_pages: totalPages, current_page: currentPage, cover_url: cover, genre  })
+      body: JSON.stringify({ title, author, total_pages: totalPages, current_page: currentPage, genre, cover_url: cover  })
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 

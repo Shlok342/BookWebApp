@@ -26,6 +26,7 @@ def init_db():
                 quotes TEXT DEFAULT '[]',
                 last_read_date DATE DEFAULT NULL,
                 streak_count INTEGER DEFAULT 0,
+                genre TEXT DEFAULT '',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
             """)
@@ -38,6 +39,8 @@ def init_db():
             cursor.execute("""
             ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_url TEXT DEFAULT '';
             """)
+            
+
             
 
             cursor.execute("""
@@ -87,6 +90,5 @@ def init_db():
             ON CONFLICT (id) DO NOTHING
             """)
             
-    conn.commit()
-    cursor.close()
+ 
     conn.close()
