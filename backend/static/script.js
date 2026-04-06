@@ -382,10 +382,12 @@ function applyFilters() {
   const searchValue = document.getElementById("searchInput").value.toLowerCase();
   const filterValue = document.getElementById("statusFilter").value;
   const sortValue   = document.getElementById("sortOption").value;
+  const genreValue = document.getElementById("genreInput").value.toLowerCase();
 
   let filtered = books.filter(book => {
 
     const matchesSearch = book.title.toLowerCase().includes(searchValue);
+    const matchesGenre = !genreValue || (book.genre || "").toLowerCase().includes(genreValue);
 
     let status = "not-started";
     if (book.current_page === 0) status = "not-started";
@@ -394,7 +396,7 @@ function applyFilters() {
 
     const matchesFilter = filterValue === "all" || status === filterValue;
 
-    return matchesSearch && matchesFilter;
+    return matchesSearch && matchesFilter && matchesGenre;
   });
 
   // 🔥 SORTING LOGIC
