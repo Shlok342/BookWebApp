@@ -78,28 +78,7 @@ bibliotheca/
 ```
 
 ---
-
-## 🚀 Running Locally
-
-**1. Clone & install dependencies**
-```bash
-git clone https://github.com/yourname/bibliotheca.git
-cd bibliotheca
-pip install -r requirements.txt
-```
-
-**2. Set up your environment**
-```bash
-# .env
-DATABASE_URL=postgresql://user:password@localhost:5432/bibliotheca
-```
-
-**3. Start the server**
-```bash
-gunicorn main:app -w 1 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
-```
-
-**4. Open `static/index.html` in your browser** — or serve it via FastAPI's `StaticFiles` mount.
+mount.
 
 ---
 
