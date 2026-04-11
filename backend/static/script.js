@@ -45,6 +45,21 @@ async function getBooks() {
     container.innerHTML = "<p>Could not load books. Is the server running?</p>";
   }
 }
+async function getColorsFromImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = url;
+
+    img.onload = () => {
+      Vibrant.from(img).getPalette()
+        .then(palette => resolve(palette))
+        .catch(err => reject(err));
+    };
+
+    img.onerror = reject;
+  });
+}
 
 // ─── FETCH STATS ──────────────────────────────────────────────────────────────
 // FIX: was using `${BASE_URL}/stats` (full origin URL) — everything else uses
@@ -202,31 +217,57 @@ function updateTimeLeft(lastReadDate) {
     el.textContent = `⏳ ${hours}h ${minutes}m left to save your streak`;
   }
 }
-// ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
-function applyThemeFromCover(book) {
-  if (!book.cover_url) return;
-
-  const modal = document.querySelectorAll(".modal-content");
-
-  modal.forEach(m => {
-    m.style.backgroundImage = `
-    linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)),
-    url(${book.cover_url})
-  `;
-    m.style.backgroundSize = "cover";
-    m.style.backgroundPosition = "center";
-    m.style.backgroundRepeat = "no-repeat";
-    m.style.backgroundAttachment = "fixed";
-    m.style.backgroundBlendMode = "overlay";
-    m.style.backgroundOpacity = "0.7";
-    m.style.backgroundFilter = "blur(8px)";
-  
-  });
+function closeAll() {
+  clearTheme();
+  quotesModal.style.display = "none";
+  notesModal.style.display = "none";
+  openBookModalEl.style.display = "none";
 }
 
+window.addEventListener("click", (e) => {
+  if (e.target.classList.contains("modal")) closeAll();
+});
+
+// ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
+
+async function applyThemeFromCover(book) {
+  if (!book.cover_url.trim()) {
+    document.querySelectorAll(".modal-content").forEach(m => {
+      m.style.background = "linear-gradient(135deg, #2c3e50, #4ca1af)";
+      m.style.color = "#fff";
+    });
+    return;
+  }
+
+  try {
+    const palette = await getColorsFromImage(book.cover_url);
+
+    const bg = palette.DarkVibrant?.hex || "#1e1e1e";
+    const accent = palette.Vibrant?.hex || "#ffcc00";
+    const text = palette.LightVibrant?.hex || "#ffffff";
+
+    document.querySelectorAll(".modal-content").forEach(m => {
+      m.style.background = `linear-gradient(135deg, ${bg}, ${accent})`;
+      m.style.color = text;
+      m.style.transition = "all 0.3s ease";
+
+      const btn = m.querySelector("button");
+      if (btn) btn.style.background = accent;
+    });
+  } catch (err) {
+    const bg = palette.DarkVibrant?.hex || "#1e1e1e";
+    const accent = palette.Vibrant?.hex || "#ffcc00";
+    const text = palette.LightVibrant?.hex || "#ffffff";
+    console.error("Color extraction failed:", err);
+  }
+}
 function clearTheme() {
   document.querySelectorAll(".modal-content").forEach(m => {
-    m.style.backgroundImage = "none";
+    m.style.background = "";
+    m.style.color = "";
+
+    const btn = m.querySelector("button");
+    if (btn) btn.style.background = "";
   });
 }
 function renderBooks(filteredBooks = books) {
@@ -469,11 +510,11 @@ if (sortValue === "date-asc") {
 const quotesModal  = document.getElementById("quotesModal");
 const addBookModal = document.getElementById("addBookModal");
 
-function openQuotesModal(book) {
+async function openQuotesModal(book) {
   activeBookId = book.id;
   document.getElementById("quotesModalTitle").textContent = book.title;
   renderQuotesList(book.quotes || []);
-  applyThemeFromCover(book);
+  await applyThemeFromCover(book);
   quotesModal.style.display = "block";
 }
 
@@ -531,13 +572,13 @@ function countWords(text) {
   return text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
 }
 
-function openNotesModal(book) {
+async function openNotesModal(book) {
   activeBookId = book.id;
   document.getElementById("notesModalTitle").textContent = `Notes — ${book.title}`;
   const existing = book.notes || "";
   document.getElementById("notesInput").value = existing;
   document.getElementById("notesWordCount").textContent = countWords(existing);
-  applyThemeFromCover(book);
+  await applyThemeFromCover(book);
   notesModal.style.display = "block";
 }
 
@@ -577,10 +618,10 @@ document.getElementById("saveNotesBtn").addEventListener("click", async () => {
 // ─── OPEN BOOK MODAL ──────────────────────────────────────────────────────────
 const openBookModalEl = document.getElementById("openBookModal");
 
-function openBookModal(book) {
+async function openBookModal(book) {
   document.getElementById("openBookTitle").textContent  = book.title;
   document.getElementById("openBookAuthor").textContent = book.author ? `by ${book.author}` : "";
-  applyThemeFromCover(book);
+  await applyThemeFromCover(book);
   const current = book.current_page ?? 0;
   const total   = book.total_pages  ?? 0;
   document.getElementById("openBookProgress").textContent = `${current} / ${total} pages`;
