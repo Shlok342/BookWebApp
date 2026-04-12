@@ -249,6 +249,8 @@ def get_streak():
             if diff_days > 2:
                 streak = 0
                 freeze = 0
+                last_read = None  # 🔥 THIS IS THE FIX
+                
 
             # 🧊 USE FREEZE OR LOSE
             elif diff_days >= 1:
@@ -259,11 +261,12 @@ def get_streak():
 
             # ✅ SAVE BACK TO DB
             cursor.execute("""
-                UPDATE user_streak
-                SET streak_count = %s,
-                    freeze_count = %s
-                WHERE id = 1
-            """, (streak, freeze))
+                    UPDATE user_streak
+                    SET streak_count = %s,
+                        freeze_count = %s,
+                        last_read_date = %s
+                    WHERE id = 1
+                """, (streak, freeze, last_read))
 
             conn.commit()
 

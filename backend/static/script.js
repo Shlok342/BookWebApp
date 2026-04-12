@@ -115,7 +115,9 @@ function scheduleMidnightCheck() {
 
   scheduleNext();
 }
-
+if (data.is_lost) {
+  el.textContent = "💀 Streak frozen too long. Start again!";
+}
 //FUNCTION GLOBAL STREAK WARNING:
 function renderGlobalStreak(count, lastReadDate, freezeCount) {
   
@@ -124,7 +126,11 @@ function renderGlobalStreak(count, lastReadDate, freezeCount) {
 
   // 🧊 No streak yet
   if (!lastReadDate) {
-    el.textContent = "Start your streak today!";
+    
+      el.textContent = count === 0
+        ? "💀 Your streak died. Start again!"
+        : "Start your streak today!";
+    
     el.classList.add("global-streak-badge--cold");
     el.classList.remove("global-streak-warning");
     return;
