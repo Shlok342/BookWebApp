@@ -231,16 +231,19 @@ window.addEventListener("click", (e) => {
 // ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
 
 async function applyThemeFromCover(book) {
-  if (!book.cover_url.trim()) {
-    document.querySelectorAll(".modal-content").forEach(m => {
-      m.style.background = "linear-gradient(135deg, #2c3e50, #4ca1af)";
-      m.style.color = "#fff";
-    });
-    return;
-  }
-
   try {
-    const palette = await getColorsFromImage(book.cover_url);
+    if (!book.cover_url || !book.cover_url.trim()) return;
+
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = book.cover_url;
+
+    await new Promise((res, rej) => {
+      img.onload = res;
+      img.onerror = rej;
+    });
+
+    const palette = await Vibrant.from(img).getPalette();
 
     const bg = palette.DarkVibrant?.hex || "#1e1e1e";
     const accent = palette.Vibrant?.hex || "#ffcc00";
@@ -249,16 +252,22 @@ async function applyThemeFromCover(book) {
     document.querySelectorAll(".modal-content").forEach(m => {
       m.style.background = `linear-gradient(135deg, ${bg}, ${accent})`;
       m.style.color = text;
-      m.style.transition = "all 0.3s ease";
 
       const btn = m.querySelector("button");
       if (btn) btn.style.background = accent;
     });
+
   } catch (err) {
-    const bg = palette.DarkVibrant?.hex || "#1e1e1e";
-    const accent = palette.Vibrant?.hex || "#ffcc00";
-    const text = palette.LightVibrant?.hex || "#ffffff";
-    console.error("Color extraction failed:", err);
+    if (book.cover_url.startsWith("data:image")) {
+      console.log("Base64 detected");
+    }
+    console.warn("Theme failed, fallback used:", err);
+    
+    // 🔥 fallback so modal STILL works
+    document.querySelectorAll(".modal-content").forEach(m => {
+      m.style.background = "linear-gradient(135deg, #2c3e50, #4ca1af)";
+      m.style.color = "#fff";
+    });
   }
 }
 function clearTheme() {
@@ -514,8 +523,9 @@ async function openQuotesModal(book) {
   activeBookId = book.id;
   document.getElementById("quotesModalTitle").textContent = book.title;
   renderQuotesList(book.quotes || []);
-  await applyThemeFromCover(book);
   quotesModal.style.display = "block";
+  await applyThemeFromCover(book);
+  
 }
 
 function renderQuotesList(quotes) {
@@ -578,8 +588,9 @@ async function openNotesModal(book) {
   const existing = book.notes || "";
   document.getElementById("notesInput").value = existing;
   document.getElementById("notesWordCount").textContent = countWords(existing);
-  await applyThemeFromCover(book);
   notesModal.style.display = "block";
+  await applyThemeFromCover(book);
+  
 }
 
 document.getElementById("notesInput").addEventListener("input", () => {
@@ -621,6 +632,7 @@ const openBookModalEl = document.getElementById("openBookModal");
 async function openBookModal(book) {
   document.getElementById("openBookTitle").textContent  = book.title;
   document.getElementById("openBookAuthor").textContent = book.author ? `by ${book.author}` : "";
+  openBookModalEl.style.display = "block";
   await applyThemeFromCover(book);
   const current = book.current_page ?? 0;
   const total   = book.total_pages  ?? 0;
@@ -634,7 +646,7 @@ async function openBookModal(book) {
   const notes = book.notes?.trim();
   document.getElementById("openBookNotes").textContent = notes || "No notes yet.";
 
-  openBookModalEl.style.display = "block";
+  
 }
 
 document.getElementById("openBookClose").addEventListener("click", () => {
