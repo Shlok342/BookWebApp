@@ -92,9 +92,7 @@ async function getGlobalStreak() {
     console.error("Failed to fetch global streak:", err);
   }
 }
-if (data.is_lost) {
-  el.textContent = "💀 Streak frozen too long. Start again!";
-}
+
 
 // CHECKS IF THE DAY HAS CHANGED (reschedule at next local midnight)
 function scheduleMidnightCheck() {
