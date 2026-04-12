@@ -26,21 +26,29 @@ const quoteClose = document.getElementById("quoteClose");
 
 quoteBtn.onclick = async () => {
   quoteModal.style.display = "block";
-  document.getElementById("quoteDayText").textContent = "Loading...";
+  document.getElementById("quoteDayText").textContent = "Fetching wisdom...";
   document.getElementById("quoteDayAuthor").textContent = "";
 
   try {
     const res = await fetch("/quote");
+    if (!res.ok) throw new Error("API failed");
+
     const data = await res.json();
+
     document.getElementById("quoteDayText").textContent = `"${data.quote}"`;
-    document.getElementById("quoteDayAuthor").textContent = `— ${data.author}`;
-  } catch {
-    document.getElementById("quoteDayText").textContent = "Could not load quote. Try again!";
+    document.getElementById("quoteDayAuthor").textContent =
+      data.author ? `— ${data.author}` : "";
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("quoteDayText").textContent =
+      "Could not load quote. Try again!";
   }
 
 };
 
 quoteClose.onclick = () => quoteModal.style.display = "none";
+
 window.addEventListener("click", (e) => {
   if (e.target === quoteModal) quoteModal.style.display = "none";
 });
