@@ -30,21 +30,14 @@ quoteBtn.onclick = async () => {
   document.getElementById("quoteDayAuthor").textContent = "";
 
   try {
-    const res = await fetch("https://zenquotes.io/api/today");
+    const res = await fetch("/quote");
     const data = await res.json();
-    document.getElementById("quoteDayText").textContent = `"${data[0].q}"`;
-    document.getElementById("quoteDayAuthor").textContent = `— ${data[0].a}`;
+    document.getElementById("quoteDayText").textContent = `"${data.quote}"`;
+    document.getElementById("quoteDayAuthor").textContent = `— ${data.author}`;
   } catch {
-    // Fallback to Quotable if ZenQuotes fails (CORS on some hosts)
-    try {
-      const res = await fetch("https://api.quotable.io/quotes/random?tags=literature");
-      const data = await res.json();
-      document.getElementById("quoteDayText").textContent = `"${data[0].content}"`;
-      document.getElementById("quoteDayAuthor").textContent = `— ${data[0].author}`;
-    } catch {
-      document.getElementById("quoteDayText").textContent = "Could not load quote. Try again!";
-    }
+    document.getElementById("quoteDayText").textContent = "Could not load quote. Try again!";
   }
+
 };
 
 quoteClose.onclick = () => quoteModal.style.display = "none";
