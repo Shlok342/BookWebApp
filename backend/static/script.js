@@ -231,6 +231,10 @@ window.addEventListener("click", (e) => {
 // ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
 
 async function applyThemeFromCover(book) {
+  if (typeof Vibrant === "undefined") {
+    console.error("Vibrant STILL not loaded");
+    return;
+  }
   try {
     if (!book.cover_url || !book.cover_url.trim()) return;
 
