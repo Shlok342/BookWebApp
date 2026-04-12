@@ -944,7 +944,7 @@ main {
 
 /* 🔥 STRICT CONSTRAINT: PRESERVE EXACT MODAL TYPOGRAPHY OVERRIDES 🔥 */
 .modal-content {
-  color: #f5f5f5; /* 🔥 makes ALL text white */
+  color: #a8bf9a; /* 🔥 makes ALL text white */
 }
 .modal-content input,
 .modal-content textarea {
@@ -961,7 +961,7 @@ main {
 .modal-content h3,
 .modal-content p,
 .modal-content span {
-  color: #f5f5f5;
+  color: #a8bf9a;
 }
 .modal-content {
   backdrop-filter: blur(12px);
@@ -1074,7 +1074,7 @@ textarea:focus {
   margin-top: 14px;
   padding: 12px;
   background: linear-gradient(135deg, var(--forest) 0%, var(--forest-mid) 100%);
-  color: #f2ead6;
+  color: #a8bf9a;
   border: none;
   border-radius: var(--radius-btn);
   font-family: 'DM Sans', sans-serif;
@@ -1266,7 +1266,7 @@ footer {
 }
 .modal-content input,
 .modal-content textarea {
-  color: #f5f5f5;
+  color: #a8893d;
   background: rgba(0, 0, 0, 0.5); /* 🔥 dark glass effect */
   border: 1px solid rgba(255,255,255,0.2);
 }
