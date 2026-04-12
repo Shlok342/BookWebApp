@@ -739,7 +739,9 @@ document.addEventListener("DOMContentLoaded", () => {
 setInterval(async () => {
   await getGlobalStreak(); // refresh every minute
 }, 60000);
-getBooks();
-getStats();
-getGlobalStreak();
-scheduleMidnightCheck();
+document.addEventListener("DOMContentLoaded", () => {
+  getBooks();
+  getStats();
+  getGlobalStreak();
+  scheduleMidnightCheck();
+});
