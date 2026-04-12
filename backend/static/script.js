@@ -191,17 +191,17 @@ if (count > 0) {
 }
 
   // 🔥 ACTIVE STREAKz
-  if (count > 0) {
-    el.textContent = `🔥 ${count} day streak`;
-    el.classList.remove("global-streak-warning");
-    el.classList.remove("global-streak-badge--cold");
-  } else {
-    el.textContent = "Start your streak today!";
-    el.classList.add("global-streak-badge--cold");
-  }
+  // 🔥 ACTIVE
+if (count > 0) {
+  el.textContent = `🔥 ${count} day streak`;
   if (freezeCount > 0) {
     el.textContent += ` 🧊 ${freezeCount} freeze${freezeCount > 1 ? "s" : ""}`;
   }
+  el.classList.remove("global-streak-warning");
+  el.classList.remove("global-streak-badge--cold");
+  return;  // ← add this so the dead block below never runs
+}
+  
 } 
 function updateTimeLeft(lastReadDate) {
   const el = document.getElementById("globalStreak");

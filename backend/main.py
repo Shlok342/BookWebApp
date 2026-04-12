@@ -93,6 +93,7 @@ def add_book(book: Book):
     return {"message": "Book added"}
 
 # ─── GET SINGLE BOOK ─────────────────────────────────────────────────────────
+
 @app.patch("/books/{book_id}")
 def update_progress(book_id: int, update: PageUpdate):
     MIN_PAGES_FOR_STREAK = 2
@@ -100,7 +101,7 @@ def update_progress(book_id: int, update: PageUpdate):
     with get_db() as conn:
         cursor = conn.cursor()
 
-        # ── Get current state ──
+        # ── Get current book state ──
         cursor.execute(
             "SELECT current_page, last_read_date, streak_count FROM books WHERE id = %s",
             (book_id,)
@@ -113,33 +114,30 @@ def update_progress(book_id: int, update: PageUpdate):
         today = date.today()
 
         # ── Calculate pages read ──
-        if update.current_page >= current_page_old:
-            pages_read = update.current_page - current_page_old
-        else:
-            # User corrected mistake — no reading happened
-            pages_read = 0
+        # If user corrected a mistake (lower number), treat as 0
+        pages_read = max(0, update.current_page - current_page_old)
+        qualified  = pages_read >= MIN_PAGES_FOR_STREAK
 
         # ── Per-book streak ──
-        if pages_read >= MIN_PAGES_FOR_STREAK:
+        if qualified:
             if last_read_date is None:
                 new_streak = 1
             elif last_read_date == today:
-                new_streak = streak_count
+                new_streak = streak_count          # already counted today
             elif (today - last_read_date).days == 1:
-                new_streak = streak_count + 1
+                new_streak = streak_count + 1      # consecutive day
             else:
-                new_streak = streak_count   # 🔥 FREEZE
-
+                new_streak = 1                     # ❌ gap too big — reset
             new_last_read_date = today
         else:
-            new_streak = streak_count
+            new_streak         = streak_count      # not enough pages, no change
             new_last_read_date = last_read_date
 
         # ── Update book ──
         cursor.execute(
             """
-            UPDATE books 
-            SET current_page = %s, last_read_date = %s, streak_count = %s 
+            UPDATE books
+            SET current_page = %s, last_read_date = %s, streak_count = %s
             WHERE id = %s
             """,
             (update.current_page, new_last_read_date, new_streak, book_id)
@@ -148,14 +146,11 @@ def update_progress(book_id: int, update: PageUpdate):
         # ── Insert reading session ──
         if pages_read > 0:
             cursor.execute(
-                """
-                INSERT INTO reading_sessions (book_id, pages_read)
-                VALUES (%s, %s)
-                """,
+                "INSERT INTO reading_sessions (book_id, pages_read) VALUES (%s, %s)",
                 (book_id, pages_read)
             )
 
-        # ── Get global streak ──
+        # ── Get global streak (create row if missing) ──
         cursor.execute(
             "SELECT last_read_date, streak_count, freeze_count FROM user_streak WHERE id = 1"
         )
@@ -167,38 +162,38 @@ def update_progress(book_id: int, update: PageUpdate):
             )
             g_last, g_streak, g_freeze = None, 0, 2
         else:
-            g_last, g_streak, g_freeze = g  # ✅ FIXED unpacking
+            g_last, g_streak, g_freeze = g
 
         # ── Global streak ──
-        if pages_read >= MIN_PAGES_FOR_STREAK:
+        if qualified:
             if g_last is None:
-                new_global_streak = 1
+                new_global_streak = 1                      # first ever read
 
             elif g_last == today:
-                new_global_streak = g_streak
+                new_global_streak = g_streak               # already counted today
 
             elif (today - g_last).days == 1:
-                new_global_streak = g_streak + 1
+                new_global_streak = g_streak + 1           # consecutive day
 
             else:
-                # ❄️ MISSED DAY
+                # ❄️ missed a day
                 if g_freeze > 0:
-                    new_global_streak = g_streak + 1
+                    new_global_streak = g_streak + 1       # freeze saves it
                     g_freeze -= 1
                 else:
-                    new_global_streak = g_streak
+                    new_global_streak = 1                  # ❌ no freezes — reset
 
             new_global_last_read = today
 
         else:
-            new_global_streak = g_streak
-            new_global_last_read = g_last  # ⚠️ DON'T overwrite date
+            new_global_streak    = g_streak                # not enough pages, no change
+            new_global_last_read = g_last                  # ⚠️ don't overwrite date
 
         # ── Update global streak ──
         cursor.execute(
             """
-            UPDATE user_streak 
-            SET last_read_date = %s, streak_count = %s, freeze_count = %s 
+            UPDATE user_streak
+            SET last_read_date = %s, streak_count = %s, freeze_count = %s
             WHERE id = 1
             """,
             (new_global_last_read, new_global_streak, g_freeze)
@@ -207,13 +202,14 @@ def update_progress(book_id: int, update: PageUpdate):
         conn.commit()
 
     return {
-        "message": "Progress updated",
-        "pages_logged": pages_read,
-        "streak_count": new_streak,
-        "global_streak": new_global_streak,
-        "last_read_date": str(new_last_read_date) if new_last_read_date else None,
-        "qualified_for_streak": pages_read >= MIN_PAGES_FOR_STREAK,
-        "freeze_count":g_freeze}
+        "message":             "Progress updated",
+        "pages_logged":        pages_read,
+        "streak_count":        new_streak,
+        "global_streak":       new_global_streak,
+        "last_read_date":      str(new_last_read_date) if new_last_read_date else None,
+        "qualified_for_streak": qualified,
+        "freeze_count":        g_freeze
+    }
         
 
 # ─── GET GLOBAL STREAK ───────────────────────────────────────────────────────
@@ -225,51 +221,18 @@ from datetime import date
 def get_streak():
     with get_db() as conn:
         cursor = conn.cursor()
-
         cursor.execute(
             "SELECT last_read_date, streak_count, freeze_count FROM user_streak WHERE id = 1"
         )
         row = cursor.fetchone()
 
         if not row:
-            return {
-                "last_read_date": None,
-                "streak_count": 0,
-                "freeze_count": 0
-            }
+            return {"last_read_date": None, "streak_count": 0, "freeze_count": 0}
 
         last_read, streak, freeze = row
 
-        # ✅ ONLY RUN THIS LOGIC ONCE PER DAY
-        if last_read and last_read != date.today():
-
-            diff_days = (date.today() - last_read).days
-
-            # 💀 HARD RESET
-            if diff_days > 2:
-                streak = 0
-                freeze = 0
-                last_read = None  # 🔥 THIS IS THE FIX
-                
-
-            # 🧊 USE FREEZE OR LOSE
-            elif diff_days >= 1:
-                if freeze > 0:
-                    freeze -= 1
-                else:
-                    streak = 0
-
-            # ✅ SAVE BACK TO DB
-            cursor.execute("""
-                    UPDATE user_streak
-                    SET streak_count = %s,
-                        freeze_count = %s,
-                        last_read_date = %s
-                    WHERE id = 1
-                """, (streak, freeze, last_read))
-
-            conn.commit()
-
+        # ✅ READ ONLY — no DB writes here
+        # Decay is handled in PATCH when the user actually logs progress
         return {
             "last_read_date": str(last_read) if last_read else None,
             "streak_count": streak or 0,
