@@ -346,7 +346,7 @@ def get_stats():
 async def get_quote():
     def _fetch_quote():
         req = urllib.request.Request(
-            "https://zenquotes.io/api/today",
+            "https://api.quotable.io/random",
             headers={"User-Agent": "BookWebApp/1.0"},
             method="GET",
         )
@@ -356,16 +356,17 @@ async def get_quote():
     try:
         data = await asyncio.to_thread(_fetch_quote)
 
-        if not data or "q" not in data[0]:
+        # Validate response
+        if not data or "content" not in data:
             raise ValueError("Invalid API response")
 
         return {
-            "quote": data[0].get("q", "No quote"),
-            "author": data[0].get("a", "Unknown")
+            "quote": data.get("content", "No quote"),
+            "author": data.get("author", "Unknown")
         }
 
     except Exception as e:
-        print("Quote fetch failed:", e)  # 👈 useful for debugging
+        print("Quote fetch failed:", e)
         return {
             "quote": "A reader lives a thousand lives before he dies.",
             "author": "George R.R. Martin"

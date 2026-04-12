@@ -44,7 +44,6 @@ quoteBtn.onclick = async () => {
     document.getElementById("quoteDayText").textContent =
       "Could not load quote. Try again!";
   }
-
 };
 
 quoteClose.onclick = () => quoteModal.style.display = "none";
