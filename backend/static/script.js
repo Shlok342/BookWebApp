@@ -144,26 +144,36 @@ function renderGlobalStreak(count, lastReadDate, freezeCount) {
   
 
   // ❌ LOST
-if (diffDays >= 2) {
-  el.textContent = "💀 Streak lost. Start again!";
-  if (freezeCount > 0) {
-    el.textContent += ` 🧊 ${freezeCount}`;
-  }
+// 🧠 REAL LOGIC
+const usableFreezes = freezeCount || 0;
+
+// ❌ HARD LIMIT: more than 2 days → always lose
+if (diffDays > 2) {
+  el.textContent = "💀 Streak frozen too long. Start again!";
   el.classList.remove("global-streak-warning");
   el.classList.add("global-streak-badge--cold");
   return;
 }
 
-// ⚠️ LAST CHANCE
-if (diffDays >= 1 && diffDays < 2) {
+// ❌ USED MORE FREEZES THAN AVAILABLE
+if (diffDays > usableFreezes + 1) {
+  el.textContent = "💀 Out of freezes. Streak lost!";
+  el.classList.remove("global-streak-warning");
+  el.classList.add("global-streak-badge--cold");
+  return;
+}
+
+// ⚠️ USING FREEZE RIGHT NOW
+if (diffDays >= 1) {
   el.classList.add("global-streak-warning");
   el.classList.remove("global-streak-badge--cold");
 
-  updateTimeLeft(lastReadDate);
-
-  if (freezeCount > 0) {
-    el.textContent += ` 🧊 ${freezeCount}`;
+  if (usableFreezes > 0) {
+    el.textContent = `🧊 Using freeze (${usableFreezes} left) — don't break it bro`;
+  } else {
+    updateTimeLeft(lastReadDate);
   }
+
   return;
 }
 

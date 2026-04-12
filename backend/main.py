@@ -217,10 +217,15 @@ def update_progress(book_id: int, update: PageUpdate):
         
 
 # ─── GET GLOBAL STREAK ───────────────────────────────────────────────────────
+
+
+from datetime import date
+
 @app.get("/streak")
 def get_streak():
     with get_db() as conn:
         cursor = conn.cursor()
+
         cursor.execute(
             "SELECT last_read_date, streak_count, freeze_count FROM user_streak WHERE id = 1"
         )
@@ -235,11 +240,32 @@ def get_streak():
 
         last_read, streak, freeze = row
 
-        # 💀 AUTO RESET CHECK (VERY IMPORTANT)
-        if last_read:
+        # ✅ ONLY RUN THIS LOGIC ONCE PER DAY
+        if last_read and last_read != date.today():
+
             diff_days = (date.today() - last_read).days
-            if diff_days >= 2:
+
+            # 💀 HARD RESET
+            if diff_days > 2:
                 streak = 0
+                freeze = 0
+
+            # 🧊 USE FREEZE OR LOSE
+            elif diff_days >= 1:
+                if freeze > 0:
+                    freeze -= 1
+                else:
+                    streak = 0
+
+            # ✅ SAVE BACK TO DB
+            cursor.execute("""
+                UPDATE user_streak
+                SET streak_count = %s,
+                    freeze_count = %s
+                WHERE id = 1
+            """, (streak, freeze))
+
+            conn.commit()
 
         return {
             "last_read_date": str(last_read) if last_read else None,
