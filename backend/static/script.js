@@ -35,7 +35,7 @@ quoteBtn.onclick = async () => {
 
     const data = await res.json();
 
-    document.getElementById("quoteDayText").textContent = `"${data.quote}"`;
+    document.getElementById("quoteDayText").textContent = data.quote;
     document.getElementById("quoteDayAuthor").textContent =
       data.author ? `— ${data.author}` : "";
 
