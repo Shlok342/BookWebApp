@@ -4,6 +4,8 @@
 /* ── CSS Variables ─────────────────────────────────────── */
 :root {
   /* Palette — warm parchment + deep forest */
+  --gold:          #c9a84c;
+  --gold-dark:     #a8893d;
   --cream:         #ede3d0;
   --parchment:     #f7f0e2;
   --parchment-mid: #f2e9d5;
@@ -1281,6 +1283,50 @@ footer {
 }
 .modal-content {
   backdrop-filter: blur(12px);
+}
+/* Quote of the Day Button */
+.quote-btn {
+  padding: 10px 16px;
+  border: none;
+  background: var(--gold, #c9a84c);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  letter-spacing: 0.3px;
+}
+
+.quote-btn:hover {
+  background: var(--gold-dark, #a8893d);
+}
+
+/* Quote Modal Inner */
+#quoteModalContent {
+  text-align: center;
+  padding: 36px 32px;
+}
+
+.quote-day-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--sage, #7a9e7e);
+  margin-bottom: 20px;
+}
+
+.quote-day-text {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.35rem;
+  font-style: italic;
+  color: var(--bark, #6b4f2e);
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+.quote-day-author {
+  font-size: 0.9rem;
+  color: #999;
+  font-style: normal;
 }
 /* ── Midnight Woods Dark Mode 🦇✨ ─────────────────────── */
 body.dark-theme {

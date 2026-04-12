@@ -28,6 +28,20 @@
   <span id="globalStreak" class="global-streak-badge global-streak-badge--cold">
     No streak yet
   </span>
+  <!-- In your <header>, near streaks -->
+<button class="quote-btn" id="quoteBtn">✨ Quote of the Day</button>
+
+<!-- New modal — add before </body> -->
+<div id="quoteModal" class="modal">
+  <div class="modal-content" id="quoteModalContent">
+    <span class="close" id="quoteClose">&times;</span>
+    <div class="quote-modal-inner">
+      <p class="quote-day-label">📖 Quote of the Day</p>
+      <p class="quote-day-text" id="quoteDayText">Loading...</p>
+      <p class="quote-day-author" id="quoteDayAuthor"></p>
+    </div>
+  </div>
+</div>
 
   <span class="tagline-pill">
     <svg class="pill-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

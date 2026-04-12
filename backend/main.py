@@ -176,12 +176,12 @@ def update_progress(book_id: int, update: PageUpdate):
                 new_global_streak = g_streak + 1           # consecutive day
 
             else:
-                # ❄️ missed a day
+    # ❄️ missed a day
                 if g_freeze > 0:
-                    new_global_streak = g_streak + 1       # freeze saves it
+                    new_global_streak = g_streak  # ✅ hold, don't grow
                     g_freeze -= 1
                 else:
-                    new_global_streak = 1                  # ❌ no freezes — reset
+                    new_global_streak = 1  # ❌ no freezes — reset                  # ❌ no freezes — reset
 
             new_global_last_read = today
 
