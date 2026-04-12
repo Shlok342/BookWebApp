@@ -956,13 +956,7 @@ main {
 .modal-content textarea::placeholder {
   color: rgba(255,255,255,0.7);
 }
-.modal-content h1,
-.modal-content h2,
-.modal-content h3,
-.modal-content p,
-.modal-content span {
-  color: #a8bf9a;
-}
+
 .modal-content {
   backdrop-filter: blur(12px);
 }
@@ -1310,7 +1304,7 @@ footer {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: var(--sage, #7a9e7e);
+  color: var(--sage, #7a9e7e)!important;
   margin-bottom: 20px;
 }
 
@@ -1318,14 +1312,14 @@ footer {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.35rem;
   font-style: italic;
-  color: var(--bark, #6b4f2e);
+  color: var(--bark, #6b4f2e)!important;
   line-height: 1.7;
   margin-bottom: 18px;
 }
 
 .quote-day-author {
   font-size: 0.9rem;
-  color: #999;
+  color: #999!important;
   font-style: normal;
 }
 /* ── Midnight Woods Dark Mode 🦇✨ ─────────────────────── */
