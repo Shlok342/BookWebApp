@@ -119,90 +119,65 @@ function scheduleMidnightCheck() {
 
 //FUNCTION GLOBAL STREAK WARNING:
 function renderGlobalStreak(count, lastReadDate, freezeCount) {
-  
   const el = document.getElementById("globalStreak");
   if (!el) return;
 
-  // 🧊 No streak yet
-  if (!lastReadDate) {
-    
-      el.textContent = count === 0
-        ? "💀 Your streak died. Start again!"
-        : "Start your streak today!";
-    
+  // helper: reset to cold state
+  const setCold = (msg) => {
+    el.textContent = msg;
     el.classList.add("global-streak-badge--cold");
     el.classList.remove("global-streak-warning");
+  };
+
+  // helper: set active state
+  const setActive = (msg) => {
+    el.textContent = msg;
+    el.classList.remove("global-streak-badge--cold");
+    el.classList.remove("global-streak-warning");
+  };
+
+  // ── No read date yet → never started or fully reset by backend ──
+  if (!lastReadDate) {
+    setCold(count === 0 ? "💀 Your streak died. Start again!" : "Start your streak today!");
     return;
   }
-  
+
   const today = new Date();
-  const last = new Date(lastReadDate);
+  const last  = new Date(lastReadDate);
+  today.setHours(0, 0, 0, 0);
+  last.setHours(0, 0, 0, 0);
 
-  // ⚠️ Normalize dates (VERY IMPORTANT)
-  today.setHours(0,0,0,0);
-  last.setHours(0,0,0,0);
+  const diffDays      = (today - last) / (1000 * 60 * 60 * 24);
+  const usableFreezes = freezeCount || 0;
 
-  const diffDays = (today - last) / (1000 * 60 * 60 * 24);
+  // ── Read today → active ──
+  if (diffDays === 0) {
+    let msg = `🔥 ${count} day streak`;
+    if (usableFreezes > 0) msg += ` 🧊 ${usableFreezes} freeze${usableFreezes > 1 ? "s" : ""}`;
+    setActive(msg);
+    return;
+  }
 
-  // 🚨 MISSED TODAY
-  // ❌ Streak LOST (missed more than 1 day)
-  
+  // ── Missed too many days → lost ──
+  if (diffDays > 2 || diffDays > usableFreezes + 1) {
+    setCold("💀 Out of freezes. Streak lost!");
+    return;
+  }
 
-  // ❌ LOST
-// 🧠 REAL LOGIC
-const usableFreezes = freezeCount || 0;
+  // ── Missed 1 day but has freezes → at risk ──
+  if (diffDays >= 1 && usableFreezes > 0) {
+    el.textContent = `🧊 Using freeze (${usableFreezes} left) — don't break it bro`;
+    el.classList.add("global-streak-warning");
+    el.classList.remove("global-streak-badge--cold");
+    return;
+  }
 
-// ❌ HARD LIMIT: more than 2 days → always lose
-if (diffDays > 2) {
-  el.textContent = "💀 Streak frozen too long. Start again!";
-  el.classList.remove("global-streak-warning");
-  el.classList.add("global-streak-badge--cold");
-  return;
-}
-
-// ❌ USED MORE FREEZES THAN AVAILABLE
-if (diffDays > usableFreezes + 1) {
-  el.textContent = "💀 Out of freezes. Streak lost!";
-  el.classList.remove("global-streak-warning");
-  el.classList.add("global-streak-badge--cold");
-  return;
-}
-
-// ⚠️ USING FREEZE RIGHT NOW
-if (diffDays >= 1) {
+  // ── Missed 1 day, no freezes → countdown ──
+  updateTimeLeft(lastReadDate);
   el.classList.add("global-streak-warning");
   el.classList.remove("global-streak-badge--cold");
-
-  if (usableFreezes > 0) {
-    el.textContent = `🧊 Using freeze (${usableFreezes} left) — don't break it bro`;
-  } else {
-    updateTimeLeft(lastReadDate);
-  }
-
-  return;
 }
 
-// 🔥 ACTIVE
-if (count > 0) {
-  el.textContent = `🔥 ${count} day streak`;
-  if (freezeCount > 0) {
-    el.textContent += ` 🧊 ${freezeCount}`;
-  }
-}
-
-  // 🔥 ACTIVE STREAKz
-  // 🔥 ACTIVE
-if (count > 0) {
-  el.textContent = `🔥 ${count} day streak`;
-  if (freezeCount > 0) {
-    el.textContent += ` 🧊 ${freezeCount} freeze${freezeCount > 1 ? "s" : ""}`;
-  }
-  el.classList.remove("global-streak-warning");
-  el.classList.remove("global-streak-badge--cold");
-  return;  // ← add this so the dead block below never runs
-}
-  
-} 
 function updateTimeLeft(lastReadDate) {
   const el = document.getElementById("globalStreak");
   if (!el) return;
