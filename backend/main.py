@@ -166,7 +166,7 @@ def update_progress(book_id: int, update: PageUpdate):
             g_last, g_streak, g_freeze = None, 0, 2
         else:
             g_last, g_streak, g_freeze = g
-            from datetime import date
+            
 
             if g_last and not isinstance(g_last, date):
                 g_last = g_last.date() if hasattr(g_last, "date") else date.fromisoformat(g_last)
@@ -231,7 +231,7 @@ def update_progress(book_id: int, update: PageUpdate):
 # ─── GET GLOBAL STREAK ───────────────────────────────────────────────────────
 
 
-from datetime import date
+
 
 @app.get("/streak")
 def get_streak():
@@ -317,7 +317,6 @@ def delete_book(book_id: int):
 
     return {"message": "Book deleted"}
 
-from datetime import datetime
 
 @app.get("/stats")
 def get_stats():
