@@ -103,10 +103,16 @@ async function getStats() {
 
     const data = await res.json();
 
-    document.getElementById("totalBooks").textContent    = data.total_books;
-    document.getElementById("totalPages").textContent    = data.total_pages_read;
-    document.getElementById("monthlyPages").textContent  = data.pages_this_month;
-    document.getElementById("avgPages").textContent      = data.avg_pages_per_month;
+    // 📚 basic stats
+    document.getElementById("totalBooks").textContent   = data.total_books;
+    document.getElementById("totalPages").textContent   = data.total_pages_read;
+    document.getElementById("monthlyPages").textContent = data.pages_this_month;
+    document.getElementById("avgPages").textContent     = data.avg_pages_per_month;
+
+    // 🔥 NEW: streak-based stats
+    document.getElementById("streakPages").textContent        = data.streak_pages_read;
+    document.getElementById("streakMonthly").textContent      = data.streak_pages_this_month;
+    document.getElementById("streakAvg").textContent          = data.avg_streak_pages_per_month;
 
   } catch (err) {
     console.error("Stats error:", err);

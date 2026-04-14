@@ -320,6 +320,8 @@ def delete_book(book_id: int):
 
 @app.get("/stats")
 def get_stats():
+    MIN_PAGES_FOR_STREAK = 2
+
     with get_db() as conn:
         cursor = conn.cursor()
 
@@ -327,11 +329,22 @@ def get_stats():
         cursor.execute("SELECT COUNT(*) FROM books")
         total_books = cursor.fetchone()[0]
 
-        # total pages read
-        cursor.execute("SELECT COALESCE(SUM(pages_read), 0) FROM reading_sessions")
+        # ── TOTAL PAGES (all reading) ──
+        cursor.execute("""
+            SELECT COALESCE(SUM(pages_read), 0)
+            FROM reading_sessions
+        """)
         total_pages = cursor.fetchone()[0]
 
-        # pages this month
+        # ── STREAK PAGES (qualified only) ──
+        cursor.execute("""
+            SELECT COALESCE(SUM(pages_read), 0)
+            FROM reading_sessions
+            WHERE pages_read >= %s
+        """, (MIN_PAGES_FOR_STREAK,))
+        streak_pages = cursor.fetchone()[0]
+
+        # ── PAGES THIS MONTH (all) ──
         cursor.execute("""
             SELECT COALESCE(SUM(pages_read), 0)
             FROM reading_sessions
@@ -339,7 +352,16 @@ def get_stats():
         """)
         monthly_pages = cursor.fetchone()[0]
 
-        # months active (VERY IMPORTANT)
+        # ── STREAK PAGES THIS MONTH ──
+        cursor.execute("""
+            SELECT COALESCE(SUM(pages_read), 0)
+            FROM reading_sessions
+            WHERE pages_read >= %s
+            AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)
+        """, (MIN_PAGES_FOR_STREAK,))
+        monthly_streak_pages = cursor.fetchone()[0]
+
+        # ── months active ──
         cursor.execute("""
             SELECT COUNT(DISTINCT DATE_TRUNC('month', created_at))
             FROM reading_sessions
@@ -347,14 +369,21 @@ def get_stats():
         months_active = cursor.fetchone()[0] or 1
 
         avg_pages = total_pages / months_active
+        avg_streak_pages = streak_pages / months_active
 
     return {
         "total_books": total_books,
+
+        # ALL reading
         "total_pages_read": total_pages,
         "pages_this_month": monthly_pages,
-        "avg_pages_per_month": round(avg_pages, 2)
+        "avg_pages_per_month": round(avg_pages, 2),
+
+        # STREAK-only reading ❄️🔥
+        "streak_pages_read": streak_pages,
+        "streak_pages_this_month": monthly_streak_pages,
+        "avg_streak_pages_per_month": round(avg_streak_pages, 2)
     }
-  # add to your imports at the top
 
 @app.get("/quote")
 async def get_quote():

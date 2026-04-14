@@ -374,7 +374,14 @@ body::after {
   color: var(--sand);
   opacity: 0.8;
 }
-
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+.stat-card:nth-last-child(-n+3) {
+  border: 1px solid #7a9e7e;
+}
 /* ── Sanctuary Label ───────────────────────────────────── */
 .sanctuary-label-wrap {
   display: flex;
