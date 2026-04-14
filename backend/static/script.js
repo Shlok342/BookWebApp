@@ -102,7 +102,7 @@ async function getStats() {
   try {
     console.log("Fetching stats...");
 
-    const res = await fetch("https://bookwebapp-dtfb.onrender.com/stats");
+    const res = await fetch("/stats");
     if (!res.ok) throw new Error("Failed to fetch stats");
 
     const data = await res.json();
