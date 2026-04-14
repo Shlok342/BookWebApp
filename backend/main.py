@@ -112,6 +112,8 @@ def update_progress(book_id: int, update: PageUpdate):
             raise HTTPException(status_code=404, detail="Book not found")
 
         current_page_old, last_read_date, streak_count = row
+        if last_read_date is not None and isinstance(last_read_date, str):
+            last_read_date = date.fromisoformat(last_read_date)
         today = date.today()
 
         # ── Calculate pages read ──
@@ -164,6 +166,10 @@ def update_progress(book_id: int, update: PageUpdate):
             g_last, g_streak, g_freeze = None, 0, 2
         else:
             g_last, g_streak, g_freeze = g
+            from datetime import date
+
+            if g_last and not isinstance(g_last, date):
+                g_last = g_last.date() if hasattr(g_last, "date") else date.fromisoformat(g_last)
 
         # ── Global streak ──
         if qualified:
