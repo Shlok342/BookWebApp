@@ -172,29 +172,38 @@ def update_progress(book_id: int, update: PageUpdate):
                 g_last = g_last.date() if hasattr(g_last, "date") else date.fromisoformat(g_last)
 
         # ── Global streak ──
+        # ── Global streak ──
+
+        gap = (today - g_last).days if g_last else 0
+
+# ❄️ ALWAYS handle missed days FIRST (independent of qualification)
+        if g_last and gap > 1:
+            if g_freeze > 0:
+                g_freeze -= 1
+                # keep streak as-is (freeze protects it)
+            else:
+                g_streak = 0  # reset if no freeze left
+
+# ── Now handle today's reading ──
         if qualified:
             if g_last is None:
-                new_global_streak = 1                      # first ever read
+                new_global_streak = 1
 
             elif g_last == today:
-                new_global_streak = g_streak               # already counted today
+                new_global_streak = g_streak  # already counted today
 
-            elif (today - g_last).days == 1:
-                new_global_streak = g_streak + 1           # consecutive day
+            elif gap == 1:
+                new_global_streak = g_streak + 1
 
             else:
-    # ❄️ missed a day
-                if g_freeze > 0:
-                    new_global_streak = g_streak  # ✅ hold, don't grow
-                    g_freeze -= 1
-                else:
-                    new_global_streak = 1  # ❌ no freezes — reset                  # ❌ no freezes — reset
+                # gap > 1 already handled above (freeze or reset)
+                new_global_streak = g_streak
 
             new_global_last_read = today
 
         else:
-            new_global_streak    = g_streak                # not enough pages, no change
-            new_global_last_read = g_last                  # ⚠️ don't overwrite date
+            new_global_streak    = g_streak
+            new_global_last_read = g_last                 # ⚠️ don't overwrite date
 
         # ── Update global streak ──
         cursor.execute(

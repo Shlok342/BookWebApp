@@ -191,14 +191,14 @@ function renderGlobalStreak(count, lastReadDate, freezeCount) {
   }
 
   // ── Missed too many days → lost ──
-  if (diffDays > 2 || diffDays > usableFreezes + 1) {
+  if (diffDays > 2 && usableFreezes === 0) {
     setCold("💀 Out of freezes. Streak lost!");
     return;
   }
 
   // ── Missed 1 day but has freezes → at risk ──
-  if (diffDays >= 1 && usableFreezes > 0) {
-    el.textContent = `🧊 Using freeze (${usableFreezes} left) — don't break it bro`;
+  if (diffDays === 1 && usableFreezes > 0) {
+    el.textContent = `🧊 Freeze will be used if you don’t read today (${usableFreezes} left)`;
     el.classList.add("global-streak-warning");
     el.classList.remove("global-streak-badge--cold");
     return;
