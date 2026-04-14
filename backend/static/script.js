@@ -96,23 +96,28 @@ async function getColorsFromImage(url) {
 // ─── FETCH STATS ──────────────────────────────────────────────────────────────
 // FIX: was using `${BASE_URL}/stats` (full origin URL) — everything else uses
 //      a relative path, so this was inconsistent and would break behind a proxy.
+document.addEventListener("DOMContentLoaded", () => {
+  getStats();
+});
+
 async function getStats() {
   try {
-    const res = await fetch("/stats");
+    console.log("Fetching stats...");
+
+    const res = await fetch("https://bookwebapp-dtfb.onrender.com/stats");
     if (!res.ok) throw new Error("Failed to fetch stats");
 
     const data = await res.json();
+    console.log(data);
 
-    // 📚 basic stats
     document.getElementById("totalBooks").textContent   = data.total_books;
     document.getElementById("totalPages").textContent   = data.total_pages_read;
     document.getElementById("monthlyPages").textContent = data.pages_this_month;
     document.getElementById("avgPages").textContent     = data.avg_pages_per_month;
 
-    // 🔥 NEW: streak-based stats
-    document.getElementById("streakPages").textContent        = data.streak_pages_read;
-    document.getElementById("streakMonthly").textContent      = data.streak_pages_this_month;
-    document.getElementById("streakAvg").textContent          = data.avg_streak_pages_per_month;
+    document.getElementById("streakPages").textContent  = data.streak_pages_read;
+    document.getElementById("streakMonthly").textContent= data.streak_pages_this_month;
+    document.getElementById("streakAvg").textContent    = data.avg_streak_pages_per_month;
 
   } catch (err) {
     console.error("Stats error:", err);
