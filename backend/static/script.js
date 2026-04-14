@@ -103,6 +103,11 @@ document.addEventListener("DOMContentLoaded", () => {
 async function getStats() {
   try {
     console.log("Fetching stats...");
+    console.log(
+      document.getElementById("streakPages"),
+      document.getElementById("streakMonthly"),
+      document.getElementById("streakAvg")
+    );
 
     const res = await fetch("https://bookwebapp-dtfb.onrender.com/stats");
     if (!res.ok) throw new Error("Failed to fetch stats");
