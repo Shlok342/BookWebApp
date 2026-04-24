@@ -119,6 +119,56 @@ def update_progress(book_id: int, update: PageUpdate):
         # ── Calculate pages read ──
         # If user corrected a mistake (lower number), treat as 0
         pages_read = max(0, update.current_page - current_page_old)
+        # ── CHALLENGES LOGIC ──
+        cursor.execute("SELECT daily_completed, daily_date, monthly_completed_books, current_month FROM user_challenges WHERE id = 1")
+        challenge = cursor.fetchone()
+
+        today_str = today.isoformat()
+        current_month = today.strftime("%Y-%m")
+
+        if challenge is None:
+            cursor.execute("""
+                INSERT INTO user_challenges (id, daily_completed, daily_date, monthly_completed_books, current_month)
+                VALUES (1, FALSE, NULL, 0, %s)
+            """, (current_month,))
+            daily_completed, daily_date, monthly_books, saved_month = False, None, 0, current_month
+        else:
+            daily_completed, daily_date, monthly_books, saved_month = challenge
+
+        # ── DAILY RESET ──
+        if daily_date != today:
+            daily_completed = False
+
+        # ── MONTHLY RESET ──
+        if saved_month != current_month:
+            monthly_books = 0
+            saved_month = current_month
+
+        # ── DAILY CHALLENGE (20 pages in ONE update) ──
+        if pages_read >= 20:
+            daily_completed = True
+            daily_date = today
+
+        # ── MONTHLY CHALLENGE (book finished) ──
+        if update.current_page == current_page_old:
+            pass  # no change
+        elif update.current_page >= current_page_old:
+            # check if just completed
+            cursor.execute("SELECT total_pages FROM books WHERE id = %s", (book_id,))
+            total_pages = cursor.fetchone()[0]
+
+            if current_page_old < total_pages and update.current_page >= total_pages:
+                monthly_books += 1
+
+        # ── SAVE ──
+        cursor.execute("""
+            UPDATE user_challenges
+            SET daily_completed = %s,
+                daily_date = %s,
+                monthly_completed_books = %s,
+                current_month = %s
+            WHERE id = 1
+        """, (daily_completed, daily_date, monthly_books, saved_month))
         qualified  = pages_read >= MIN_PAGES_FOR_STREAK
 
         # ── Per-book streak ──
@@ -229,10 +279,46 @@ def update_progress(book_id: int, update: PageUpdate):
         
 
 # ─── GET GLOBAL STREAK ───────────────────────────────────────────────────────
+@app.get("/challenges")
+def get_challenges():
+    with get_db() as conn:
+        cursor = conn.cursor()
 
+        cursor.execute("""
+            SELECT daily_completed, daily_date, monthly_completed_books, current_month
+            FROM user_challenges WHERE id = 1
+        """)
+        row = cursor.fetchone()
 
+        today = date.today()
+        current_month = today.strftime("%Y-%m")
 
+        if not row:
+            return {
+                "daily": {"goal": 20, "completed": False},
+                "monthly": {"goal": 2, "progress": 0}
+            }
 
+        daily_completed, daily_date, monthly_books, saved_month = row
+
+        # reset logic (read-only)
+        if daily_date != today:
+            daily_completed = False
+
+        if saved_month != current_month:
+            monthly_books = 0
+
+        return {
+            "daily": {
+                "goal": 20,
+                "completed": daily_completed
+            },
+            "monthly": {
+                "goal": 2,
+                "progress": monthly_books,
+                "completed": monthly_books >= 2
+            }
+        }
 @app.get("/streak")
 def get_streak():
     with get_db() as conn:

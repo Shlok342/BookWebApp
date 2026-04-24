@@ -76,6 +76,23 @@ async function getBooks() {
     container.innerHTML = "<p>Could not load books. Is the server running?</p>";
   }
 }
+async function getChallenges() {
+  const res = await fetch("/challenges");
+  const data = await res.json();
+  renderChallenges(data);
+}
+
+function renderChallenges(data) {
+  document.getElementById("dailyChallenge").innerHTML = `
+    <h3>📅 Daily Challenge</h3>
+    <p>${data.daily.completed ? "✅ Completed!" : "Read 20 pages today"}</p>
+  `;
+
+  document.getElementById("monthlyChallenge").innerHTML = `
+    <h3>📚 Monthly Challenge</h3>
+    <p>${data.monthly.progress} / 2 books</p>
+  `;
+}
 async function getColorsFromImage(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -457,6 +474,7 @@ function renderBooks(filteredBooks = books) {
           alert(`🔥 ${data.global_streak}-day global reading streak!`);
         }
         await getBooks();
+        await getChallenges();
         await getStats();
       } catch (err) {
         console.error("Failed to update progress:", err);
@@ -778,6 +796,7 @@ setInterval(async () => {
 }, 60000);
 document.addEventListener("DOMContentLoaded", () => {
   getBooks();
+  getChallenges();
   getStats();
   getGlobalStreak();
   scheduleMidnightCheck();
