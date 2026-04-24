@@ -23,6 +23,17 @@ const quoteModal = document.getElementById("quoteModal");
 const quoteBtn = document.getElementById("quoteBtn");
 const quoteClose = document.getElementById("quoteClose");
 
+// CHALLENGES 
+const challengeModal = document.getElementById("challengeModal");
+const challengeBtn = document.getElementById("challengeBtn");
+const challengeClose = document.getElementById("challengeClose");
+challengeBtn.addEventListener("click", async () => {
+  await getChallenges(); // always fresh
+  challengeModal.style.display = "block";
+});
+challengeClose.addEventListener("click", () => {
+  challengeModal.style.display = "none";
+});
 quoteBtn.onclick = async () => {
   quoteModal.style.display = "block";
   document.getElementById("quoteDayText").textContent = "Fetching wisdom...";
@@ -49,6 +60,9 @@ quoteClose.onclick = () => quoteModal.style.display = "none";
 
 window.addEventListener("click", (e) => {
   if (e.target === quoteModal) quoteModal.style.display = "none";
+  if (event.target === challengeModal) {
+    challengeModal.style.display = "none";
+  }
 });
 function showToast(message) {
   const toast = document.createElement("div");
@@ -83,14 +97,27 @@ async function getChallenges() {
 }
 
 function renderChallenges(data) {
+  const progressPercent = Math.min((data.monthly.progress / 2) * 100, 100);
+
   document.getElementById("dailyChallenge").innerHTML = `
-    <h3>📅 Daily Challenge</h3>
-    <p>${data.daily.completed ? "✅ Completed!" : "Read 20 pages today"}</p>
+    <div class="challenge-card ${data.daily.completed ? "done" : ""}">
+      <h3>📅 Daily Challenge</h3>
+      <p>
+        ${data.daily.completed ? "✅ Completed!" : "Read 20 pages in one session"}
+      </p>
+    </div>
   `;
 
   document.getElementById("monthlyChallenge").innerHTML = `
-    <h3>📚 Monthly Challenge</h3>
-    <p>${data.monthly.progress} / 2 books</p>
+    <div class="challenge-card ${data.monthly.completed ? "done" : ""}">
+      <h3>📚 Monthly Challenge</h3>
+
+      <div class="progress-bar">
+        <div class="progress" style="width:${progressPercent}%"></div>
+      </div>
+
+      <p>${data.monthly.progress} / 2 books</p>
+    </div>
   `;
 }
 async function getColorsFromImage(url) {

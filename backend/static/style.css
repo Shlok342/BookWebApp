@@ -523,7 +523,39 @@ body::after {
   background-size: 28px 28px;
   transition: backdrop-filter var(--speed-mid) ease;
 }
+/*Challenges brooo */
+.challenge-card {
+  background: #f7f7f7;
+  padding: 18px;
+  border-radius: 14px;
+  margin-top: 14px;
+  text-align: cent  er;
+  transition: 0.3s;
+}
 
+.challenge-card.done {
+  background: #e6f7ec;
+  border: 1px solid #4caf50;
+}
+
+.challenge-status {
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* reuse your existing progress bar style */
+.progress-bar {
+  background: #ddd;
+  height: 8px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.progress {
+  height: 100%;
+  background: #4caf50;
+}
 /* ── Add Book Button ───────────────────────────────────── */
 .add-btn {
   display: inline-flex;

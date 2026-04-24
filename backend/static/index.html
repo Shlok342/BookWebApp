@@ -30,6 +30,7 @@
   </span>
   <!-- In your <header>, near streaks -->
 <button class="quote-btn" id="quoteBtn">✨ Quote of the Day</button>
+<button id="challengeBtn">🎯 Challenges</button>
 
 <!-- New modal — add before </body> -->
 <div id="quoteModal" class="modal">
@@ -42,9 +43,15 @@
     </div>
   </div>
 </div>
-<div class="challenges">
-  <div id="dailyChallenge"></div>
-  <div id="monthlyChallenge"></div>
+<div id="challengeModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="challengeClose">&times;</span>
+
+    <h2>🎯 Your Challenges</h2>
+
+    <div id="dailyChallenge"></div>
+    <div id="monthlyChallenge"></div>
+  </div>
 </div>
 
   <span class="tagline-pill">
