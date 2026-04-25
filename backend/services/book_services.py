@@ -14,6 +14,13 @@ def update_progress_service(book_id: int, update):
 
         # ── 1. Get book ──
         book = get_book(cursor, book_id)
+        book = get_book(cursor, book_id)
+
+        if update.current_page < 0:
+            raise HTTPException(400, "Page cannot be negative")
+
+        if update.current_page > book["total_pages"]:
+            update.current_page = book["total_pages"]   # clamp instead of error
 
         # ── 2. Calculate pages read ──
         pages_read = calculate_pages_read(book["current_page"], update.current_page)
@@ -55,7 +62,7 @@ def update_progress_service(book_id: int, update):
 
 def get_book(cursor, book_id):
     cursor.execute(
-        "SELECT current_page, last_read_date, streak_count FROM books WHERE id = %s",
+        "SELECT current_page, last_read_date, streak_count, total_pages FROM books WHERE id = %s",
         (book_id,)
     )
     row = cursor.fetchone()
@@ -73,7 +80,8 @@ def get_book(cursor, book_id):
     return {
         "current_page": current_page,
         "last_read_date": last_read_date,
-        "streak_count": streak_count
+        "streak_count": streak_count, 
+        "total_pages": row["total_pages"]
     }
 
 def calculate_pages_read(old, new):
