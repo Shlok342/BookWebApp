@@ -50,14 +50,15 @@ def update_progress_service(book_id: int, update):
         conn.commit()
 
     return {
-        "message": "Progress updated",
+    "success": True,
+    "data": {
         "pages_logged": pages_read,
         "streak_count": new_streak,
         "global_streak": global_streak,
-        "freeze_count": freeze_count, 
+        "freeze_count": freeze_count,
         "qualified_for_streak": qualified
-        
     }
+}
 
 
 # ─── HELPERS ───────────────────────────────────────────────────────────

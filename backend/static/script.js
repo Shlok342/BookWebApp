@@ -60,7 +60,7 @@ quoteClose.onclick = () => quoteModal.style.display = "none";
 
 window.addEventListener("click", (e) => {
   if (e.target === quoteModal) quoteModal.style.display = "none";
-  if (event.target === challengeModal) {
+  if (e.target === challengeModal) {
     challengeModal.style.display = "none";
   }
 });
@@ -477,6 +477,9 @@ function renderBooks(filteredBooks = books) {
     updateBtn.classList.add("update-btn");
     updateBtn.innerHTML = '<span class="btn-label">Update Progress</span>';
     updateBtn.addEventListener("click", async () => {
+      updateBtn.disabled = true;                 // ✅ ADD
+      const label = updateBtn.querySelector(".btn-label");
+      if (label) label.textContent = "Updating...";  // ✅ ADD
       const newPage = parseInt(prompt(
         `How many pages of "${book.title}" have you read?\n(Current: ${currentPage} / ${totalPages})`
       ));
@@ -491,42 +494,31 @@ function renderBooks(filteredBooks = books) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ current_page: newPage })
         });
+    
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    
         const data = await res.json();
+    
         if (!data.qualified_for_streak) {
           showToast("📖 Read at least 2 pages to count for streak!");
         }
-        await getGlobalStreak(); // fetches fresh streak_count + last_read_date together
+    
+        await getGlobalStreak();
+    
         if (data.global_streak > 1) {
           alert(`🔥 ${data.global_streak}-day global reading streak!`);
         }
+    
         await getBooks();
         await getChallenges();
         await getStats();
+    
       } catch (err) {
         console.error("Failed to update progress:", err);
         alert("Could not update progress. Is the server running?");
-      }
-    });
-
-    const notesBtn = document.createElement("button");
-    notesBtn.classList.add("notes-btn");
-    notesBtn.textContent = "Notes";
-    notesBtn.addEventListener("click", () => openNotesModal(book));
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.classList.add("delete-btn");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.addEventListener("click", async () => {
-      if (!confirm(`Delete "${book.title}"? This cannot be undone.`)) return;
-      try {
-        const res = await fetch(`/books/${book.id}`, { method: "DELETE" });
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        await getBooks();
-        await getStats();
-      } catch (err) {
-        console.error("Failed to delete book:", err);
-        alert("Could not delete book. Is the server running?");
+      } finally {
+        updateBtn.disabled = false;              // ✅ ADD
+        if (label) label.textContent = "Update Progress"; // ✅ ADD
       }
     });
 
