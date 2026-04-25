@@ -265,7 +265,9 @@ def get_stats():
         cursor.execute("""
             SELECT COALESCE(SUM(pages_read), 0) AS monthly_pages
             FROM reading_sessions
-            WHERE DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)
+            WHERE created_at >= DATE_TRUNC('month', CURRENT_DATE)
+              AND created_at < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'   
+
         """)
         monthly_pages = cursor.fetchone()["monthly_pages"]
 
