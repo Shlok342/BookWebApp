@@ -131,7 +131,10 @@ def handle_challenges(cursor, pages_read, book_id, old_page, new_page):
         """, (current_month,))
         daily_completed, daily_date, monthly_books, saved_month = False, None, 0, current_month
     else:
-        daily_completed, daily_date, monthly_books, saved_month = challenge
+        daily_completed = challenge["daily_completed"]
+        daily_date = challenge["daily_date"]
+        monthly_books = challenge["monthly_completed_books"]
+        saved_month = challenge["current_month"]
 
     # reset
     if daily_date != today:
