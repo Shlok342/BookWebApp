@@ -1,6 +1,7 @@
 from datetime import date
 from fastapi import HTTPException
 from backend.database import get_connection
+from psycopg2.extras import RealDictCursor
 
 MIN_PAGES_FOR_STREAK = 2
 def compute_qualified(pages_read: int) -> bool:
@@ -9,7 +10,7 @@ def compute_qualified(pages_read: int) -> bool:
 # ─── MAIN SERVICE FUNCTION ─────────────────────────────────────────────
 def update_progress_service(book_id: int, update):
     with get_connection() as conn:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
 
         # ── 1. Get book ──
         book = get_book(cursor, book_id)
@@ -148,7 +149,7 @@ def handle_challenges(cursor, pages_read, book_id, old_page, new_page):
     # monthly challenge
     if new_page > old_page:
         cursor.execute("SELECT total_pages FROM books WHERE id = %s", (book_id,))
-        total_pages = cursor.fetchone()[0]
+        total_pages = cursor.fetchone()["total_pages"]
 
         if old_page < total_pages and new_page >= total_pages:
             monthly_books += 1
