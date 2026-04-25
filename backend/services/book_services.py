@@ -34,7 +34,9 @@ def update_progress_service(book_id: int, update):
         )
 
         # ── 4. Update book ──
-        update_book(cursor, book_id, update.current_page, new_last_read, new_streak)
+        if pages_read > 0:
+            update_book(cursor, book_id, update.current_page, new_last_read, new_streak)
+        
 
         # ── 5. Challenges ──
         handle_challenges(cursor, pages_read, book_id, book["current_page"], update.current_page)
