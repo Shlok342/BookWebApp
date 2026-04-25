@@ -16,7 +16,7 @@ def update_progress_service(book_id: int, update):
 
         # ── 2. Calculate pages read ──
         pages_read = calculate_pages_read(book["current_page"], update.current_page)
-        qualified = compute_qualified(pages_read)
+        qualified = pages_read >= MIN_PAGES_FOR_STREAK
 
         # ── 3. Update per-book streak ──
         new_streak, new_last_read = update_streak_logic(
@@ -78,9 +78,9 @@ def calculate_pages_read(old, new):
     return max(0, new - old)
 
 
-def update_streak_logic(last_read_date, streak_count, pages_read, qualified):
+def update_streak_logic(last_read_date, streak_count, pages_read):
     today = date.today()
-    
+    qualified = pages_read >= MIN_PAGES_FOR_STREAK
 
     if not qualified:
         return streak_count, last_read_date
