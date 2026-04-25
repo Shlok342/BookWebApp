@@ -123,7 +123,11 @@ def get_challenges():
                 "monthly": {"goal": 2, "progress": 0}
             }
 
-        daily_completed, daily_date, monthly_books, saved_month = row
+        # ✅ Correct
+        daily_completed = row["daily_completed"]
+        daily_date = row["daily_date"]
+        monthly_books = row["monthly_completed_books"]
+        saved_month = row["current_month"]
 
         # reset logic (read-only)
         if daily_date != today:
@@ -155,7 +159,10 @@ def get_streak():
         if not row:
             return {"last_read_date": None, "streak_count": 0, "freeze_count": 0}
 
-        last_read, streak, freeze = row
+        # ✅ Correct
+        last_read = row["last_read_date"]
+        streak = row["streak_count"]
+        freeze = row["freeze_count"]
 
         # ✅ READ ONLY — no DB writes here
         # Decay is handled in PATCH when the user actually logs progress

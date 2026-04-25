@@ -194,7 +194,10 @@ def update_global_streak(cursor, pages_read):
         )
         g_last, g_streak, g_freeze = None, 0, 2
     else:
-        g_last, g_streak, g_freeze = g
+        # ✅ Correct
+        g_last = g["last_read_date"]
+        g_streak = g["streak_count"]
+        g_freeze = g["freeze_count"]
 
         if g_last and not isinstance(g_last, date):
             g_last = date.fromisoformat(str(g_last))
