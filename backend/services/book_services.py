@@ -3,7 +3,8 @@ from fastapi import HTTPException
 from backend.database import get_connection
 
 MIN_PAGES_FOR_STREAK = 2
-
+def compute_qualified(pages_read: int) -> bool:
+    return pages_read >= MIN_PAGES_FOR_STREAK
 
 # ─── MAIN SERVICE FUNCTION ─────────────────────────────────────────────
 def update_progress_service(book_id: int, update):
@@ -15,6 +16,7 @@ def update_progress_service(book_id: int, update):
 
         # ── 2. Calculate pages read ──
         pages_read = calculate_pages_read(book["current_page"], update.current_page)
+        qualified = compute_qualified(pages_read)
 
         # ── 3. Update per-book streak ──
         new_streak, new_last_read = update_streak_logic(
@@ -42,7 +44,9 @@ def update_progress_service(book_id: int, update):
         "pages_logged": pages_read,
         "streak_count": new_streak,
         "global_streak": global_streak,
-        "freeze_count": freeze_count
+        "freeze_count": freeze_count, 
+        "qualified_for_streak": qualified
+        
     }
 
 
@@ -74,9 +78,9 @@ def calculate_pages_read(old, new):
     return max(0, new - old)
 
 
-def update_streak_logic(last_read_date, streak_count, pages_read):
+def update_streak_logic(last_read_date, streak_count, pages_read, qualified):
     today = date.today()
-    qualified = pages_read >= MIN_PAGES_FOR_STREAK
+    
 
     if not qualified:
         return streak_count, last_read_date
