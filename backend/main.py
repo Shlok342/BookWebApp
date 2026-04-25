@@ -13,6 +13,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from pathlib import Path
+from psycopg2.extras import RealDictCursor
 from backend.services.book_services import update_progress_service
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -55,25 +56,25 @@ def get_db():
 
 def row_to_book(row):
     return {
-        "id":             row[0],
-        "title":          row[1],
-        "author":         row[2] if row[2] else "",
-        "total_pages":    row[3],
-        "current_page":   row[4],
-        "quotes":         json.loads(row[5]) if row[5] else [],
-        "notes":          row[6] if row[6] else "",
-        "last_read_date": str(row[7]) if row[7] else None,
-        "streak_count":   row[8] if row[8] else 0,
-        "created_at":     str(row[9]) if row[9] else None,
-        "genre":          row[10] if row[10] else "",
-        "cover_url":      row[11] if row[11] else ""
+        "id":             row["id"],
+        "title":          row["title"],
+        "author":         row.get("author") or "",
+        "total_pages":    row["total_pages"],
+        "current_page":   row["current_page"],
+        "quotes":         json.loads(row["quotes"]) if row.get("quotes") else [],
+        "notes":          row.get("notes") or "",
+        "last_read_date": str(row["last_read_date"]) if row.get("last_read_date") else None,
+        "streak_count":   row.get("streak_count") or 0,
+        "created_at":     str(row["created_at"]) if row.get("created_at") else None,
+        "genre":          row.get("genre") or "",
+        "cover_url":      row.get("cover_url") or ""
     }
 
 # ─── GET ALL BOOKS ───────────────────────────────────────────────────────────
 @app.get("/books")
 def get_books():
     with get_db() as conn:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute(
             "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at, genre,  cover_url FROM books"
         )
@@ -83,7 +84,7 @@ def get_books():
 @app.post("/books")
 def add_book(book: Book):
     with get_db() as conn:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute(
             """
             INSERT INTO books (title, author, total_pages, current_page, genre, cover_url)
@@ -105,7 +106,7 @@ def update_progress(book_id: int, update: PageUpdate):
 @app.get("/challenges")
 def get_challenges():
     with get_db() as conn:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
 
         cursor.execute("""
             SELECT daily_completed, daily_date, monthly_completed_books, current_month
@@ -145,7 +146,7 @@ def get_challenges():
 @app.get("/streak")
 def get_streak():
     with get_db() as conn:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute(
             "SELECT last_read_date, streak_count, freeze_count FROM user_streak WHERE id = 1"
         )
@@ -173,7 +174,7 @@ class QuotesUpdate(BaseModel):
 @app.patch("/books/{book_id}/quotes")
 def update_quotes(book_id: int, update: QuotesUpdate):
     with get_db() as conn:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
 
         cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
         if not cursor.fetchone():
@@ -196,7 +197,7 @@ class NotesUpdate(BaseModel):
 @app.patch("/books/{book_id}/notes")
 def update_notes(book_id: int, update: NotesUpdate):
     with get_db() as conn:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
 
         cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
         if not cursor.fetchone():
@@ -215,7 +216,7 @@ def update_notes(book_id: int, update: NotesUpdate):
 @app.delete("/books/{book_id}")
 def delete_book(book_id: int):
     with get_db() as conn:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
 
         cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
         if not cursor.fetchone():
@@ -232,7 +233,7 @@ def get_stats():
     MIN_PAGES_FOR_STREAK = 2
 
     with get_db() as conn:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
 
         # total books
         cursor.execute("SELECT COUNT(*) FROM books")

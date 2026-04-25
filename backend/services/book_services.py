@@ -62,7 +62,9 @@ def get_book(cursor, book_id):
     if not row:
         raise HTTPException(status_code=404, detail="Book not found")
 
-    current_page, last_read_date, streak_count = row
+    current_page = row["current_page"]
+    last_read_date = row["last_read_date"]
+    streak_count = row["streak_count"]
 
     if last_read_date and not isinstance(last_read_date, date):
         last_read_date = date.fromisoformat(str(last_read_date))
@@ -72,7 +74,6 @@ def get_book(cursor, book_id):
         "last_read_date": last_read_date,
         "streak_count": streak_count
     }
-
 
 def calculate_pages_read(old, new):
     return max(0, new - old)
