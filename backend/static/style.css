@@ -291,7 +291,7 @@ body::after {
 .brand-name {
   display: flex;
   align-items: center;
-  gap: 4px; /* was 0 */
+  gap: 6px; /* was 0 */
 }
 
 .brand-sans {
