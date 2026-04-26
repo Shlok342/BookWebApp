@@ -372,11 +372,9 @@ function renderBooks(filteredBooks = books) {
     return;
   }
 
-  // ✅ FIX: use filteredBooks instead of books
   const bloomedCount = filteredBooks.filter(
     b => b.total_pages > 0 && b.current_page >= b.total_pages
   ).length;
-
   document.getElementById("bloomedCount").textContent = bloomedCount;
 
   const storiesEl = document.getElementById("storiesCount");
@@ -384,19 +382,16 @@ function renderBooks(filteredBooks = books) {
     storiesEl.innerHTML = `<em>${filteredBooks.length} ${filteredBooks.length === 1 ? "story" : "stories"} collected</em>`;
   }
 
-  // ✅ MAIN CHANGE HERE
   filteredBooks.forEach(book => {
     const currentPage = Number(book.current_page) || 0;
     const totalPages  = Number(book.total_pages) || 0;
-
-    const progress = totalPages > 0
-      ? (currentPage / totalPages) * 100
-      : 0;
+    const progress    = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
     const quoteCount  = (book.quotes || []).length;
-    const pct = isNaN(progress) ? 0 : Math.round(progress);;
+    const pct         = isNaN(progress) ? 0 : Math.round(progress);
 
     const card = document.createElement("div");
     card.classList.add("book-card");
+
     // 🖼️ BOOK COVER
     if (book.cover_url) {
       const coverDiv = document.createElement("div");
@@ -404,7 +399,7 @@ function renderBooks(filteredBooks = books) {
       coverDiv.style.backgroundImage = `url(${book.cover_url})`;
       card.appendChild(coverDiv);
     }
-    console.log("book", book);
+
     const title = document.createElement("h2");
     title.textContent = book.title;
 
@@ -435,26 +430,18 @@ function renderBooks(filteredBooks = books) {
       </span>
       <span class="pct-badge">${pct}%</span>
     `;
-    console.log("Current Progress:", pct, "Color:", getProgressColor(pct));
+
     const progressBar = document.createElement("div");
     progressBar.classList.add("progress-bar");
 
     const progressFill = document.createElement("div");
     progressFill.classList.add("progress");
-
-    // 🟡 STEP 1: initial state
     progressFill.style.width = "0%";
     progressFill.style.backgroundColor = getProgressColor(0);
-
     progressBar.appendChild(progressFill);
 
-    // 🟢 STEP 2: add to DOM (IMPORTANT)
-    container.appendChild(progressBar); // use your actual container
-
-    // 🔵 STEP 3: FORCE browser to register initial state
-    progressFill.offsetWidth;
-
-    // 🔴 STEP 4: now animate
+    container.appendChild(progressBar);
+    progressFill.offsetWidth; // force reflow
     requestAnimationFrame(() => {
       progressFill.style.width = `${progress}%`;
       progressFill.style.backgroundColor = getProgressColor(pct);
@@ -463,64 +450,95 @@ function renderBooks(filteredBooks = books) {
     const buttonsDiv = document.createElement("div");
     buttonsDiv.classList.add("card-buttons");
 
-    const quotesBtn = document.createElement("button");
-    quotesBtn.classList.add("quotes-btn");
-    quotesBtn.textContent = "Quotes";
-    quotesBtn.addEventListener("click", () => openQuotesModal(book));
-
+    // ── Open ──
     const openBtn = document.createElement("button");
     openBtn.classList.add("open-btn");
     openBtn.textContent = "Open";
     openBtn.addEventListener("click", () => openBookModal(book));
 
+    // ── Quotes ──
+    const quotesBtn = document.createElement("button");
+    quotesBtn.classList.add("quotes-btn");
+    quotesBtn.textContent = "Quotes";
+    quotesBtn.addEventListener("click", () => openQuotesModal(book));
+
+    // ── Update Progress ──
     const updateBtn = document.createElement("button");
     updateBtn.classList.add("update-btn");
     updateBtn.innerHTML = '<span class="btn-label">Update Progress</span>';
     updateBtn.addEventListener("click", async () => {
-      updateBtn.disabled = true;                 // ✅ ADD
+      updateBtn.disabled = true;
       const label = updateBtn.querySelector(".btn-label");
-      if (label) label.textContent = "Updating...";  // ✅ ADD
+      if (label) label.textContent = "Updating...";
+
       const newPage = parseInt(prompt(
         `How many pages of "${book.title}" have you read?\n(Current: ${currentPage} / ${totalPages})`
       ));
-      if (isNaN(newPage)) return;
-      if (newPage < 0 || newPage > totalPages) {
-        alert(`Please enter a number between 0 and ${totalPages}.`);
+      if (isNaN(newPage)) {
+        updateBtn.disabled = false;
+        if (label) label.textContent = "Update Progress";
         return;
       }
+      if (newPage < 0 || newPage > totalPages) {
+        alert(`Please enter a number between 0 and ${totalPages}.`);
+        updateBtn.disabled = false;
+        if (label) label.textContent = "Update Progress";
+        return;
+      }
+
       try {
         const res = await fetch(`/books/${book.id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ current_page: newPage })
         });
-    
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    
+
         const data = await res.json();
-    
         if (!data.qualified_for_streak) {
           showToast("📖 Read at least 2 pages to count for streak!");
         }
-    
+
         await getGlobalStreak();
-    
         if (data.global_streak > 1) {
           alert(`🔥 ${data.global_streak}-day global reading streak!`);
         }
-    
+
         await getBooks();
         await getChallenges();
         await getStats();
-    
+
       } catch (err) {
         console.error("Failed to update progress:", err);
         alert("Could not update progress. Is the server running?");
       } finally {
-        updateBtn.disabled = false;              // ✅ ADD
-        if (label) label.textContent = "Update Progress"; // ✅ ADD
+        updateBtn.disabled = false;
+        if (label) label.textContent = "Update Progress";
       }
     });
+
+    // ── Notes ──
+    const notesBtn = document.createElement("button");
+    notesBtn.classList.add("notes-btn");
+    notesBtn.textContent = "Notes";
+    notesBtn.addEventListener("click", () => openNotesModal(book));
+
+    // ── Delete ──
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.addEventListener("click", async () => {
+      if (!confirm(`Delete "${book.title}"? This cannot be undone.`)) return;
+      try {
+        const res = await fetch(`/books/${book.id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        await getBooks();
+        await getStats();
+      } catch (err) {
+        console.error("Failed to delete book:", err);
+        alert("Could not delete book. Is the server running?");
+      }
+    }); // ✅ deleteBtn listener closes here
 
     buttonsDiv.append(openBtn, quotesBtn, updateBtn, notesBtn, deleteBtn);
 
@@ -530,7 +548,7 @@ function renderBooks(filteredBooks = books) {
 
     card.append(title, author, streakBadge, progressLabel, pagesRow, progressBar, buttonsDiv, quoteHint);
     container.appendChild(card);
-  });
+  }); // ✅ forEach closes here
 }
 // Function Aplly filters: 
 function applyFilters() {
