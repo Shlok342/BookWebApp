@@ -290,9 +290,8 @@ body::after {
 
 .brand-name {
   display: flex;
-  align-items: baseline;
-  gap: 0;
-  line-height: 1;
+  align-items: center;
+  gap: 4px; /* was 0 */
 }
 
 .brand-sans {
@@ -310,6 +309,9 @@ body::after {
   font-size: 1.22rem;
   color: var(--bark);
   letter-spacing: 0;
+}
+.brand-serif {
+  transform: translateY(-1px);
 }
 
 /* ── Tagline pill ──────────────────────────────────────── */
