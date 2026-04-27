@@ -223,10 +223,10 @@ def update_global_streak(cursor, pages_read):
             g_streak = 0
 
     if qualified:
-        if g_last is None:
-            new_streak = 1
+        if g_last is None or g_streak == 0:
+            new_streak=1
         elif g_last == today:
-            new_streak = g_streak
+            new_streak=max(1, g_streak)
         elif gap == 1:
             new_streak = g_streak + 1
         else:

@@ -43,6 +43,20 @@ def init_db():
                 current_month TEXT
             )
             """)
+            cursor.execute("""DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.table_constraints
+                    WHERE constraint_name = 'valid_streak'
+                ) THEN
+                    ALTER TABLE user_streak
+                    ADD CONSTRAINT valid_streak
+                    CHECK (
+                    (last_read_date IS NULL AND streak_count = 0)
+                    OR (last_read_date IS NOT NULL AND streak_count >= 1)
+                    );
+                END IF;
+            END $$;""")
             cursor.execute("""
             INSERT INTO user_challenges (id, daily_completed, monthly_completed_books, current_month)
             VALUES (1, FALSE, 0, TO_CHAR(CURRENT_DATE, 'YYYY-MM'))
@@ -57,7 +71,7 @@ def init_db():
             """)
             
             cursor.execute("ALTER TABLE books ADD COLUMN IF NOT EXISTS genre TEXT DEFAULT ''")
-            cursor.execute("ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_url TEXT DEFAULT ''")
+            
             
 
             cursor.execute("""
