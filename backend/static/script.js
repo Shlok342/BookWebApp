@@ -76,7 +76,7 @@ function showToast(message) {
   setTimeout(() => { toast.style.opacity = "0"; setTimeout(() => toast.remove(), 500); }, 3000);
 }
 function getProgressColor(pct) {
-  const hue = (pct / 100) * 270; // 0 → 270 (green → purple-ish)
+  const hue = (pct / 100) * 270; 
   return `hsl(${hue}, 80%, 50%)`;
 }
 async function getBooks() {
@@ -576,7 +576,7 @@ function applyFilters() {
   });
 
   // 🔥 SORTING LOGIC
-  // 🔥 SORTING
+ 
 
 // 📊 PROGRESS
 if (sortValue === "progress-asc") {

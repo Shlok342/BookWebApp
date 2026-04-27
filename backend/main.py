@@ -123,7 +123,7 @@ def get_challenges():
                 "monthly": {"goal": 2, "progress": 0}
             }
 
-        # ✅ Correct
+        
         daily_completed = row["daily_completed"]
         daily_date = row["daily_date"]
         monthly_books = row["monthly_completed_books"]

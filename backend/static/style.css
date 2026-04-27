@@ -168,7 +168,7 @@ body::after {
   padding: 6px 16px;
   border-radius: 50px;
 
-  /* Font matching your brand-sans style */
+  /* Font matching the brand-sans style */
   font-family: 'Inter', system-ui, sans-serif; 
   font-size: 13px;
   font-weight: 600;
@@ -241,7 +241,7 @@ body::after {
   padding: 14px 32px;
   border-radius: 50px; 
   
-  /* Matching your gorgeous forest vibe */
+  /* Matching the gorgeous forest vibe */
   background: linear-gradient(135deg, var(--forest), var(--moss));
   color: #f2ead6;
   border: none;
@@ -252,7 +252,7 @@ body::after {
   font-weight: 600;
   cursor: pointer;
   
-  /* The secret sauce: Buttery smooth shadows and animations! 🧈 */
+
   box-shadow: 0 4px 15px rgba(44, 72, 39, 0.25);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
 }
@@ -578,7 +578,7 @@ body::after {
   font-weight: 500;
 }
 
-/* reuse your existing progress bar style */
+/* reuse the existing progress bar style */
 .progress-bar {
   background: #ddd;
   height: 8px;
