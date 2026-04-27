@@ -178,7 +178,11 @@ async function getGlobalStreak() {
     const res = await fetch("/streak");
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
-    renderGlobalStreak(data.streak_count, data.last_read_date, data.freeze_count);
+    renderGlobalStreak(
+      data.data?.global_streak ?? data.global_streak,
+      data.data?.last_read_date ?? data.last_read_date,
+      data.data?.freeze_count ?? data.freeze_count
+    );
   } catch (err) {
     console.error("Failed to fetch global streak:", err);
   }
@@ -509,6 +513,7 @@ function renderBooks(filteredBooks = books) {
         await getBooks();
         await getChallenges();
         await getStats();
+        await getGlobalStreak();
 
       } catch (err) {
         console.error("Failed to update progress:", err);
