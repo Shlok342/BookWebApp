@@ -230,7 +230,7 @@ def update_global_streak(cursor, pages_read):
         elif gap == 1:
             new_streak = g_streak + 1
         else:
-            new_streak = g_streak
+            new_streak = g_streak + 1 
 
         new_last = today
     else:
