@@ -494,21 +494,14 @@ function renderBooks(filteredBooks = books) {
         });
         
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
         
         const json = await res.json();
-        const data = json.data;  // ← unwrap the nested data
+        const data = json.data;  // ← unwrap first
         
         if (!data.qualified_for_streak) {
           showToast("📖 Read at least 2 pages to count for streak!");
         }
-        
-        await getGlobalStreak();
-        
-        if (data.global_streak > 1) {
-          alert(`🔥 ${data.global_streak}-day global reading streak!`);
-        }
-
-        await getGlobalStreak();
         if (data.global_streak > 1) {
           alert(`🔥 ${data.global_streak}-day global reading streak!`);
         }
