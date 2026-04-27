@@ -494,7 +494,11 @@ function renderBooks(filteredBooks = books) {
         });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
-        const res = await fetch(`/books/${book.id}`, { ... });
+        const res = await fetch(`/books/${book.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ current_page: newPage })
+        });
         const json = await res.json();
         const data = json.data;  // ← unwrap first
         
