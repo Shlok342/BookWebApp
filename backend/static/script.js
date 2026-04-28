@@ -308,7 +308,58 @@ function closeAll() {
 window.addEventListener("click", (e) => {
   if (e.target.classList.contains("modal")) closeAll();
 });
+//-Function Progress Input, placement like this to ensure reachability of data:
+function showProgressInput(book, currentPage, totalPages) {
+  const popup = document.createElement("div");
 
+  popup.className = "mini-progress-popup";
+
+  popup.innerHTML = `
+    <h3>📖 ${book.title}</h3>
+    <p>Current: ${currentPage} / ${totalPages}</p>
+
+    <input
+      type="number"
+      class="page-input"
+      value="${currentPage}"
+      min="0"
+      max="${totalPages}"
+    >
+
+    <div class="popup-actions">
+      <button class="save-btn">Save</button>
+      <button class="cancel-btn">Cancel</button>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+  const input = popup.querySelector(".page-input");
+  const saveBtn = popup.querySelector(".save-btn");
+  const cancelBtn = popup.querySelector(".cancel-btn");
+
+  cancelBtn.onclick = () => popup.remove();
+
+  saveBtn.onclick = async () => {
+    const newPage = parseInt(input.value);
+
+    if (isNaN(newPage) || newPage < 0 || newPage > totalPages) {
+      showToast(`Enter between 0 and ${totalPages}`);
+      return;
+    }
+
+    await fetch(`http://127.0.0.1:8001/books/${book.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ current_page: newPage })
+    });
+
+    popup.remove();
+    getBooks();
+  };
+
+  input.focus();
+}
 // ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
 
 async function applyThemeFromCover(book) {
@@ -471,9 +522,9 @@ function renderBooks(filteredBooks = books) {
       const label = updateBtn.querySelector(".btn-label");
       if (label) label.textContent = "Updating...";
 
-      const newPage = parseInt(prompt(
-        `How many pages of "${book.title}" have you read?\n(Current: ${currentPage} / ${totalPages})`
-      ));
+      card.querySelector(".update-btn").addEventListener("click", () => {
+        showProgressInput(book, currentPage, totalPages);
+      });
       if (isNaN(newPage)) {
         updateBtn.disabled = false;
         if (label) label.textContent = "Update Progress";
