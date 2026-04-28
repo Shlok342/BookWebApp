@@ -543,11 +543,11 @@ body::after {
   transform: translate(-50%, -50%);
   z-index: 99999;
 
-  width: 360px;
-  max-width: 92%;
+  width: 320px;
+  max-width: 90%;
 
-  padding: 28px 26px 22px;
-  border-radius: 26px;
+  padding: 22px 20px 18px;
+  border-radius: 22px;
 
   font-family: 'Cormorant Garamond', serif;
   text-align: center;
@@ -577,7 +577,7 @@ body::after {
 .mini-progress-popup::before,
 .mini-progress-popup::after {
   position: absolute;
-  font-size: 26px;
+  font-size: 20px;
   opacity: 0.22;
   pointer-events: none;
   animation: leafFloat 5s ease-in-out infinite;
@@ -599,7 +599,7 @@ body::after {
 /* title */
 .mini-progress-popup h3 {
   margin: 0;
-  font-size: 46px;
+  font-size: 38px;
   line-height: 1;
   color: #36502f;
   font-weight: 700;
@@ -608,7 +608,7 @@ body::after {
 
 /* subtitle */
 .mini-progress-popup p {
-  margin: 12px 0 18px;
+  margin: 10px 0 14px;
   font-size: 19px;
   color: #7b684d;
 }
@@ -618,17 +618,17 @@ body::after {
   width: 100%;
   box-sizing: border-box;
 
-  height: 62px;
+  height: 54px;
   padding: 0 18px;
 
-  border-radius: 20px;
+  border-radius: 16px;
   border: 1px solid rgba(88, 114, 73, 0.35);
 
   background:
     linear-gradient(180deg, rgba(255,255,255,0.85), rgba(247,242,232,0.9));
 
   color: #2f2a22;
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 700;
   text-align: center;
 
@@ -666,19 +666,19 @@ body::after {
 /* buttons row */
 .popup-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 18px;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 /* base button */
 .popup-actions button {
   flex: 1;
-  height: 54px;
+  height: 48px;
 
   border: none;
-  border-radius: 18px;
+  border-radius: 15px;
 
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
 
