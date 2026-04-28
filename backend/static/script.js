@@ -2,7 +2,7 @@ const container = document.querySelector(".books-container");
 
 let books = [];
 let activeBookId = null;
-
+let lastKnownGlobalStreak = 0;
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 // Grab our shiny button
 const toggleBtn = document.getElementById('dark-mode-toggle');
@@ -239,6 +239,7 @@ function renderGlobalStreak(count, lastReadDate, freezeCount) {
   last.setHours(0, 0, 0, 0);
 
   const diffDays      = (today - last) / (1000 * 60 * 60 * 24);
+  lastKnownGlobalStreak = count;
   const usableFreezes = freezeCount || 0;
 
   // ── Read today → active ──
@@ -372,11 +373,12 @@ function showProgressInput(book, currentPage, totalPages) {
       const data = json.data;
 
       // Keep your streak logic
-      if (data && !data.qualified_for_streak) {
+      // NEW
+      if (data && !data.qualified_for_streak && data.global_streak === 0) {
         showToast("📖 Read at least 2 pages to count for streak!");
       }
 
-      if (data && data.global_streak > 1) {
+      if (data && data.global_streak > lastKnownGlobalStreak) {
         showToast(`🔥 ${data.global_streak}-day global streak!`);
       }
 
