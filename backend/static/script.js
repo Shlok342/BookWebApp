@@ -581,7 +581,7 @@ function renderBooks(filteredBooks = books) {
         await getStats();
       } catch (err) {
         console.error("Failed to delete book:", err);
-        alert("Could not delete book. Is the server running?");
+        showToast("Could not delete book. Is the server running?");
       }
     }); // ✅ deleteBtn listener closes here
 
@@ -690,7 +690,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
   const quotes = [...(book?.quotes || [])];
 
   if (!text || !book) return;
-  if (quotes.length >= 5) { alert("Maximum 5 quotes per book."); return; }
+  if (quotes.length >= 5) { showToast("Maximum 5 quotes per book."); return; }
 
   quotes.push(text);
 
@@ -704,7 +704,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
     const data = await res.json();
 
     if (data.streak_count > 1) {
-      alert(`🔥 ${data.streak_count}-day reading streak!`);
+      showToast(`🔥 ${data.streak_count}-day reading streak!`);
     }
     document.getElementById("quoteInput").value = "";
     await getBooks();
@@ -712,7 +712,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
     if (updated) renderQuotesList(updated.quotes || []);
   } catch (err) {
     console.error("Failed to save quote:", err);
-    alert("Could not save quote. Is the server running?");
+    showToast("Could not save quote. Is the server running?");
   }
 });
 
@@ -763,7 +763,7 @@ document.getElementById("saveNotesBtn").addEventListener("click", async () => {
     await getBooks();
   } catch (err) {
     console.error("Failed to save notes:", err);
-    alert("Could not save notes. Is the server running?");
+    showToast("Could not save notes. Is the server running?");
   }
 });
 
@@ -834,11 +834,11 @@ document.getElementById("saveBook").addEventListener("click", async () => {
   const genre = document.getElementById("genreInput").value;
 
   if (!title || isNaN(totalPages)) {
-    alert("Please enter a valid title and total pages.");
+    showToast("Please enter a valid title and total pages.");
     return;
   }
   if (currentPage < 0 || currentPage > totalPages) {
-    alert(`Pages read must be between 0 and ${totalPages}.`);
+    showToast(`Pages read must be between 0 and ${totalPages}.`);
     return;
   }
 
