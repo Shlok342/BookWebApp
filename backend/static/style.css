@@ -534,6 +534,61 @@ body::after {
   text-align: cent  er;
   transition: 0.3s;
 }
+.mini-progress-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  width: 320px;
+  max-width: 90%;
+
+  background: #fdf8ee;
+  padding: 22px;
+  border-radius: 18px;
+
+  box-shadow: 0 18px 45px rgba(0,0,0,0.22);
+
+  z-index: 99999;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  text-align: center;
+}
+
+.mini-progress-popup input {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #d9c9a6;
+  backdrop-filter: blur(8px);
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.popup-actions button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.save-btn {
+  background: #5e7d53;
+  color: white;
+}
+
+.cancel-btn {
+  background: #e5ddcf;
+}
 #challengeBtn {
   display: inline-flex;
   align-items: center;
