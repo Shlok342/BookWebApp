@@ -311,7 +311,6 @@ window.addEventListener("click", (e) => {
 //-Function Progress Input, placement like this to ensure reachability of data:
 function showProgressInput(book, currentPage, totalPages) {
   const popup = document.createElement("div");
-
   popup.className = "mini-progress-popup";
 
   popup.innerHTML = `
@@ -343,19 +342,58 @@ function showProgressInput(book, currentPage, totalPages) {
   saveBtn.onclick = async () => {
     const newPage = parseInt(input.value);
 
-    if (isNaN(newPage) || newPage < 0 || newPage > totalPages) {
+    // Validation
+    if (isNaN(newPage)) {
+      showToast("Enter a valid number 📘");
+      return;
+    }
+
+    if (newPage < 0 || newPage > totalPages) {
       showToast(`Enter between 0 and ${totalPages}`);
       return;
     }
 
-    await fetch(`http://127.0.0.1:8001/books/${book.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ current_page: newPage })
-    });
+    // Loading state
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Updating...";
 
-    popup.remove();
-    getBooks();
+    try {
+      const res = await fetch(`/books/${book.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ current_page: newPage })
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const json = await res.json();
+      const data = json.data;
+
+      // Keep your streak logic
+      if (data && !data.qualified_for_streak) {
+        showToast("📖 Read at least 2 pages to count for streak!");
+      }
+
+      if (data && data.global_streak > 1) {
+        showToast(`🔥 ${data.global_streak}-day global streak!`);
+      }
+
+      popup.remove();
+
+      await getBooks();
+      await getChallenges();
+      await getStats();
+      await getGlobalStreak();
+
+    } catch (err) {
+      console.error("Failed to update progress:", err);
+      showToast("Could not update progress.");
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = "Save";
+    }
   };
 
   input.focus();
@@ -517,58 +555,9 @@ function renderBooks(filteredBooks = books) {
     const updateBtn = document.createElement("button");
     updateBtn.classList.add("update-btn");
     updateBtn.innerHTML = '<span class="btn-label">Update Progress</span>';
-    updateBtn.addEventListener("click", async () => {
-      updateBtn.disabled = true;
-      const label = updateBtn.querySelector(".btn-label");
-      if (label) label.textContent = "Updating...";
 
-      card.querySelector(".update-btn").addEventListener("click", () => {
-        showProgressInput(book, currentPage, totalPages);
-      });
-      if (isNaN(newPage)) {
-        updateBtn.disabled = false;
-        if (label) label.textContent = "Update Progress";
-        return;
-      }
-      if (newPage < 0 || newPage > totalPages) {
-        alert(`Please enter a number between 0 and ${totalPages}.`);
-        updateBtn.disabled = false;
-        if (label) label.textContent = "Update Progress";
-        return;
-      }
-
-      try {
-        const res = await fetch(`/books/${book.id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ current_page: newPage })
-        });
-        
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-        
-        const json = await res.json();
-        const data = json.data;  // ← unwrap first
-        
-        if (!data.qualified_for_streak) {
-          showToast("📖 Read at least 2 pages to count for streak!");
-        }
-        if (data.global_streak > 1) {
-          alert(`🔥 ${data.global_streak}-day global reading streak!`);
-        }
-
-        await getBooks();
-        await getChallenges();
-        await getStats();
-        await getGlobalStreak();
-
-      } catch (err) {
-        console.error("Failed to update progress:", err);
-        alert("Could not update progress. Is the server running?");
-      } finally {
-        updateBtn.disabled = false;
-        if (label) label.textContent = "Update Progress";
-      }
+    updateBtn.addEventListener("click", () => {
+      showProgressInput(book, currentPage, totalPages);
     });
 
     // ── Notes ──
