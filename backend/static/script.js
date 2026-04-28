@@ -315,7 +315,7 @@ function showProgressInput(book, currentPage, totalPages) {
   popup.className = "mini-progress-popup";
 
   popup.innerHTML = `
-    <h3>📖 ${book.title}</h3>
+    <h3>🌿 ${book.title}</h3>
     <p>Current: ${currentPage} / ${totalPages}</p>
 
     <input

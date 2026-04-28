@@ -534,60 +534,132 @@ body::after {
   text-align: cent  er;
   transition: 0.3s;
 }
+/* ─── Botanical Progress Popup ───────────────────────── */
+
 .mini-progress-popup {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
-  width: 320px;
-  max-width: 90%;
 
-  background: #fdf8ee;
-  padding: 22px;
-  border-radius: 18px;
+  width: 340px;
+  max-width: 92%;
 
-  box-shadow: 0 18px 45px rgba(0,0,0,0.22);
+  padding: 24px;
+  border-radius: 22px;
 
+  background:
+    linear-gradient(145deg, rgba(255,248,236,0.96), rgba(246,238,221,0.95));
+
+  border: 1px solid rgba(138, 116, 76, 0.18);
+
+  box-shadow:
+    0 18px 45px rgba(58, 44, 20, 0.18),
+    inset 0 1px 0 rgba(255,255,255,0.7);
+
+  backdrop-filter: blur(8px);
   z-index: 99999;
 
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
   text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  color: #3e3525;
+
+  animation: bloomPopup 0.28s ease;
 }
 
+/* Title */
+.mini-progress-popup h3 {
+  margin: 0 0 10px;
+  font-size: 30px;
+  font-weight: 600;
+  color: #2f4d2e;
+  letter-spacing: 0.3px;
+}
+
+/* Subtitle */
+.mini-progress-popup p {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: #6c5a43;
+}
+
+/* Input */
 .mini-progress-popup input {
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #d9c9a6;
-  backdrop-filter: blur(8px);
-  font-size: 16px;
   width: 100%;
   box-sizing: border-box;
+
+  padding: 14px 16px;
+  border-radius: 16px;
+
+  border: 1px solid rgba(112, 92, 61, 0.18);
+  background: rgba(255,255,255,0.7);
+
+  font-size: 18px;
+  text-align: center;
+  color: #3c3224;
+
+  outline: none;
+  transition: 0.2s ease;
 }
 
+.mini-progress-popup input:focus {
+  border-color: #6e8c5a;
+  box-shadow: 0 0 0 4px rgba(110,140,90,0.12);
+}
+
+/* Buttons row */
 .popup-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 18px;
 }
 
+/* Shared button */
 .popup-actions button {
   flex: 1;
-  padding: 10px;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
+  padding: 12px;
+
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
+
+  transition: 0.22s ease;
 }
 
+/* Save button */
 .save-btn {
-  background: #5e7d53;
+  background: linear-gradient(135deg, #5d7a48, #789a60);
   color: white;
+  box-shadow: 0 8px 18px rgba(93,122,72,0.25);
 }
 
+.save-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+}
+
+/* Cancel button */
 .cancel-btn {
-  background: #e5ddcf;
+  background: #efe6d7;
+  color: #6d5b43;
+}
+
+.cancel-btn:hover {
+  background: #e6dac7;
+}
+
+/* Animation */
+@keyframes bloomPopup {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 #challengeBtn {
   display: inline-flex;
