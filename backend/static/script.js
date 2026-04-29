@@ -155,6 +155,9 @@ async function getStats() {
     document.getElementById("totalPages").textContent   = data.total_pages_read;
     document.getElementById("monthlyPages").textContent = data.pages_this_month;
     document.getElementById("avgPages").textContent     = data.avg_pages_per_month;
+    document.getElementById("miniBooks").textContent = data.total_books;
+    document.getElementById("miniPages").textContent = data.total_pages_read;
+    document.getElementById("miniMonth").textContent = data.pages_this_month;
 
     console.log("Old stats done ✅");
 
@@ -171,7 +174,21 @@ async function getStats() {
     console.error("Stats error:", err);
   }
 }
+const statsModal = document.getElementById("statsModal");
 
+document.getElementById("openStats").addEventListener("click", () => {
+  statsModal.style.display = "flex";
+});
+
+document.getElementById("closeStats").addEventListener("click", () => {
+  statsModal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target === statsModal) {
+    statsModal.style.display = "none";
+  }
+});
 // ─── FETCH GLOBAL STREAK ──────────────────────────────────────────────────────
 async function getGlobalStreak() {
   try {

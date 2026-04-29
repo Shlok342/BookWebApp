@@ -112,10 +112,19 @@
         <span class="dot">·</span>
         <span>🌸 <span id="bloomedCount">0</span> fully bloomed</span>
       </div>
-      <button class="add-btn">📖 Add Book</button>
+      <div class="mini-stats">
+        <div class="mini-stat">📚 Books <strong id="miniBooks">0</strong></div>
+        <div class="mini-stat">📄 Pages <strong id="miniPages">0</strong></div>
+        <div class="mini-stat">🌿 This Month <strong id="miniMonth">0</strong></div>
+      </div>
+      
+      <div class="hero-actions">
+        <button class="add-btn">📖 Add Book</button>
+        <button class="insights-btn" id="openStats">📊 View Insights</button>
+      </div>
     </div>
   </section>
-  <section class="stats-container">
+  
 
     <div class="stat-card">
       <h3>Total Books</h3>
@@ -154,7 +163,7 @@
       <p id="streakAvg">0</p>
     </div>
   
-  </section>
+ 
   <main>
     <div class="controls">
       <input type="text" id="searchInput" placeholder="Search books...">
@@ -195,7 +204,51 @@
 </main>
 
 </div>
+<div class="stats-modal" id="statsModal">
+  <div class="stats-modal-content">
+    <span class="stats-close" id="closeStats">&times;</span>
+    <h2>Reading Insights</h2>
 
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Books</h3>
+        <p id="totalBooks">0</p>
+      </div>
+    
+      <div class="stat-card">
+        <h3>Total Pages</h3>
+        <p id="totalPages">0</p>
+      </div>
+    
+      <div class="stat-card">
+        <h3>This Month</h3>
+        <p id="monthlyPages">0</p>
+      </div>
+    
+      <div class="stat-card">
+        <h3>Avg / Month</h3>
+        <p id="avgPages">0</p>
+      </div>
+    
+      <!-- 🔥 NEW STREAK STATS -->
+    
+      <div class="stat-card">
+        <h3>🔥 Streak Pages</h3>
+        <p id="streakPages">0</p>
+      </div>
+    
+      <div class="stat-card">
+        <h3>❄️ Streak This Month</h3>
+        <p id="streakMonthly">0</p>
+      </div>
+    
+      <div class="stat-card">
+        <h3>📊 Streak Avg</h3>
+        <p id="streakAvg">0</p>
+      </div><!-- move your stat cards here -->
+    </div>
+  </div>
+</div>
 <footer>
   <p class="footer-quote">"A room without books is like a body without a soul."</p>
 </footer>

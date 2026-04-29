@@ -337,54 +337,98 @@ body::after {
   opacity: 0.80;
 }
 
-/* ── Hero ──────────────────────────────────────────────── */
-.hero {
-  padding: 30px 48px 10px;
-}
+/* Replace old stats section with hybrid layout */
 
-.hero-inner {
-  position: relative;
-  z-index: 2;
-  padding-bottom: 10px;
-}
-
-.hero-title {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: clamp(2.6rem, 5vw, 4.4rem);
-  font-weight: 700;
-  color: var(--text-dark);
-  line-height: 1.08;
-  margin-bottom: 14px;
-  text-shadow: 0 2px 12px rgba(70,45,15,0.07);
-  letter-spacing: -0.01em;
-}
-
-.hero-meta {
+/* MINI STATS */
+.mini-stats {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 0.87rem;
-  color: var(--text-muted);
-  margin-bottom: 26px;
-  font-family: 'DM Sans', sans-serif;
-  letter-spacing: 0.01em;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 8px 0 22px;
 }
 
-.hero-meta .dot {
-  font-size: 1.1rem;
-  color: var(--sand);
-  opacity: 0.8;
+.mini-stat {
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(90,110,70,0.15);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  color: var(--text-dark);
 }
+
+.mini-stat strong {
+  margin-left: 4px;
+}
+
+/* BUTTON ROW */
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* INSIGHTS BUTTON */
+.insights-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 22px;
+  background: #e9e2d3;
+  color: #3d6234;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.insights-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* HIDE OLD GRID ON PAGE */
 .stats-container {
+  display: none;
+}
+
+/* MODAL */
+.stats-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.stats-modal-content {
+  width: min(900px, 100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #f6f0e4;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+}
+
+.stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
   gap: 16px;
 }
-.stat-card:nth-last-child(-n+3) {
-  border: 1px solid #7a9e7e;
+
+.stats-modal .stat-card {
+  background: white;
+  border-radius: 22px;
+  padding: 22px;
+  text-align: center;
 }
-/* ── Sanctuary Label ───────────────────────────────────── */
+
+.stats-close {
+  float: right;
+  font-size: 1.8rem;
+  cursor: pointer;
+}/*Sanctuary Label ───────────────────────────────────── */
 .sanctuary-label-wrap {
   display: flex;
   align-items: center;
