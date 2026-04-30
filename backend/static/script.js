@@ -1,5 +1,5 @@
 const container = document.querySelector(".books-container");
-
+import { API } from "./services/api.js";
 let books = [];
 let activeBookId = null;
 let lastKnownGlobalStreak = 0;
@@ -40,10 +40,9 @@ quoteBtn.onclick = async () => {
   document.getElementById("quoteDayAuthor").textContent = "";
 
   try {
-    const res = await fetch("/quote");
-    if (!res.ok) throw new Error("API failed");
+    
 
-    const data = await res.json();
+    const data = await API.getQuote();
 
     document.getElementById("quoteDayText").textContent = data.quote;
     document.getElementById("quoteDayAuthor").textContent =
@@ -81,9 +80,7 @@ function getProgressColor(pct) {
 }
 async function getBooks() {
   try {
-    const response = await fetch("/books");
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    books = await response.json();
+    books = await API.getBooks();
     applyFilters();
   } catch (error) {
     console.error("Failed to fetch books:", error);
@@ -91,8 +88,7 @@ async function getBooks() {
   }
 }
 async function getChallenges() {
-  const res = await fetch("/challenges");
-  const data = await res.json();
+  const data = await API.getChallenges();
   renderChallenges(data);
 }
 
@@ -145,10 +141,9 @@ async function getStats() {
   try {
     console.log("Fetching stats...");
 
-    const res = await fetch("/stats");
-    if (!res.ok) throw new Error("Failed to fetch stats");
+    
 
-    const data = await res.json();
+    const data = await API.getStats();
     console.log("DATA:", data);
 
     document.getElementById("totalBooks").textContent   = data.total_books;
@@ -192,9 +187,7 @@ window.addEventListener("click", (e) => {
 // ─── FETCH GLOBAL STREAK ──────────────────────────────────────────────────────
 async function getGlobalStreak() {
   try {
-    const res = await fetch("/streak");
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    const data = await res.json();
+    const data = await API.getGlobalStreak();
     renderGlobalStreak(data.streak_count, data.last_read_date, data.freeze_count);
   } catch (err) {
     console.error("Failed to fetch global streak:", err);
@@ -376,40 +369,29 @@ function showProgressInput(book, currentPage, totalPages) {
     saveBtn.textContent = "Updating...";
 
     try {
-      const res = await fetch(`/books/${book.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ current_page: newPage })
-      });
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const json = await res.json();
-      const data = json.data;
-
-      // Keep your streak logic
-      // NEW
+      const json = await API.updateProgress(book.id, newPage);
+      const data = json.data; // 👈 KEEP THIS if your backend returns { data: ... }
+    
       if (data && !data.qualified_for_streak && data.global_streak === 0) {
         showToast("📖 Read at least 2 pages to count for streak!");
       }
-
+    
       if (data && data.global_streak > lastKnownGlobalStreak) {
         showToast(`🔥 ${data.global_streak}-day global streak!`);
       }
-
+    
       popup.remove();
-
+    
       await getBooks();
       await getChallenges();
       await getStats();
       await getGlobalStreak();
-
+    
     } catch (err) {
       console.error("Failed to update progress:", err);
       showToast("Could not update progress.");
-    } finally {
+    }
+    finally {
       saveBtn.disabled = false;
       saveBtn.textContent = "Save";
     }
@@ -590,16 +572,17 @@ function renderBooks(filteredBooks = books) {
     deleteBtn.classList.add("delete-btn");
     deleteBtn.textContent = "Delete";
     deleteBtn.addEventListener("click", async () => {
-      if (!confirm(`Delete "${book.title}"? This cannot be undone.`)) return;
       try {
-        const res = await fetch(`/books/${book.id}`, { method: "DELETE" });
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        await API.deleteBook(book.id);
+      
         await getBooks();
         await getStats();
+      
       } catch (err) {
         console.error("Failed to delete book:", err);
-        showToast("Could not delete book. Is the server running?");
+        showToast("Could not delete book.");
       }
+
     }); // ✅ deleteBtn listener closes here
 
     buttonsDiv.append(openBtn, quotesBtn, updateBtn, notesBtn, deleteBtn);
@@ -707,29 +690,30 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
   const quotes = [...(book?.quotes || [])];
 
   if (!text || !book) return;
-  if (quotes.length >= 5) { showToast("Maximum 5 quotes per book."); return; }
+  if (quotes.length >= 5) {
+    showToast("Maximum 5 quotes per book.");
+    return;
+  }
 
   quotes.push(text);
 
   try {
-    const res = await fetch(`/books/${activeBookId}/quotes`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ quotes })
-    });
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    const data = await res.json();
+    const data = await API.updateQuotes(activeBookId, quotes);
 
     if (data.streak_count > 1) {
       showToast(`🔥 ${data.streak_count}-day reading streak!`);
     }
+
     document.getElementById("quoteInput").value = "";
+
     await getBooks();
+
     const updated = books.find(b => b.id === activeBookId);
     if (updated) renderQuotesList(updated.quotes || []);
+
   } catch (err) {
     console.error("Failed to save quote:", err);
-    showToast("Could not save quote. Is the server running?");
+    showToast("Could not save quote.");
   }
 });
 
@@ -769,15 +753,13 @@ document.getElementById("saveNotesBtn").addEventListener("click", async () => {
   if (!activeBookId) return;
 
   try {
-    const res = await fetch(`/books/${activeBookId}/notes`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ notes })
-    });
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    await API.updateNotes(activeBookId, notes);
+
     notesModal.style.display = "none";
     activeBookId = null;
+
     await getBooks();
+
   } catch (err) {
     console.error("Failed to save notes:", err);
     showToast("Could not save notes. Is the server running?");
@@ -860,30 +842,20 @@ document.getElementById("saveBook").addEventListener("click", async () => {
   }
 
   try {
-    const res = await fetch("/books", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, author, total_pages: totalPages, current_page: currentPage, genre, cover_url: cover  })
+    await API.addBook({
+      title,
+      author,
+      total_pages: totalPages,
+      current_page: currentPage,
+      genre,
+      cover_url: cover
     });
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-    await res.json();
-
-    await getGlobalStreak();
-
-    document.getElementById("titleInput").value       = "";
-    document.getElementById("authorInput").value      = "";
-    document.getElementById("totalPagesInput").value  = "";
-    document.getElementById("currentPageInput").value = "";
-    addBookModal.style.display = "none";
-
+  
     await getBooks();
     await getStats();
   } catch (err) {
     console.error("Failed to add book:", err);
-    alert("Could not save book. Is the server running?");
   }
-});
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("searchInput").addEventListener("input", applyFilters);
   document.getElementById("statusFilter").addEventListener("change", applyFilters);
@@ -899,4 +871,4 @@ document.addEventListener("DOMContentLoaded", () => {
   getStats();
   getGlobalStreak();
   scheduleMidnightCheck();
-});
+})});
