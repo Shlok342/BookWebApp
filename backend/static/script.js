@@ -1,5 +1,5 @@
 const container = document.querySelector(".books-container");
-import { API } from "./services/api.js";
+import { API } from "./frontend_services/api.js";
 let books = [];
 let activeBookId = null;
 let lastKnownGlobalStreak = 0;

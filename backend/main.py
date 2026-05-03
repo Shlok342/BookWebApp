@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from pathlib import Path
 from psycopg2.extras import RealDictCursor
-from backend.services.book_services import update_progress_service
+from backend.backend_services.book_services import update_progress_service
 
 BASE_DIR = Path(__file__).resolve().parent
 # Ensure environment variables are loaded from `backend/.env` regardless of CWD.
