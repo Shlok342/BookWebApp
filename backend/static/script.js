@@ -603,19 +603,23 @@ function renderBooks(filteredBooks = books) {
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
     deleteBtn.textContent = "Delete";
+
     deleteBtn.addEventListener("click", async () => {
+      const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
+
+      if (!confirmDelete) return; // 🚫 user canceled
+
       try {
         await API.deleteBook(book.id);
-      
+
         await getBooks();
         await getStats();
-      
-      } catch (err) {
-        console.error("Failed to delete book:", err);
-        showToast("Could not delete book.");
-      }
 
-    }); // ✅ deleteBtn listener closes here
+      } catch (err) {
+        console.error("Delete failed:", err);
+        alert("Could not delete the book.");
+      }
+    }); 
 
     buttonsDiv.append(openBtn, quotesBtn, updateBtn, notesBtn, deleteBtn);
 
