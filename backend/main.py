@@ -23,7 +23,7 @@ class PageUpdate(BaseModel):
     current_page: int
 from backend.database import init_db, get_connection
 app=FastAPI()
-app.mount("/static", StaticFiles(directory=BASE_DIR /"backend"/ "static"), name="static")
+app.mount("/static", StaticFiles(directory=BASE_DIR/"static"), name="static")
 init_db()
 
 origins = [
