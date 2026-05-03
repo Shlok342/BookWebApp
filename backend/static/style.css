@@ -4,69 +4,71 @@
 /* ── CSS Variables ─────────────────────────────────────── */
 :root {
   /* Palette — warm parchment + deep forest */
-  --gold:          #c9a84c;
-  --gold-dark:     #a8893d;
-  --cream:         #ede3d0;
-  --parchment:     #f7f0e2;
+  --gold: #c9a84c;
+  --gold-dark: #a8893d;
+  --cream: #ede3d0;
+  --parchment: #f7f0e2;
   --parchment-mid: #f2e9d5;
-  --sand:          #d4c09a;
-  --sand-light:    #e5d5b5;
-  --bark:          #6b4f2e;
-  --bark-light:    #8a6640;
-  --bark-pale:     #c4a882;
-  --forest:        #2c4827;
-  --forest-mid:    #3a5e33;
-  --moss:          #56754a;
-  --moss-light:    #7a9e6c;
-  --sage:          #a8bf9a;
-  --sage-pale:     #d4e3cc;
+  --sand: #d4c09a;
+  --sand-light: #e5d5b5;
+  --bark: #6b4f2e;
+  --bark-light: #8a6640;
+  --bark-pale: #c4a882;
+  --forest: #2c4827;
+  --forest-mid: #3a5e33;
+  --moss: #56754a;
+  --moss-light: #7a9e6c;
+  --sage: #a8bf9a;
+  --sage-pale: #d4e3cc;
 
   /* Surfaces */
-  --card-bg:       #fdf8ee;
-  --card-bg-alt:   #faf4e8;
-  --modal-bg:      #f9f3e5;
+  --card-bg: #fdf8ee;
+  --card-bg-alt: #faf4e8;
+  --modal-bg: #f9f3e5;
 
   /* Text */
-  --text-dark:     #251c0d;
-  --text-mid:      #5c4530;
-  --text-muted:    #9a8060;
-  --text-faint:    #030303;
+  --text-dark: #251c0d;
+  --text-mid: #5c4530;
+  --text-muted: #9a8060;
+  --text-faint: #030303;
 
   /* Misc */
-  --progress-bg:   #ddd0b5;
-  --shadow-sm:     rgba(70, 45, 15, 0.08);
-  --shadow-md:     rgba(70, 45, 15, 0.13);
-  --shadow-lg:     rgba(70, 45, 15, 0.20);
-  --shadow-glow:   rgba(90, 122, 69, 0.15);
-  --radius-card:   20px;
-  --radius-btn:    50px;
-  --radius-input:  12px;
+  --progress-bg: #ddd0b5;
+  --shadow-sm: rgba(70, 45, 15, 0.08);
+  --shadow-md: rgba(70, 45, 15, 0.13);
+  --shadow-lg: rgba(70, 45, 15, 0.20);
+  --shadow-glow: rgba(90, 122, 69, 0.15);
+  --radius-card: 20px;
+  --radius-btn: 50px;
+  --radius-input: 12px;
 
   /* Transitions */
-  --ease-smooth:   cubic-bezier(0.34, 1.04, 0.64, 1);
-  --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
-  --speed-fast:    0.22s;
-  --speed-mid:     0.30s;
-  --speed-slow:    0.60s;
+  --ease-smooth: cubic-bezier(0.34, 1.04, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --speed-fast: 0.22s;
+  --speed-mid: 0.30s;
+  --speed-slow: 0.60s;
 
   /* Premium Background Architecture */
-  --bg-gradient-top:      rgba(255, 253, 245, 0.85);
-  --bg-gradient-mid:      rgba(232, 221, 200, 0.65);
-  --bg-gradient-bottom:   rgba(210, 195, 168, 0.80);
-  --noise-texture:        url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-  --glow-top-right:       rgba(255, 245, 210, 0.55);
-  --glow-bottom-left:     rgba(180, 210, 160, 0.18);
-  --glass-blur:           10px;
+  --bg-gradient-top: rgba(255, 253, 245, 0.85);
+  --bg-gradient-mid: rgba(232, 221, 200, 0.65);
+  --bg-gradient-bottom: rgba(210, 195, 168, 0.80);
+  --noise-texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+  --glow-top-right: rgba(255, 245, 210, 0.55);
+  --glow-bottom-left: rgba(180, 210, 160, 0.18);
+  --glass-blur: 10px;
 
   /* Mountain Silhouette Layers */
-  --mtn-layer-1:          linear-gradient(180deg, #cbb797 0%, #b8a382 100%);
-  --mtn-opacity-1:        0.75;
-  --mtn-layer-2:          linear-gradient(180deg, #b09870 0%, #8a7350 100%);
-  --mtn-opacity-2:        0.88;
+  --mtn-layer-1: linear-gradient(180deg, #cbb797 0%, #b8a382 100%);
+  --mtn-opacity-1: 0.75;
+  --mtn-layer-2: linear-gradient(180deg, #b09870 0%, #8a7350 100%);
+  --mtn-opacity-2: 0.88;
 }
 
 /* ── Reset & Base ──────────────────────────────────────── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -127,27 +129,85 @@ body::after {
   pointer-events: none;
   z-index: 0;
   opacity: 0.50;
-  filter: drop-shadow(0 2px 4px rgba(70,90,50,0.15));
+  filter: drop-shadow(0 2px 4px rgba(70, 90, 50, 0.15));
 }
 
-.leaf-1 { top: 8%;  right: 4%;  font-size: 2.4rem; animation: drift1 9s ease-in-out infinite alternate; transform: rotate(-15deg); }
-.leaf-2 { top: 18%; right: 12%; font-size: 1.6rem; animation: drift2 11s ease-in-out infinite alternate; transform: rotate(25deg); }
-.leaf-3 { top: 5%;  right: 22%; font-size: 1.8rem; animation: drift3 8s ease-in-out infinite alternate; transform: rotate(-8deg); }
-.leaf-4 { top: 35%; right: 2%;  font-size: 1.4rem; animation: drift1 10s ease-in-out infinite alternate; transform: rotate(40deg); }
-.leaf-5 { top: 12%; left: 3%;   font-size: 1.6rem; animation: drift2 12s ease-in-out infinite alternate; transform: rotate(-20deg); }
-.leaf-6 { top: 28%; left: 8%;   font-size: 1.2rem; animation: drift3 9.5s ease-in-out infinite alternate; transform: rotate(15deg); }
+.leaf-1 {
+  top: 8%;
+  right: 4%;
+  font-size: 2.4rem;
+  animation: drift1 9s ease-in-out infinite alternate;
+  transform: rotate(-15deg);
+}
+
+.leaf-2 {
+  top: 18%;
+  right: 12%;
+  font-size: 1.6rem;
+  animation: drift2 11s ease-in-out infinite alternate;
+  transform: rotate(25deg);
+}
+
+.leaf-3 {
+  top: 5%;
+  right: 22%;
+  font-size: 1.8rem;
+  animation: drift3 8s ease-in-out infinite alternate;
+  transform: rotate(-8deg);
+}
+
+.leaf-4 {
+  top: 35%;
+  right: 2%;
+  font-size: 1.4rem;
+  animation: drift1 10s ease-in-out infinite alternate;
+  transform: rotate(40deg);
+}
+
+.leaf-5 {
+  top: 12%;
+  left: 3%;
+  font-size: 1.6rem;
+  animation: drift2 12s ease-in-out infinite alternate;
+  transform: rotate(-20deg);
+}
+
+.leaf-6 {
+  top: 28%;
+  left: 8%;
+  font-size: 1.2rem;
+  animation: drift3 9.5s ease-in-out infinite alternate;
+  transform: rotate(15deg);
+}
 
 @keyframes drift1 {
-  from { transform: translateY(0px)   rotate(-15deg); }
-  to   { transform: translateY(-14px) rotate(-6deg); }
+  from {
+    transform: translateY(0px) rotate(-15deg);
+  }
+
+  to {
+    transform: translateY(-14px) rotate(-6deg);
+  }
 }
+
 @keyframes drift2 {
-  from { transform: translateY(0px)  rotate(25deg); }
-  to   { transform: translateY(-10px) rotate(18deg); }
+  from {
+    transform: translateY(0px) rotate(25deg);
+  }
+
+  to {
+    transform: translateY(-10px) rotate(18deg);
+  }
 }
+
 @keyframes drift3 {
-  from { transform: translateY(0px)  rotate(-8deg); }
-  to   { transform: translateY(-16px) rotate(2deg); }
+  from {
+    transform: translateY(0px) rotate(-8deg);
+  }
+
+  to {
+    transform: translateY(-16px) rotate(2deg);
+  }
 }
 
 /* ── Top Nav ───────────────────────────────────────────── */
@@ -160,6 +220,7 @@ body::after {
   position: relative;
   z-index: 10;
 }
+
 /* 1. The Base Badge */
 .global-streak-badge {
   display: inline-flex;
@@ -169,10 +230,10 @@ body::after {
   border-radius: 50px;
 
   /* Font matching the brand-sans style */
-  font-family: 'Inter', system-ui, sans-serif; 
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 600;
-  
+
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: 1.5px solid transparent;
@@ -185,9 +246,17 @@ body::after {
 }
 
 @keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.6; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 /* 2. The "Cold" State (No streak) */
@@ -222,39 +291,44 @@ body::after {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
 }
+
 .controls {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
+
 .controls input,
 .controls select {
   padding: 8px;
   border-radius: 6px;
 }
-#searchInput, #statusFilter {
+
+#searchInput,
+#statusFilter {
   padding: 8px;
   border-radius: 6px;
 }
+
 .mood-ring-btn {
   /* Maximum roundness and plush padding! */
   padding: 14px 32px;
-  border-radius: 50px; 
-  
+  border-radius: 50px;
+
   /* Matching the gorgeous forest vibe */
   background: linear-gradient(135deg, var(--forest), var(--moss));
   color: #f2ead6;
   border: none;
-  
+
   /* Typography */
   font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  
+
 
   box-shadow: 0 4px 15px rgba(44, 72, 39, 0.25);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Make it float when you hover! */
@@ -269,6 +343,7 @@ body::after {
   transform: translateY(1px) scale(0.98);
   box-shadow: 0 2px 10px rgba(44, 72, 39, 0.3);
 }
+
 /* ── Brand ─────────────────────────────────────────────── */
 .brand {
   display: flex;
@@ -280,18 +355,19 @@ body::after {
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(90,122,69,0.18), rgba(60,90,45,0.10));
+  background: linear-gradient(135deg, rgba(90, 122, 69, 0.18), rgba(60, 90, 45, 0.10));
   border: 1px solid rgba(90, 122, 69, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(70,100,50,0.10), inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: 0 2px 8px rgba(70, 100, 50, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .brand-name {
   display: flex;
   align-items: center;
-  gap: 6px; /* was 0 */
+  gap: 6px;
+  /* was 0 */
 }
 
 .brand-sans {
@@ -310,6 +386,7 @@ body::after {
   color: var(--bark);
   letter-spacing: 0;
 }
+
 .brand-serif {
   transform: translateY(-1px);
 }
@@ -319,7 +396,7 @@ body::after {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: linear-gradient(120deg, rgba(210,230,200,0.50), rgba(200,220,185,0.38));
+  background: linear-gradient(120deg, rgba(210, 230, 200, 0.50), rgba(200, 220, 185, 0.38));
   border: 1px solid rgba(90, 122, 69, 0.28);
   border-radius: 50px;
   padding: 7px 18px 7px 13px;
@@ -328,7 +405,7 @@ body::after {
   font-weight: 400;
   color: var(--forest-mid);
   letter-spacing: 0.02em;
-  box-shadow: 0 2px 8px rgba(70,100,50,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+  box-shadow: 0 2px 8px rgba(70, 100, 50, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(4px);
 }
 
@@ -364,15 +441,15 @@ body::after {
 }
 
 .mini-stat {
-  background: rgba(255,255,255,0.55);
-  border: 1px solid rgba(90,110,70,0.12);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(90, 110, 70, 0.12);
   border-radius: 999px;
   padding: 10px 16px;
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.08rem;
   color: #4e4a3f;
   font-style: italic;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .mini-stat strong {
@@ -415,7 +492,7 @@ body::after {
 .stats-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.35);
   display: none;
   justify-content: center;
   align-items: center;
@@ -430,12 +507,12 @@ body::after {
   background: #f6f0e4;
   border-radius: 28px;
   padding: 28px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
 }
 
@@ -450,7 +527,9 @@ body::after {
   float: right;
   font-size: 1.8rem;
   cursor: pointer;
-}/*Sanctuary Label ───────────────────────────────────── */
+}
+
+/*Sanctuary Label ───────────────────────────────────── */
 .sanctuary-label-wrap {
   display: flex;
   align-items: center;
@@ -462,13 +541,13 @@ body::after {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(210,230,200,0.55), rgba(185,210,170,0.35));
-  border: 1px solid rgba(90,122,69,0.25);
+  background: linear-gradient(135deg, rgba(210, 230, 200, 0.55), rgba(185, 210, 170, 0.35));
+  border: 1px solid rgba(90, 122, 69, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .sanctuary-label {
@@ -491,8 +570,8 @@ body::after {
   pointer-events: none;
   z-index: 1;
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.25) 22%, black 58%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.25) 22%, black 58%);
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25) 22%, black 58%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25) 22%, black 58%);
 }
 
 /* Layer 1 — Far mountains */
@@ -532,24 +611,25 @@ body::after {
   opacity: var(--mtn-opacity-2);
   transition: background var(--speed-slow) var(--ease-smooth);
 }
+
 .global-streak-badge {
   /* Layout & Spacing */
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 8px 20px;
-  
+
   /* Shape & Background */
   background-color: #fdfaf2;
   border-radius: 50px;
   border: 1.5px solid #ece4d5;
-  
+
   /* Typography */
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 1rem;
   font-weight: 500;
   color: #2d2d2d;
-  
+
   /* Interactive Elements */
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
@@ -563,11 +643,19 @@ body::after {
   opacity: 0.40;
   z-index: 2;
   pointer-events: none;
-  filter: drop-shadow(0 4px 8px rgba(50,70,30,0.15));
+  filter: drop-shadow(0 4px 8px rgba(50, 70, 30, 0.15));
 }
 
-.corner-br { bottom: 20px; right: 60px; transform: scaleX(-1); }
-.corner-bl { bottom: 20px; left: 50px; }
+.corner-br {
+  bottom: 20px;
+  right: 60px;
+  transform: scaleX(-1);
+}
+
+.corner-bl {
+  bottom: 20px;
+  left: 50px;
+}
 
 /* ── Sanctuary Panel ───────────────────────────────────── */
 .sanctuary-panel {
@@ -586,20 +674,22 @@ body::after {
     inset 0 1px 0 rgba(255, 255, 255, 0.50);
   overflow: hidden;
   background-image:
-    linear-gradient(rgba(107,79,46,0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(107,79,46,0.055) 1px, transparent 1px);
+    linear-gradient(rgba(107, 79, 46, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107, 79, 46, 0.055) 1px, transparent 1px);
   background-size: 28px 28px;
   transition: backdrop-filter var(--speed-mid) ease;
 }
+
 /*Challenges brooo */
 .challenge-card {
   background: #f7f7f7;
   padding: 18px;
   border-radius: 14px;
   margin-top: 14px;
-  text-align: cent  er;
+  text-align: cent er;
   transition: 0.3s;
 }
+
 /* ─── Botanical Progress Popup ───────────────────────── */
 
 .mini-progress-popup {
@@ -621,17 +711,17 @@ body::after {
 
   /* parchment texture */
   background:
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.55) 0%, transparent 22%),
-    radial-gradient(circle at 80% 30%, rgba(255,255,255,0.35) 0%, transparent 20%),
-    radial-gradient(circle at 50% 80%, rgba(214,194,160,0.18) 0%, transparent 30%),
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.55) 0%, transparent 22%),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.35) 0%, transparent 20%),
+    radial-gradient(circle at 50% 80%, rgba(214, 194, 160, 0.18) 0%, transparent 30%),
     linear-gradient(145deg, #f8f2e6, #efe5d3);
 
   border: 1px solid rgba(113, 91, 55, 0.14);
 
   box-shadow:
     0 28px 60px rgba(47, 33, 12, 0.18),
-    inset 0 1px 0 rgba(255,255,255,0.75),
-    inset 0 -1px 0 rgba(160,130,80,0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1px 0 rgba(160, 130, 80, 0.08);
 
   backdrop-filter: blur(10px);
 
@@ -691,7 +781,7 @@ body::after {
   border: 1px solid rgba(88, 114, 73, 0.35);
 
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.85), rgba(247,242,232,0.9));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(247, 242, 232, 0.9));
 
   color: #2f2a22;
   font-size: 24px;
@@ -701,7 +791,7 @@ body::after {
   outline: none;
 
   box-shadow:
-    inset 0 2px 4px rgba(0,0,0,0.04),
+    inset 0 2px 4px rgba(0, 0, 0, 0.04),
     0 6px 14px rgba(84, 104, 66, 0.08);
 
   transition: all 0.22s ease;
@@ -724,8 +814,8 @@ body::after {
   border-color: #6f8f57;
   transform: translateY(-1px);
   box-shadow:
-    inset 0 2px 4px rgba(0,0,0,0.04),
-    0 0 0 5px rgba(111,143,87,0.12),
+    inset 0 2px 4px rgba(0, 0, 0, 0.04),
+    0 0 0 5px rgba(111, 143, 87, 0.12),
     0 8px 18px rgba(84, 104, 66, 0.12);
 }
 
@@ -757,7 +847,7 @@ body::after {
   background: linear-gradient(135deg, #5f7c49, #7c9b63);
 
   box-shadow:
-    0 12px 22px rgba(95,124,73,0.22);
+    0 12px 22px rgba(95, 124, 73, 0.22);
 }
 
 .save-btn:hover {
@@ -793,6 +883,7 @@ body::after {
     opacity: 0;
     transform: translate(-50%, -46%) scale(0.94);
   }
+
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
@@ -800,9 +891,17 @@ body::after {
 }
 
 @keyframes leafFloat {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-6px) rotate(6deg); }
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-6px) rotate(6deg);
+  }
 }
+
 #challengeBtn {
   display: inline-flex;
   align-items: center;
@@ -860,6 +959,7 @@ body::after {
   height: 100%;
   background: #4caf50;
 }
+
 /* ── Add Book Button ───────────────────────────────────── */
 .add-btn {
   display: inline-flex;
@@ -936,12 +1036,14 @@ main {
 .book-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 3px;
   background: linear-gradient(90deg,
-    var(--forest) 0%,
-    var(--moss) 55%,
-    var(--sage) 100%);
+      var(--forest) 0%,
+      var(--moss) 55%,
+      var(--sage) 100%);
   border-radius: var(--radius-card) var(--radius-card) 0 0;
   opacity: 0.85;
 }
@@ -952,7 +1054,7 @@ main {
   position: absolute;
   inset: 0;
   border-radius: var(--radius-card);
-  background: radial-gradient(circle at 50% 0%, rgba(255,245,210,0.35), transparent 65%);
+  background: radial-gradient(circle at 50% 0%, rgba(255, 245, 210, 0.35), transparent 65%);
   opacity: 0;
   transition: opacity 0.30s ease;
   pointer-events: none;
@@ -1021,7 +1123,7 @@ main {
   font-weight: 600;
   color: var(--bark);
   letter-spacing: 0.02em;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 /* ── Progress Bar ──────────────────────────────────────── */
@@ -1029,7 +1131,7 @@ main {
 .progressBar {
   --track-bg: #eee;
   --bar-radius: 999px;
-  
+
   width: 100%;
   height: 10px;
   background-color: var(--track-bg);
@@ -1041,7 +1143,7 @@ main {
 .progress,
 .prgoress {
   height: 100%;
-  border-radius: inherit; 
+  border-radius: inherit;
   transition: width 0.6s ease, background-color 0.6s ease;
   will-change: width, background-color;
 }
@@ -1081,7 +1183,7 @@ main {
   background: linear-gradient(120deg, var(--cream), var(--parchment-mid));
   border-color: var(--bark-light);
   color: var(--bark);
-  box-shadow: 0 2px 8px rgba(107,79,46,0.12);
+  box-shadow: 0 2px 8px rgba(107, 79, 46, 0.12);
   transform: translateY(-1px);
 }
 
@@ -1096,7 +1198,7 @@ main {
   background: linear-gradient(120deg, var(--cream), var(--parchment-mid));
   border-color: var(--bark-light);
   color: var(--bark);
-  box-shadow: 0 2px 8px rgba(107,79,46,0.12);
+  box-shadow: 0 2px 8px rgba(107, 79, 46, 0.12);
   transform: translateY(-1px);
 }
 
@@ -1127,7 +1229,7 @@ main {
   border-style: solid;
   border-color: var(--forest);
   transform: translateY(-1px);
-  box-shadow: 0 3px 12px rgba(44,72,39,0.22);
+  box-shadow: 0 3px 12px rgba(44, 72, 39, 0.22);
 }
 
 .update-btn:hover::before {
@@ -1144,13 +1246,13 @@ main {
   background: linear-gradient(135deg, var(--forest), var(--forest-mid));
   border-color: transparent;
   color: #f2ead6;
-  box-shadow: 0 3px 10px rgba(44,72,39,0.22);
+  box-shadow: 0 3px 10px rgba(44, 72, 39, 0.22);
 }
 
 .notes-btn:hover {
   background: linear-gradient(135deg, var(--forest-mid), var(--moss));
   transform: translateY(-1px);
-  box-shadow: 0 5px 16px rgba(44,72,39,0.30);
+  box-shadow: 0 5px 16px rgba(44, 72, 39, 0.30);
 }
 
 /* Delete → soft red */
@@ -1166,13 +1268,13 @@ main {
   font-weight: 500;
   letter-spacing: 0.02em;
   transition: all 0.24s var(--ease-out);
-  box-shadow: 0 3px 10px rgba(180,60,60,0.18);
+  box-shadow: 0 3px 10px rgba(180, 60, 60, 0.18);
 }
 
 .delete-btn:hover {
   transform: translateY(-1px);
   background: linear-gradient(135deg, #d45555, #bb3333);
-  box-shadow: 0 5px 16px rgba(180,60,60,0.28);
+  box-shadow: 0 5px 16px rgba(180, 60, 60, 0.28);
 }
 
 /* ── Quote count hint ──────────────────────────────────── */
@@ -1184,6 +1286,7 @@ main {
   font-family: 'Cormorant Garamond', serif;
   letter-spacing: 0.01em;
 }
+
 /* ── Streak Badge ──────────────────────────────────────── */
 .streak-badge {
   display: inline-flex;
@@ -1217,13 +1320,16 @@ main {
   background: linear-gradient(120deg, rgba(255, 200, 100, 0.40), rgba(255, 160, 60, 0.30));
   border-color: rgba(210, 130, 40, 0.50);
 }
+
 /* ── Modal Overlay ─────────────────────────────────────── */
 .modal {
   display: none;
   position: fixed;
   z-index: 100;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(35, 24, 10, 0.52);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -1253,6 +1359,7 @@ main {
     opacity: 0;
     transform: translateY(-18px) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1271,8 +1378,8 @@ main {
   font-size: 1.35rem;
   margin: 0 auto 16px;
   box-shadow:
-    0 3px 10px rgba(107,79,46,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.7);
+    0 3px 10px rgba(107, 79, 46, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .modal-content h2 {
@@ -1287,17 +1394,20 @@ main {
 
 /* 🔥 STRICT CONSTRAINT: PRESERVE EXACT MODAL TYPOGRAPHY OVERRIDES 🔥 */
 .modal-content {
-  color: #a8bf9a; /* 🔥 makes ALL text white */
+  color: #a8bf9a;
+  /* 🔥 makes ALL text white */
 }
+
 .modal-content input,
 .modal-content textarea {
-  color: rgba(255,255,255,0.7);
-  background: rgba(0, 0, 0, 0.65); /* 🔥 dark glass effect */
-  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.65);
+  /* 🔥 dark glass effect */
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .modal-content textarea::placeholder {
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .modal-content {
@@ -1333,11 +1443,12 @@ main {
 .close:hover {
   color: var(--bark);
   transform: rotate(90deg);
-  background: rgba(107,79,46,0.08);
+  background: rgba(107, 79, 46, 0.08);
 }
 
 /* ── Inputs ────────────────────────────────────────────── */
-input, textarea {
+input,
+textarea {
   width: 100%;
   padding: 11px 15px;
   margin: 7px 0;
@@ -1369,6 +1480,7 @@ textarea:focus {
     0 2px 8px rgba(86, 117, 74, 0.08);
   background: rgba(255, 253, 248, 0.95);
 }
+
 #genreInput {
   width: 100%;
   padding: 11px 15px;
@@ -1425,7 +1537,7 @@ textarea:focus {
   letter-spacing: 0.03em;
   box-shadow:
     0 5px 18px rgba(44, 72, 39, 0.28),
-    inset 0 1px 0 rgba(255,255,255,0.10);
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
 }
 
 #saveBook:hover,
@@ -1435,7 +1547,7 @@ textarea:focus {
   transform: translateY(-1px);
   box-shadow:
     0 8px 24px rgba(44, 72, 39, 0.34),
-    inset 0 1px 0 rgba(255,255,255,0.12);
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 #saveBook:active,
@@ -1473,19 +1585,19 @@ textarea:focus {
   font-size: 1.02rem;
   color: var(--text-mid);
   background:
-    linear-gradient(135deg, rgba(255,252,245,0.80), rgba(250,244,232,0.65));
+    linear-gradient(135deg, rgba(255, 252, 245, 0.80), rgba(250, 244, 232, 0.65));
   border: 1px solid rgba(205, 185, 148, 0.32);
   border-radius: 14px;
   padding: 15px 20px;
   margin-bottom: 11px;
   line-height: 1.72;
-  box-shadow: 0 2px 8px rgba(107,79,46,0.06), inset 0 1px 0 rgba(255,255,255,0.65);
+  box-shadow: 0 2px 8px rgba(107, 79, 46, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.65);
   transition: box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
 .quote-item:hover {
-  box-shadow: 0 4px 14px rgba(107,79,46,0.10), inset 0 1px 0 rgba(255,255,255,0.70);
-  border-color: rgba(190,165,125,0.45);
+  box-shadow: 0 4px 14px rgba(107, 79, 46, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.70);
+  border-color: rgba(190, 165, 125, 0.45);
 }
 
 .no-quotes {
@@ -1601,20 +1713,23 @@ footer {
   background: rgba(90, 122, 69, 0.20);
   color: var(--text-dark);
 }
+
 .modal-content input,
 .modal-content textarea {
   color: #a8893d;
-  background: rgba(0, 0, 0, 0.5); /* 🔥 dark glass effect */
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0, 0, 0, 0.5);
+  /* 🔥 dark glass effect */
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .modal-content textarea::placeholder {
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .modal-content {
   backdrop-filter: blur(12px);
 }
+
 /* Quote of the Day Button */
 .quote-btn {
   padding: 10px 16px;
@@ -1641,11 +1756,12 @@ footer {
 
   box-shadow:
     0 20px 60px rgba(60, 40, 10, 0.25),
-    inset 0 1px 0 rgba(255,255,255,0.6);
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 
   position: relative;
   overflow: hidden;
 }
+
 #quoteModalContent::before {
   content: "";
   position: absolute;
@@ -1653,10 +1769,11 @@ footer {
   background: radial-gradient(circle at top right, rgba(255, 220, 150, 0.25), transparent 60%);
   pointer-events: none;
 }
+
 .quote-day-label {
   font-size: 0.75rem;
   letter-spacing: 2px;
-  color: var(--sage)!important;
+  color: var(--sage) !important;
   opacity: 0.85;
 }
 
@@ -1666,13 +1783,14 @@ footer {
   font-style: italic;
   line-height: 1.8;
 
-  color: var(--bark)!important;
+  color: var(--bark) !important;
 
   margin: 20px 0;
 
   position: relative;
   padding: 0 10px;
 }
+
 .quote-day-text::before {
   content: "“";
   position: absolute;
@@ -1690,20 +1808,23 @@ footer {
   font-size: 3rem;
   color: rgba(180, 140, 80, 0.25);
 }
+
 .quote-day-author {
   font-size: 0.95rem;
-  color: #7a6a55!important;
+  color: #7a6a55 !important;
 
   font-family: 'DM Sans', sans-serif;
   letter-spacing: 0.05em;
 
   opacity: 0.85;
 }
+
 @keyframes quoteFadeIn {
   from {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1713,53 +1834,55 @@ footer {
 #quoteModalContent {
   animation: quoteFadeIn 0.4s ease;
 }
+
 /* ── Midnight Woods Dark Mode 🦇✨ ─────────────────────── */
 body.dark-theme {
   /* Swapping out the sun for the moon! */
-  --cream:         #1a221d;
-  --parchment:     #121814;
+  --cream: #1a221d;
+  --parchment: #121814;
   --parchment-mid: #18201a;
-  --sand:          #36453b;
-  --sand-light:    #46594c;
-  --bark:          #b5c4ad; 
-  --bark-light:    #99a891;
-  --bark-pale:     #5e6e58;
-  --forest:        #7a9e6c; 
-  --forest-mid:    #658558;
-  --moss:          #8bb07d;
-  --moss-light:    #a3c993;
-  --sage:          #243026;
-  --sage-pale:     #1b241c;
+  --sand: #36453b;
+  --sand-light: #46594c;
+  --bark: #b5c4ad;
+  --bark-light: #99a891;
+  --bark-pale: #5e6e58;
+  --forest: #7a9e6c;
+  --forest-mid: #658558;
+  --moss: #8bb07d;
+  --moss-light: #a3c993;
+  --sage: #243026;
+  --sage-pale: #1b241c;
 
   /* Surfaces */
-  --card-bg:       #151c17;
-  --card-bg-alt:   #19211c;
-  --modal-bg:      #151c17;
+  --card-bg: #151c17;
+  --card-bg-alt: #19211c;
+  --modal-bg: #151c17;
 
   /* Text */
-  --text-dark:     #e2ebd9;
-  --text-mid:      #b8c7af;
-  --text-muted:    #82917a;
-  --text-faint:    #556350;
+  --text-dark: #e2ebd9;
+  --text-mid: #b8c7af;
+  --text-muted: #82917a;
+  --text-faint: #556350;
 
   /* Misc */
-  --progress-bg:   #253327;
+  --progress-bg: #253327;
 
   /* Premium Background Architecture - Deep Charcoal / Midnight */
-  --bg-gradient-top:      #0b1014;
-  --bg-gradient-mid:      #131b22;
-  --bg-gradient-bottom:   #1a242c;
-  --noise-texture:        url("https://www.transparenttextures.com/patterns/stardust.png");
-  --glow-top-right:       rgba(140, 170, 200, 0.12);
-  --glow-bottom-left:     rgba(80, 120, 100, 0.10);
-  --glass-blur:           16px;
+  --bg-gradient-top: #0b1014;
+  --bg-gradient-mid: #131b22;
+  --bg-gradient-bottom: #1a242c;
+  --noise-texture: url("https://www.transparenttextures.com/patterns/stardust.png");
+  --glow-top-right: rgba(140, 170, 200, 0.12);
+  --glow-bottom-left: rgba(80, 120, 100, 0.10);
+  --glass-blur: 16px;
 
   /* Mountain Silhouette Layers - Dark Mode Overrides */
-  --mtn-layer-1:          linear-gradient(180deg, #1d2833 0%, #11181f 100%);
-  --mtn-opacity-1:        0.90;
-  --mtn-layer-2:          linear-gradient(180deg, #253340 0%, #0d131a 100%);
-  --mtn-opacity-2:        1.0;
+  --mtn-layer-1: linear-gradient(180deg, #1d2833 0%, #11181f 100%);
+  --mtn-opacity-1: 0.90;
+  --mtn-layer-2: linear-gradient(180deg, #253340 0%, #0d131a 100%);
+  --mtn-opacity-2: 1.0;
 }
+
 /* ═══════════════════════════════════════════════════════
    RESPONSIVE — Tablet (≤ 1024px)
 ═══════════════════════════════════════════════════════ */
@@ -1891,13 +2014,29 @@ body.dark-theme {
   }
 
   /* Leaves — reduce on small screens */
-  .leaf-3, .leaf-4, .leaf-6 {
+  .leaf-3,
+  .leaf-4,
+  .leaf-6 {
     display: none;
   }
 
-  .leaf-1 { font-size: 1.8rem; top: 6%; right: 3%; }
-  .leaf-2 { font-size: 1.3rem; top: 14%; right: 9%; }
-  .leaf-5 { font-size: 1.3rem; top: 9%;  left: 2%; }
+  .leaf-1 {
+    font-size: 1.8rem;
+    top: 6%;
+    right: 3%;
+  }
+
+  .leaf-2 {
+    font-size: 1.3rem;
+    top: 14%;
+    right: 9%;
+  }
+
+  .leaf-5 {
+    font-size: 1.3rem;
+    top: 9%;
+    left: 2%;
+  }
 
   /* Corner plants — smaller */
   .corner-plant {
@@ -1925,6 +2064,7 @@ body.dark-theme {
     font-size: 1.08rem;
   }
 }
+
 .stats-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -1936,7 +2076,7 @@ body.dark-theme {
   background: #ffffff;
   padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   text-align: center;
 }
 
@@ -1950,6 +2090,7 @@ body.dark-theme {
   font-weight: bold;
   margin-top: 5px;
 }
+
 /* ═══════════════════════════════════════════════════════
    RESPONSIVE — Small Mobile (≤ 480px)
 ═══════════════════════════════════════════════════════ */
@@ -1986,9 +2127,271 @@ body.dark-theme {
     margin: 8px auto;
   }
 
-  
+
   .add-btn {
     padding: 9px 20px;
     font-size: 0.83rem;
+  }
+}
+
+/* ─── Botanical Delete Confirmation Popup ──────────────────────────────────── */
+
+/* overlay / backdrop */
+.delete-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(38, 32, 20, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition: background 0.32s ease, backdrop-filter 0.32s ease;
+}
+
+.delete-confirm-overlay.dc-visible {
+  background: rgba(38, 32, 20, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.delete-confirm-overlay.dc-closing {
+  background: rgba(38, 32, 20, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
+
+/* popup card */
+.delete-confirm-popup {
+  position: relative;
+  width: 360px;
+  max-width: 90vw;
+  padding: 32px 28px 26px;
+  border-radius: 24px;
+  text-align: center;
+  overflow: hidden;
+
+  font-family: 'Cormorant Garamond', serif;
+  color: #3d3527;
+
+  /* parchment texture matching the existing design */
+  background:
+    radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.55) 0%, transparent 28%),
+    radial-gradient(circle at 85% 25%, rgba(255, 255, 255, 0.35) 0%, transparent 22%),
+    radial-gradient(circle at 50% 85%, rgba(214, 194, 160, 0.20) 0%, transparent 35%),
+    linear-gradient(145deg, #f8f2e6, #efe5d3);
+
+  border: 1px solid rgba(113, 91, 55, 0.16);
+
+  box-shadow:
+    0 32px 70px rgba(47, 33, 12, 0.22),
+    0 8px 24px rgba(47, 33, 12, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.80),
+    inset 0 -1px 0 rgba(160, 130, 80, 0.08);
+
+  /* entry animation */
+  opacity: 0;
+  transform: scale(0.92) translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dc-visible .delete-confirm-popup {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.dc-closing .delete-confirm-popup {
+  opacity: 0;
+  transform: scale(0.92) translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* floating decorative leaves */
+.delete-confirm-leaves {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dc-leaf {
+  position: absolute;
+  font-size: 18px;
+  opacity: 0.18;
+}
+
+.dc-leaf-1 {
+  top: 16px;
+  left: 22px;
+  animation: dcLeafDrift1 4.5s ease-in-out infinite;
+}
+
+.dc-leaf-2 {
+  top: 24px;
+  right: 26px;
+  animation: dcLeafDrift2 5s ease-in-out infinite;
+}
+
+.dc-leaf-3 {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: dcLeafDrift3 5.5s ease-in-out infinite;
+}
+
+@keyframes dcLeafDrift1 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate(4px, -6px) rotate(8deg);
+  }
+}
+
+@keyframes dcLeafDrift2 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate(-5px, -4px) rotate(-6deg);
+  }
+}
+
+@keyframes dcLeafDrift3 {
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-5px) rotate(5deg);
+  }
+}
+
+/* wilted rose icon */
+.delete-confirm-icon {
+  font-size: 44px;
+  margin-bottom: 6px;
+  line-height: 1;
+  animation: dcIconPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes dcIconPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* title */
+.delete-confirm-title {
+  margin: 0 0 6px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #36502f;
+  letter-spacing: -0.01em;
+}
+
+/* book name */
+.delete-confirm-book {
+  margin: 0 0 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.12rem;
+  font-style: italic;
+  color: #8b6f4e;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* description message */
+.delete-confirm-msg {
+  margin: 0 0 22px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem;
+  color: #7b6b55;
+  line-height: 1.55;
+}
+
+/* buttons row */
+.delete-confirm-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.delete-confirm-actions button {
+  flex: 1;
+  height: 48px;
+  border: none;
+  border-radius: 15px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  letter-spacing: 0.01em;
+}
+
+/* Keep it — earthy green */
+.dc-cancel-btn {
+  color: white;
+  background: linear-gradient(135deg, #5f7c49, #7c9b63);
+  box-shadow: 0 8px 20px rgba(95, 124, 73, 0.24);
+}
+
+.dc-cancel-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(95, 124, 73, 0.30);
+  filter: brightness(1.04);
+}
+
+.dc-cancel-btn:active {
+  transform: translateY(0);
+}
+
+/* Remove — warm clay red */
+.dc-delete-btn {
+  color: #fff;
+  background: linear-gradient(135deg, #a85842, #c46b52);
+  box-shadow: 0 8px 20px rgba(168, 88, 66, 0.22);
+}
+
+.dc-delete-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(168, 88, 66, 0.30);
+  filter: brightness(1.06);
+}
+
+.dc-delete-btn:active {
+  transform: translateY(0);
+}
+
+/* ── Mobile adjustments for delete popup ───────────────── */
+@media (max-width: 480px) {
+  .delete-confirm-popup {
+    width: 92vw;
+    padding: 26px 20px 22px;
+  }
+
+  .delete-confirm-title {
+    font-size: 1.3rem;
+  }
+
+  .delete-confirm-actions {
+    flex-direction: column;
+    gap: 8px;
   }
 }
