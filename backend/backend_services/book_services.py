@@ -1,7 +1,41 @@
+import json
+import os
+import time
 from datetime import date
+from pathlib import Path
 from fastapi import HTTPException
 from backend.database import get_connection
 from psycopg2.extras import RealDictCursor
+
+_AGENT_LOG_PATH = Path(__file__).resolve().parent.parent.parent / "debug-f3a808.log"
+
+
+def _agent_log(location: str, message: str, data: dict, hypothesis_id: str) -> None:
+    # #region agent log
+    # Local Cursor debug file + optional NDJSON line to stderr (visible in Render "Logs").
+    try:
+        payload = {
+            "sessionId": "f3a808",
+            "location": location,
+            "message": message,
+            "data": data,
+            "hypothesisId": hypothesis_id,
+            "timestamp": int(time.time() * 1000),
+        }
+        line = json.dumps(payload, default=str) + "\n"
+        try:
+            with open(_AGENT_LOG_PATH, "a", encoding="utf-8") as f:
+                f.write(line)
+        except Exception:
+            pass
+        # RENDER_EXTERNAL_URL is set on Render Web Services (see Render env docs).
+        if os.environ.get("AGENT_DEBUG_STDERR") == "1" or os.environ.get(
+            "RENDER_EXTERNAL_URL"
+        ):
+            print(line, end="", flush=True)
+    except Exception:
+        pass
+    # #endregion
 
 MIN_PAGES_FOR_STREAK = 2
 def compute_qualified(pages_read: int) -> bool:
@@ -25,6 +59,20 @@ def update_progress_service(book_id: int, update):
         # ── 2. Calculate pages read ──
         pages_read = calculate_pages_read(book["current_page"], update.current_page)
         qualified = pages_read >= MIN_PAGES_FOR_STREAK
+        # #region agent log
+        _agent_log(
+            "book_services.update_progress_service",
+            "progress patch",
+            {
+                "book_id": book_id,
+                "old_page": book["current_page"],
+                "new_page": update.current_page,
+                "pages_read": pages_read,
+                "qualified": qualified,
+            },
+            "H_zero_patch",
+        )
+        # #endregion
 
         # ── 3. Update per-book streak ──
         new_streak, new_last_read = update_streak_logic(
@@ -214,6 +262,21 @@ def update_global_streak(cursor, pages_read):
             g_last = date.fromisoformat(str(g_last))
 
     gap = (today - g_last).days if g_last else 0
+    # #region agent log
+    _agent_log(
+        "book_services.update_global_streak:before_decay",
+        "global streak state",
+        {
+            "pages_read": pages_read,
+            "qualified": qualified,
+            "gap": gap,
+            "g_last": str(g_last) if g_last else None,
+            "g_streak": g_streak,
+            "g_freeze": g_freeze,
+        },
+        "H_freeze",
+    )
+    # #endregion
 
     # handle missed days
     if g_last and gap > 1:
@@ -221,6 +284,15 @@ def update_global_streak(cursor, pages_read):
             g_freeze -= 1
         else:
             g_streak = 0
+
+    # #region agent log
+    _agent_log(
+        "book_services.update_global_streak:after_decay",
+        "after missed-day handling",
+        {"gap": gap, "g_streak": g_streak, "g_freeze": g_freeze},
+        "H_freeze",
+    )
+    # #endregion
 
     if qualified:
         if g_last is None or g_streak == 0:
@@ -236,6 +308,21 @@ def update_global_streak(cursor, pages_read):
     else:
         new_streak = g_streak
         new_last = g_last
+
+    # #region agent log
+    _agent_log(
+        "book_services.update_global_streak:result",
+        "computed next streak",
+        {
+            "qualified": qualified,
+            "gap": gap,
+            "new_streak": new_streak,
+            "new_last": str(new_last) if new_last else None,
+            "freeze_after": g_freeze,
+        },
+        "H_freeze",
+    )
+    # #endregion
 
     cursor.execute(
         """

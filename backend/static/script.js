@@ -1,5 +1,19 @@
 const container = document.querySelector(".books-container");
 import { API } from "./frontend_services/api.js";
+// #region agent log
+fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
+  method: "POST",
+  headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "f3a808" },
+  body: JSON.stringify({
+    sessionId: "f3a808",
+    location: "script.js:afterImport",
+    message: "module evaluated after api import",
+    data: { hasAPI: typeof API !== "undefined" },
+    hypothesisId: "H_import",
+    timestamp: Date.now(),
+  }),
+}).catch(() => {});
+// #endregion
 let books = [];
 let activeBookId = null;
 let lastKnownGlobalStreak = 0;
@@ -188,6 +202,24 @@ window.addEventListener("click", (e) => {
 async function getGlobalStreak() {
   try {
     const data = await API.getGlobalStreak();
+    // #region agent log
+    fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "f3a808" },
+      body: JSON.stringify({
+        sessionId: "f3a808",
+        location: "script.js:getGlobalStreak",
+        message: "GET /streak response",
+        data: {
+          streak_count: data.streak_count,
+          last_read_date: data.last_read_date,
+          freeze_count: data.freeze_count,
+        },
+        hypothesisId: "H_streak_ui",
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     renderGlobalStreak(data.streak_count, data.last_read_date, data.freeze_count);
   } catch (err) {
     console.error("Failed to fetch global streak:", err);
@@ -857,6 +889,20 @@ document.getElementById("saveBook").addEventListener("click", async () => {
     console.error("Failed to add book:", err);
   }
 document.addEventListener("DOMContentLoaded", () => {
+  // #region agent log
+  fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "f3a808" },
+    body: JSON.stringify({
+      sessionId: "f3a808",
+      location: "script.js:DOMContentLoaded:filters",
+      message: "filters DOMContentLoaded fired",
+      data: {},
+      hypothesisId: "H_init",
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
   document.getElementById("searchInput").addEventListener("input", applyFilters);
   document.getElementById("statusFilter").addEventListener("change", applyFilters);
   document.getElementById("sortOption").addEventListener("change", applyFilters);
@@ -866,6 +912,20 @@ setInterval(async () => {
   await getGlobalStreak(); // refresh every minute
 }, 60000);
 document.addEventListener("DOMContentLoaded", () => {
+  // #region agent log
+  fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "f3a808" },
+    body: JSON.stringify({
+      sessionId: "f3a808",
+      location: "script.js:DOMContentLoaded:init",
+      message: "main init DOMContentLoaded fired",
+      data: {},
+      hypothesisId: "H_init",
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
   getBooks();
   getChallenges();
   getStats();
