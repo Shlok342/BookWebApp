@@ -48,7 +48,6 @@ def update_progress_service(book_id: int, update):
 
         # ── 1. Get book ──
         book = get_book(cursor, book_id)
-        book = get_book(cursor, book_id)
 
         if update.current_page < 0:
             raise HTTPException(400, "Page cannot be negative")
@@ -262,6 +261,24 @@ def update_global_streak(cursor, pages_read):
             g_last = date.fromisoformat(str(g_last))
 
     gap = (today - g_last).days if g_last else 0
+
+    # No pages logged — do not mutate global streak (avoids decay on no-op PATCH).
+    if pages_read <= 0:
+        # #region agent log
+        _agent_log(
+            "book_services.update_global_streak:skip",
+            "skip global streak (pages_read<=0)",
+            {
+                "pages_read": pages_read,
+                "gap": gap,
+                "g_streak": g_streak,
+                "g_freeze": g_freeze,
+            },
+            "H_zero_patch",
+        )
+        # #endregion
+        return g_streak, g_freeze
+
     # #region agent log
     _agent_log(
         "book_services.update_global_streak:before_decay",
@@ -278,9 +295,10 @@ def update_global_streak(cursor, pages_read):
     )
     # #endregion
 
-    # handle missed days
+    # Missed-day handling: gap==2 => last activity two calendar days ago (one skipped day).
+    # Freeze covers that single skip only; longer gaps break the streak without consuming freezes.
     if g_last and gap > 1:
-        if g_freeze > 0:
+        if gap == 2 and g_freeze > 0:
             g_freeze -= 1
         else:
             g_streak = 0
@@ -296,13 +314,15 @@ def update_global_streak(cursor, pages_read):
 
     if qualified:
         if g_last is None or g_streak == 0:
-            new_streak=1
+            new_streak = 1
         elif g_last == today:
-            new_streak=max(1, g_streak)
+            new_streak = max(1, g_streak)
         elif gap == 1:
             new_streak = g_streak + 1
+        elif gap == 2:
+            new_streak = g_streak + 1 if g_streak > 0 else 1
         else:
-            new_streak = g_streak + 1 
+            new_streak = 1
 
         new_last = today
     else:

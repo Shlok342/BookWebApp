@@ -1,0 +1,11 @@
+{"sessionId":"f3a808","location":"script.js:afterImport","message":"module evaluated after api import","data":{"hasAPI":true},"hypothesisId":"H_import","timestamp":1777805457907}
+{"sessionId":"f3a808","location":"script.js:afterImport","message":"module evaluated after api import","data":{"hasAPI":true},"hypothesisId":"H_import","timestamp":1777805464449}
+{"sessionId":"f3a808","location":"script.js:afterImport","message":"module evaluated after api import","data":{"hasAPI":true},"hypothesisId":"H_import","timestamp":1777805472747}
+{"sessionId":"f3a808","location":"script.js:afterImport","message":"module evaluated after api import","data":{"hasAPI":true},"hypothesisId":"H_import","timestamp":1777805474598}
+{"sessionId":"f3a808","location":"script.js:getGlobalStreak","message":"GET /streak response","data":{"streak_count":1,"last_read_date":"2026-05-03","freeze_count":0},"hypothesisId":"H_streak_ui","timestamp":1777805519095}
+{"sessionId":"f3a808","location":"script.js:getGlobalStreak","message":"GET /streak response","data":{"streak_count":1,"last_read_date":"2026-05-03","freeze_count":0},"hypothesisId":"H_streak_ui","timestamp":1777805561546}
+{"sessionId":"f3a808","location":"script.js:getGlobalStreak","message":"GET /streak response","data":{"streak_count":1,"last_read_date":"2026-05-03","freeze_count":0},"hypothesisId":"H_streak_ui","timestamp":1777805621509}
+{"sessionId":"f3a808","location":"script.js:getGlobalStreak","message":"GET /streak response","data":{"streak_count":1,"last_read_date":"2026-05-03","freeze_count":0},"hypothesisId":"H_streak_ui","timestamp":1777805681992}
+{"sessionId":"f3a808","location":"script.js:getGlobalStreak","message":"GET /streak response","data":{"streak_count":1,"last_read_date":"2026-05-03","freeze_count":0},"hypothesisId":"H_streak_ui","timestamp":1777805743300}
+{"sessionId":"f3a808","location":"script.js:getGlobalStreak","message":"GET /streak response","data":{"streak_count":1,"last_read_date":"2026-05-03","freeze_count":0},"hypothesisId":"H_streak_ui","timestamp":1777805806959}
+{"sessionId":"f3a808","location":"script.js:getGlobalStreak","message":"GET /streak response","data":{"streak_count":1,"last_read_date":"2026-05-03","freeze_count":0},"hypothesisId":"H_streak_ui","timestamp":1777805861587}

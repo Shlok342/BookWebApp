@@ -888,6 +888,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
   } catch (err) {
     console.error("Failed to add book:", err);
   }
+});
 document.addEventListener("DOMContentLoaded", () => {
   // #region agent log
   fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
@@ -931,4 +932,4 @@ document.addEventListener("DOMContentLoaded", () => {
   getStats();
   getGlobalStreak();
   scheduleMidnightCheck();
-})});
+});

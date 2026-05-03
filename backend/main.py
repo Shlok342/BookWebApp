@@ -41,6 +41,15 @@ app.add_middleware(
 )
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    """Browsers request /favicon.ico by default; serve SVG so logs stay clean of 404 noise."""
+    return FileResponse(
+        BASE_DIR / "static" / "favicon.svg",
+        media_type="image/svg+xml",
+    )
+
+
 @app.get("/")
 def home():
     return FileResponse(BASE_DIR / "static" / "index.html")
