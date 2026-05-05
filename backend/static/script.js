@@ -317,21 +317,18 @@ function renderGlobalStreak(count, lastReadDate, freezeCount) {
   const el = document.getElementById("globalStreak");
   if (!el) return;
 
-  // helper: reset to cold state
   const setCold = (msg) => {
     el.textContent = msg;
     el.classList.add("global-streak-badge--cold");
     el.classList.remove("global-streak-warning");
   };
 
-  // helper: set active state
   const setActive = (msg) => {
     el.textContent = msg;
     el.classList.remove("global-streak-badge--cold");
     el.classList.remove("global-streak-warning");
   };
 
-  // ── No read date yet → never started or fully reset by backend ──
   if (!lastReadDate) {
     setCold(count === 0 ? "💀 Your streak died. Start again!" : "Start your streak today!");
     return;
@@ -339,6 +336,7 @@ function renderGlobalStreak(count, lastReadDate, freezeCount) {
 
   const today = new Date();
   const last = new Date(lastReadDate);
+
   today.setHours(0, 0, 0, 0);
   last.setHours(0, 0, 0, 0);
 
@@ -346,32 +344,40 @@ function renderGlobalStreak(count, lastReadDate, freezeCount) {
   lastKnownGlobalStreak = count;
   const usableFreezes = freezeCount || 0;
 
-  // ── Read today → active ──
+  // ── Read today ──
   if (diffDays === 0) {
     let msg = `🔥 ${count} day streak`;
-    if (usableFreezes > 0) msg += ` 🧊 ${usableFreezes} freeze${usableFreezes > 1 ? "s" : ""}`;
+    if (usableFreezes > 0) {
+      msg += ` 🧊 ${usableFreezes} freeze${usableFreezes > 1 ? "s" : ""}`;
+    }
     setActive(msg);
     return;
   }
 
-  // ── Missed too many days → lost ──
-  if (diffDays > 2 && usableFreezes === 0) {
-    setCold("💀 Out of freezes. Streak lost!");
+  // ── Day 2 → freeze applies OR streak breaks ──
+  if (diffDays === 2) {
+    if (usableFreezes > 0) {
+      el.textContent = `🧊 Freeze will be used if you don’t read today (${usableFreezes} left)`;
+      el.classList.add("global-streak-warning");
+      el.classList.remove("global-streak-badge--cold");
+    } else {
+      setCold("💀 Streak lost!");
+    }
     return;
   }
 
-  // ── Missed 1 day but has freezes → at risk ──
-  if (diffDays === 1 && usableFreezes > 0) {
-    el.textContent = `🧊 Freeze will be used if you don’t read today (${usableFreezes} left)`;
+  // ── Beyond recovery ──
+  if (diffDays > 2) {
+    setCold("💀 Streak lost!");
+    return;
+  }
+
+  // ── Day 1 → warning (freeze irrelevant here) ──
+  if (diffDays === 1) {
+    updateTimeLeft(lastReadDate);
     el.classList.add("global-streak-warning");
     el.classList.remove("global-streak-badge--cold");
-    return;
   }
-
-  // ── Missed 1 day, no freezes → countdown ──
-  updateTimeLeft(lastReadDate);
-  el.classList.add("global-streak-warning");
-  el.classList.remove("global-streak-badge--cold");
 }
 
 function updateTimeLeft(lastReadDate) {
