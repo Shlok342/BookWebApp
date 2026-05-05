@@ -161,7 +161,7 @@ def get_challenges():
                 "progress": monthly_books,
                 "completed": monthly_books >= 2
             }
-        }
+        }    
 @app.get("/streak")
 def get_streak():
     with get_db() as conn:
@@ -172,19 +172,42 @@ def get_streak():
         row = cursor.fetchone()
 
         if not row:
-            return {"last_read_date": None, "streak_count": 0, "freeze_count": 0}
+            return {
+                "last_read_date": None,
+                "streak_count": 0,
+                "freeze_count": 0,
+                "streak_status": "no_data"
+            }
 
-        # ✅ Correct
         last_read = row["last_read_date"]
-        streak = row["streak_count"]
-        freeze = row["freeze_count"]
+        streak = row["streak_count"] or 0
+        freeze = row["freeze_count"] or 0
 
-        # ✅ READ ONLY — no DB writes here
-        # Decay is handled in PATCH when the user actually logs progress
+        if last_read and not isinstance(last_read, date):
+            last_read = date.fromisoformat(str(last_read))
+
+        today = date.today()
+        gap = (today - last_read).days if last_read else 0
+
+        # 🔥 LIVE STATUS CALCULATION
+        if gap == 0:
+            status = "safe"
+        elif gap == 1:
+            status = "at_risk"   # must read today
+        elif gap == 2:
+            if freeze > 0:
+                status = "freeze_used_today"
+            else:
+                status = "broken"
+        else:
+            status = "broken"
+
         return {
             "last_read_date": str(last_read) if last_read else None,
-            "streak_count": streak or 0,
-            "freeze_count": freeze or 0
+            "streak_count": streak,
+            "freeze_count": freeze,
+            "gap": gap,
+            "status": status
         }
 
 
