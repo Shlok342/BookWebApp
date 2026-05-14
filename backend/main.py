@@ -82,7 +82,10 @@ def row_to_book(row):
         "streak_count":   row.get("streak_count") or 0,
         "created_at":     str(row["created_at"]) if row.get("created_at") else None,
         "genre":          row.get("genre") or "",
-        "cover_url":      row.get("cover_url") or ""
+        "cover_url":      row.get("cover_url") or "",
+        "tags" :  json.loads(row["tags"]) if row.get("tags") else []
+   
+
     }
 
 # ─── GET ALL BOOKS ───────────────────────────────────────────────────────────

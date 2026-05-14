@@ -43,6 +43,12 @@ def init_db():
                 current_month TEXT
             )
             """)
+            cursor.execute("""
+            ALTER TABLE books
+            ADD COLUMN IF NOT EXISTS tags TEXT DEFAULT '[]'
+            """)
+                
+        
             cursor.execute("""DO $$
             BEGIN
                 IF NOT EXISTS (

@@ -750,7 +750,29 @@ body::after {
 
   transition: all 0.22s ease;
 }
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.title-row h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+}
+
+.tag {
+  background: #2e7d32;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
 /* save */
 .save-btn {
   color: white;

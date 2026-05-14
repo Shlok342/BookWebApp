@@ -17,6 +17,10 @@ fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
 let books = [];
 let activeBookId = null;
 let lastKnownGlobalStreak = 0;
+const tagsModal = document.getElementById("tagsModal");
+
+const AVAILABLE_TAGS = ["Witty", "Romantic"];
+let selectedTags = [];
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 // Grab our shiny button
 const toggleBtn = document.getElementById('dark-mode-toggle');
@@ -432,7 +436,54 @@ function showProgressInput(book, currentPage, totalPages) {
   input.focus();
 }
 // ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
+function renderTagOptions() {
+  const container = document.getElementById("tagsContainer");
 
+  container.innerHTML = AVAILABLE_TAGS.map(tag => {
+    const active = selectedTags.includes(tag);
+    return `
+      <span class="tag-chip ${active ? "active" : ""}" data-tag="${tag}">
+        ${tag}
+      </span>
+    `;
+  }).join("");
+
+  document.querySelectorAll(".tag-chip").forEach(el => {
+    el.addEventListener("click", () => {
+      const tag = el.dataset.tag;
+
+      if (selectedTags.includes(tag)) {
+        selectedTags = selectedTags.filter(t => t !== tag);
+      } else {
+        selectedTags.push(tag);
+      }
+
+      renderTagOptions();
+    });
+  });
+}
+document.getElementById("saveTagsBtn").addEventListener("click", async () => {
+  if (!activeBookId) return;
+
+  try {
+    await fetch(`/books/${activeBookId}/tags`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tags: selectedTags })
+    });
+
+    tagsModal.style.display = "none";
+    activeBookId = null;
+
+    await getBooks();
+  } catch (err) {
+    console.error("Failed to save tags:", err);
+  }
+});
+document.getElementById("tagsClose").addEventListener("click", () => {
+  tagsModal.style.display = "none";
+  activeBookId = null;
+});
 async function applyThemeFromCover(book) {
   if (typeof Vibrant === "undefined") {
     console.error("Vibrant STILL not loaded");
@@ -522,8 +573,26 @@ function renderBooks(filteredBooks = books) {
       card.appendChild(coverDiv);
     }
 
+    const titleRow = document.createElement("div");
+    titleRow.classList.add("title-row");
+
     const title = document.createElement("h2");
     title.textContent = book.title;
+
+    // tags container
+    const tagsDiv = document.createElement("div");
+    tagsDiv.classList.add("tags");
+
+    // render tags
+    (book.tags || []).forEach(tag => {
+      const tagEl = document.createElement("span");
+      tagEl.classList.add("tag");
+      tagEl.textContent = tag;
+      tagsDiv.appendChild(tagEl);
+    });
+
+    titleRow.appendChild(title);
+    titleRow.appendChild(tagsDiv);
 
     const author = document.createElement("p");
     author.classList.add("book-author");
@@ -578,6 +647,17 @@ function renderBooks(filteredBooks = books) {
     openBtn.textContent = "Open";
     openBtn.addEventListener("click", () => openBookModal(book));
 
+    const tagBtn = document.createElement("button");
+    tagBtn.classList.add("tag-btn");
+    tagBtn.textContent = "Tags";
+
+    tagBtn.addEventListener("click", () => {
+      activeBookId = book.id;
+      selectedTags = [...(book.tags || [])];
+
+      renderTagOptions();
+      tagsModal.style.display = "block";
+    });
     // ── Quotes ──
     const quotesBtn = document.createElement("button");
     quotesBtn.classList.add("quotes-btn");
@@ -627,7 +707,7 @@ function renderBooks(filteredBooks = books) {
     quoteHint.classList.add("quote-count-hint");
     quoteHint.textContent = `${quoteCount} / 5 quotes saved`;
 
-    card.append(title, author, streakBadge, progressLabel, pagesRow, progressBar, buttonsDiv, quoteHint);
+    card.append(titleRow, author, streakBadge, progressLabel, pagesRow, progressBar, buttonsDiv, quoteHint);
     container.appendChild(card);
   }); // ✅ forEach closes here
 }
