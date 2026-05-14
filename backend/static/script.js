@@ -12,7 +12,7 @@ fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
     hypothesisId: "H_import",
     timestamp: Date.now(),
   }),
-}).catch(() => {});
+}).catch(() => { });
 // #endregion
 let books = [];
 let activeBookId = null;
@@ -58,7 +58,7 @@ quoteBtn.onclick = async () => {
   document.getElementById("quoteDayAuthor").textContent = "";
 
   try {
-    
+
 
     const data = await API.getQuote();
 
@@ -92,8 +92,70 @@ function showToast(message) {
   document.body.appendChild(toast);
   setTimeout(() => { toast.style.opacity = "0"; setTimeout(() => toast.remove(), 500); }, 3000);
 }
+
+// ─── Botanical Delete Confirmation Popup ──────────────────────────────────────
+function showDeleteConfirm(bookTitle) {
+  return new Promise((resolve) => {
+    // backdrop
+    const overlay = document.createElement("div");
+    overlay.className = "delete-confirm-overlay";
+
+    // popup container
+    const popup = document.createElement("div");
+    popup.className = "delete-confirm-popup";
+
+    popup.innerHTML = `
+      <div class="delete-confirm-leaves">
+        <span class="dc-leaf dc-leaf-1">🍂</span>
+        <span class="dc-leaf dc-leaf-2">🌿</span>
+        <span class="dc-leaf dc-leaf-3">🍃</span>
+      </div>
+      <div class="delete-confirm-icon">🥀</div>
+      <h3 class="delete-confirm-title">Let this one go?</h3>
+      <p class="delete-confirm-book">"${bookTitle}"</p>
+      <p class="delete-confirm-msg">This book will be removed from your sanctuary.<br>This cannot be undone.</p>
+      <div class="delete-confirm-actions">
+        <button class="dc-cancel-btn">Keep it 🌱</button>
+        <button class="dc-delete-btn">Remove 🍂</button>
+      </div>
+    `;
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+
+    // force reflow then add visible class for animation
+    overlay.offsetWidth;
+    overlay.classList.add("dc-visible");
+
+    const cleanup = (result) => {
+      overlay.classList.remove("dc-visible");
+      overlay.classList.add("dc-closing");
+      setTimeout(() => {
+        overlay.remove();
+        resolve(result);
+      }, 280);
+    };
+
+    popup.querySelector(".dc-cancel-btn").addEventListener("click", () => cleanup(false));
+    popup.querySelector(".dc-delete-btn").addEventListener("click", () => cleanup(true));
+
+    // clicking backdrop = cancel
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) cleanup(false);
+    });
+
+    // ESC key = cancel
+    const escHandler = (e) => {
+      if (e.key === "Escape") {
+        document.removeEventListener("keydown", escHandler);
+        cleanup(false);
+      }
+    };
+    document.addEventListener("keydown", escHandler);
+  });
+}
 function getProgressColor(pct) {
-  const hue = (pct / 100) * 270; 
+  const hue = (pct / 100) * 270;
   return `hsl(${hue}, 80%, 50%)`;
 }
 async function getBooks() {
@@ -159,15 +221,15 @@ async function getStats() {
   try {
     console.log("Fetching stats...");
 
-    
+
 
     const data = await API.getStats();
     console.log("DATA:", data);
 
-    document.getElementById("totalBooks").textContent   = data.total_books;
-    document.getElementById("totalPages").textContent   = data.total_pages_read;
+    document.getElementById("totalBooks").textContent = data.total_books;
+    document.getElementById("totalPages").textContent = data.total_pages_read;
     document.getElementById("monthlyPages").textContent = data.pages_this_month;
-    document.getElementById("avgPages").textContent     = data.avg_pages_per_month;
+    document.getElementById("avgPages").textContent = data.avg_pages_per_month;
     document.getElementById("miniBooks").textContent = data.total_books;
     document.getElementById("miniPages").textContent = data.total_pages_read;
     document.getElementById("miniMonth").textContent = data.pages_this_month;
@@ -177,9 +239,9 @@ async function getStats() {
     // 🔥 wrap new ones
     console.log("Trying new stats...");
 
-    document.getElementById("streakPages").textContent  = data.streak_pages_read;
-    document.getElementById("streakMonthly").textContent= data.streak_pages_this_month;
-    document.getElementById("streakAvg").textContent    = data.avg_streak_pages_per_month;
+    document.getElementById("streakPages").textContent = data.streak_pages_read;
+    document.getElementById("streakMonthly").textContent = data.streak_pages_this_month;
+    document.getElementById("streakAvg").textContent = data.avg_streak_pages_per_month;
 
     console.log("New stats done ✅");
 
@@ -222,7 +284,7 @@ async function getGlobalStreak() {
         hypothesisId: "H_streak_ui",
         timestamp: Date.now(),
       }),
-    }).catch(() => {});
+    }).catch(() => { });
     // #endregion
     renderGlobalStreak(data.streak_count, data.last_read_date, data.freeze_count);
   } catch (err) {
@@ -259,61 +321,67 @@ function renderGlobalStreak(count, lastReadDate, freezeCount) {
   const el = document.getElementById("globalStreak");
   if (!el) return;
 
-  // helper: reset to cold state
   const setCold = (msg) => {
     el.textContent = msg;
     el.classList.add("global-streak-badge--cold");
     el.classList.remove("global-streak-warning");
   };
 
-  // helper: set active state
   const setActive = (msg) => {
     el.textContent = msg;
     el.classList.remove("global-streak-badge--cold");
     el.classList.remove("global-streak-warning");
   };
 
-  // ── No read date yet → never started or fully reset by backend ──
   if (!lastReadDate) {
     setCold(count === 0 ? "💀 Your streak died. Start again!" : "Start your streak today!");
     return;
   }
 
   const today = new Date();
-  const last  = new Date(lastReadDate);
+  const last = new Date(lastReadDate);
+
   today.setHours(0, 0, 0, 0);
   last.setHours(0, 0, 0, 0);
 
-  const diffDays      = (today - last) / (1000 * 60 * 60 * 24);
+  const diffDays = (today - last) / (1000 * 60 * 60 * 24);
   lastKnownGlobalStreak = count;
   const usableFreezes = freezeCount || 0;
 
-  // ── Read today → active ──
+  // ── Read today ──
   if (diffDays === 0) {
     let msg = `🔥 ${count} day streak`;
-    if (usableFreezes > 0) msg += ` 🧊 ${usableFreezes} freeze${usableFreezes > 1 ? "s" : ""}`;
+    if (usableFreezes > 0) {
+      msg += ` 🧊 ${usableFreezes} freeze${usableFreezes > 1 ? "s" : ""}`;
+    }
     setActive(msg);
     return;
   }
 
-  // ── Missed too many days → lost ──
-  if (diffDays > 2 && usableFreezes === 0) {
-    setCold("💀 Out of freezes. Streak lost!");
+  // ── Day 2 → freeze applies OR streak breaks ──
+  if (diffDays === 2) {
+    if (usableFreezes > 0) {
+      el.textContent = `🧊 Freeze will be used if you don’t read today (${usableFreezes} left)`;
+      el.classList.add("global-streak-warning");
+      el.classList.remove("global-streak-badge--cold");
+    } else {
+      setCold("💀 Streak lost!");
+    }
     return;
   }
 
-  // ── Missed 1 day but has freezes → at risk ──
-  if (diffDays === 1 && usableFreezes > 0) {
-    el.textContent = `🧊 Freeze will be used if you don’t read today (${usableFreezes} left)`;
+  // ── Beyond recovery ──
+  if (diffDays > 2) {
+    setCold("💀 Streak lost!");
+    return;
+  }
+
+  // ── Day 1 → warning (freeze irrelevant here) ──
+  if (diffDays === 1) {
+    updateTimeLeft(lastReadDate);
     el.classList.add("global-streak-warning");
     el.classList.remove("global-streak-badge--cold");
-    return;
   }
-
-  // ── Missed 1 day, no freezes → countdown ──
-  updateTimeLeft(lastReadDate);
-  el.classList.add("global-streak-warning");
-  el.classList.remove("global-streak-badge--cold");
 }
 
 function updateTimeLeft(lastReadDate) {
@@ -325,8 +393,8 @@ function updateTimeLeft(lastReadDate) {
   const now = new Date();
   const last = new Date(lastReadDate);
 
-  now.setHours(0,0,0,0);
-  last.setHours(0,0,0,0);
+  now.setHours(0, 0, 0, 0);
+  last.setHours(0, 0, 0, 0);
 
   const diffDays = (now - last) / (1000 * 60 * 60 * 24);
 
@@ -407,22 +475,22 @@ function showProgressInput(book, currentPage, totalPages) {
     try {
       const json = await API.updateProgress(book.id, newPage);
       const data = json.data; // 👈 KEEP THIS if your backend returns { data: ... }
-    
+
       if (data && !data.qualified_for_streak && data.global_streak === 0) {
         showToast("📖 Read at least 2 pages to count for streak!");
       }
-    
+
       if (data && data.global_streak > lastKnownGlobalStreak) {
         showToast(`🔥 ${data.global_streak}-day global streak!`);
       }
-    
+
       popup.remove();
-    
+
       await getBooks();
       await getChallenges();
       await getStats();
       await getGlobalStreak();
-    
+
     } catch (err) {
       console.error("Failed to update progress:", err);
       showToast("Could not update progress.");
@@ -520,7 +588,7 @@ async function applyThemeFromCover(book) {
       console.log("Base64 detected");
     }
     console.warn("Theme failed, fallback used:", err);
-    
+
     // 🔥 fallback so modal STILL works
     document.querySelectorAll(".modal-content").forEach(m => {
       m.style.background = "linear-gradient(135deg, #2c3e50, #4ca1af)";
@@ -557,10 +625,10 @@ function renderBooks(filteredBooks = books) {
 
   filteredBooks.forEach(book => {
     const currentPage = Number(book.current_page) || 0;
-    const totalPages  = Number(book.total_pages) || 0;
-    const progress    = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
-    const quoteCount  = (book.quotes || []).length;
-    const pct         = isNaN(progress) ? 0 : Math.round(progress);
+    const totalPages = Number(book.total_pages) || 0;
+    const progress = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
+    const quoteCount = (book.quotes || []).length;
+    const pct = isNaN(progress) ? 0 : Math.round(progress);
 
     const card = document.createElement("div");
     card.classList.add("book-card");
@@ -685,7 +753,7 @@ function renderBooks(filteredBooks = books) {
     deleteBtn.textContent = "Delete";
 
     deleteBtn.addEventListener("click", async () => {
-      const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
+      const confirmDelete = await showDeleteConfirm(book.title);
 
       if (!confirmDelete) return; // 🚫 user canceled
 
@@ -697,9 +765,9 @@ function renderBooks(filteredBooks = books) {
 
       } catch (err) {
         console.error("Delete failed:", err);
-        alert("Could not delete the book.");
+        showToast("🍂 Could not delete the book.");
       }
-    }); 
+    });
 
     buttonsDiv.append(openBtn, quotesBtn, updateBtn, notesBtn, deleteBtn);
 
@@ -715,7 +783,7 @@ function renderBooks(filteredBooks = books) {
 function applyFilters() {
   const searchValue = document.getElementById("searchInput").value.toLowerCase();
   const filterValue = document.getElementById("statusFilter").value;
-  const sortValue   = document.getElementById("sortOption").value;
+  const sortValue = document.getElementById("sortOption").value;
   const genreValue = document.getElementById("genreFilter").value.toLowerCase();
 
   let filtered = books.filter(book => {
@@ -734,46 +802,46 @@ function applyFilters() {
   });
 
   // 🔥 SORTING LOGIC
- 
 
-// 📊 PROGRESS
-if (sortValue === "progress-asc") {
-  filtered.sort((a, b) => {
-    const progA = (a.current_page || 0) / (a.total_pages || 1);
-    const progB = (b.current_page || 0) / (b.total_pages || 1);
-    return progA - progB;
-  });
-}
 
-if (sortValue === "progress-desc") {
-  filtered.sort((a, b) => {
-    const progA = (a.current_page || 0) / (a.total_pages || 1);
-    const progB = (b.current_page || 0) / (b.total_pages || 1);
-    return progB - progA;
-  });
-}
+  // 📊 PROGRESS
+  if (sortValue === "progress-asc") {
+    filtered.sort((a, b) => {
+      const progA = (a.current_page || 0) / (a.total_pages || 1);
+      const progB = (b.current_page || 0) / (b.total_pages || 1);
+      return progA - progB;
+    });
+  }
 
-// 🕒 DATE (THIS IS WHAT YOU WANTED)
-if (sortValue === "date-desc") {
-  filtered.sort((a, b) => {
-    const dateA = new Date(a.created_at || 0).getTime();
-    const dateB = new Date(b.created_at || 0).getTime();
-    return dateB - dateA;
-  });
-}
+  if (sortValue === "progress-desc") {
+    filtered.sort((a, b) => {
+      const progA = (a.current_page || 0) / (a.total_pages || 1);
+      const progB = (b.current_page || 0) / (b.total_pages || 1);
+      return progB - progA;
+    });
+  }
 
-if (sortValue === "date-asc") {
-  filtered.sort((a, b) => {
-    const dateA = new Date(a.created_at || 0).getTime();
-    const dateB = new Date(b.created_at || 0).getTime();
-    return dateA - dateB;
-  });
-}
+  // 🕒 DATE (THIS IS WHAT YOU WANTED)
+  if (sortValue === "date-desc") {
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.created_at || 0).getTime();
+      const dateB = new Date(b.created_at || 0).getTime();
+      return dateB - dateA;
+    });
+  }
+
+  if (sortValue === "date-asc") {
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.created_at || 0).getTime();
+      const dateB = new Date(b.created_at || 0).getTime();
+      return dateA - dateB;
+    });
+  }
 
   renderBooks(filtered);
 }
 // ─── QUOTES MODAL ─────────────────────────────────────────────────────────────
-const quotesModal  = document.getElementById("quotesModal");
+const quotesModal = document.getElementById("quotesModal");
 const addBookModal = document.getElementById("addBookModal");
 
 async function openQuotesModal(book) {
@@ -782,7 +850,7 @@ async function openQuotesModal(book) {
   renderQuotesList(book.quotes || []);
   quotesModal.style.display = "block";
   await applyThemeFromCover(book);
-  
+
 }
 
 function renderQuotesList(quotes) {
@@ -801,8 +869,8 @@ document.getElementById("quotesClose").addEventListener("click", () => {
 });
 
 document.getElementById("addQuoteBtn").addEventListener("click", async () => {
-  const text   = document.getElementById("quoteInput").value.trim();
-  const book   = books.find(b => b.id === activeBookId);
+  const text = document.getElementById("quoteInput").value.trim();
+  const book = books.find(b => b.id === activeBookId);
   const quotes = [...(book?.quotes || [])];
 
   if (!text || !book) return;
@@ -848,12 +916,12 @@ async function openNotesModal(book) {
   document.getElementById("notesWordCount").textContent = countWords(existing);
   notesModal.style.display = "block";
   await applyThemeFromCover(book);
-  
+
 }
 
 document.getElementById("notesInput").addEventListener("input", () => {
   const textarea = document.getElementById("notesInput");
-  const words    = textarea.value.trim() === "" ? [] : textarea.value.trim().split(/\s+/);
+  const words = textarea.value.trim() === "" ? [] : textarea.value.trim().split(/\s+/);
   if (words.length > 500) textarea.value = words.slice(0, 500).join(" ");
   document.getElementById("notesWordCount").textContent = Math.min(words.length, 500);
 });
@@ -886,12 +954,12 @@ document.getElementById("saveNotesBtn").addEventListener("click", async () => {
 const openBookModalEl = document.getElementById("openBookModal");
 
 async function openBookModal(book) {
-  document.getElementById("openBookTitle").textContent  = book.title;
+  document.getElementById("openBookTitle").textContent = book.title;
   document.getElementById("openBookAuthor").textContent = book.author ? `by ${book.author}` : "";
   openBookModalEl.style.display = "block";
   await applyThemeFromCover(book);
   const current = book.current_page ?? 0;
-  const total   = book.total_pages  ?? 0;
+  const total = book.total_pages ?? 0;
   document.getElementById("openBookProgress").textContent = `${current} / ${total} pages`;
 
   const quotesDiv = document.getElementById("openBookQuotes");
@@ -902,7 +970,7 @@ async function openBookModal(book) {
   const notes = book.notes?.trim();
   document.getElementById("openBookNotes").textContent = notes || "No notes yet.";
 
-  
+
 }
 
 document.getElementById("openBookClose").addEventListener("click", () => {
@@ -920,7 +988,7 @@ document.getElementById("addBookClose").addEventListener("click", () => {
 });
 
 window.addEventListener("click", (event) => {
-  if (event.target === addBookModal) {addBookModal.style.display = "none";clearTheme(); }
+  if (event.target === addBookModal) { addBookModal.style.display = "none"; clearTheme(); }
   if (event.target === quotesModal) {
     quotesModal.style.display = "none";
     activeBookId = null;
@@ -940,11 +1008,11 @@ window.addEventListener("click", (event) => {
 
 // ─── ADD BOOK ─────────────────────────────────────────────────────────────────
 document.getElementById("saveBook").addEventListener("click", async () => {
-  const title       = document.getElementById("titleInput").value.trim();
-  const author      = document.getElementById("authorInput").value.trim();
+  const title = document.getElementById("titleInput").value.trim();
+  const author = document.getElementById("authorInput").value.trim();
   const cover = document.getElementById("coverInput").value.trim();
   console.log("COVER INPUT:", cover);
-  const totalPages  = parseInt(document.getElementById("totalPagesInput").value);
+  const totalPages = parseInt(document.getElementById("totalPagesInput").value);
   const currentPage = parseInt(document.getElementById("currentPageInput").value) || 0;
   const genre = document.getElementById("genreInput").value;
 
@@ -966,7 +1034,7 @@ document.getElementById("saveBook").addEventListener("click", async () => {
       genre,
       cover_url: cover
     });
-  
+
     await getBooks();
     await getStats();
   } catch (err) {
@@ -986,7 +1054,7 @@ document.addEventListener("DOMContentLoaded", () => {
       hypothesisId: "H_init",
       timestamp: Date.now(),
     }),
-  }).catch(() => {});
+  }).catch(() => { });
   // #endregion
   document.getElementById("searchInput").addEventListener("input", applyFilters);
   document.getElementById("statusFilter").addEventListener("change", applyFilters);
@@ -1009,7 +1077,7 @@ document.addEventListener("DOMContentLoaded", () => {
       hypothesisId: "H_init",
       timestamp: Date.now(),
     }),
-  }).catch(() => {});
+  }).catch(() => { });
   // #endregion
   getBooks();
   getChallenges();
