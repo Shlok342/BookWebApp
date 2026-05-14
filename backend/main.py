@@ -103,15 +103,19 @@ def get_books():
 def add_book(book: Book):
     with get_db() as conn:
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute(
+        try:
+            cursor.execute(
             """
-            INSERT INTO books (title, author, total_pages, current_page, genre, cover_url)
-            VALUES (%s, %s, %s, 0, %s, %s)
+            INSERT INTO books (title, author, total_pages, current_page, genre, cover_url, tags)
+            VALUES (%s, %s, %s, 0, %s, %s, %s)
             """,
             (book.title, book.author, book.total_pages, book.genre, book.cover_url, "[]")
-        )
-        conn.commit()
-    return {"message": "Book added"}
+            )
+            conn.commit()
+        except Exception as e:
+            print("ERROR:", e)
+            raise
+    print(book)
 
 # ─── GET SINGLE BOOK ─────────────────────────────────────────────────────────
 
