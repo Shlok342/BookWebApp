@@ -94,7 +94,7 @@ def get_books():
     with get_db() as conn:
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute(
-            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at, genre,  cover_url FROM books"
+            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at, genre,  cover_url, tags FROM books"
         )
         rows = cursor.fetchall()
     return [row_to_book(row) for row in rows]
@@ -108,7 +108,7 @@ def add_book(book: Book):
             INSERT INTO books (title, author, total_pages, current_page, genre, cover_url)
             VALUES (%s, %s, %s, 0, %s, %s)
             """,
-            (book.title, book.author, book.total_pages, book.genre, book.cover_url)
+            (book.title, book.author, book.total_pages, book.genre, book.cover_url, "[]")
         )
         conn.commit()
     return {"message": "Book added"}

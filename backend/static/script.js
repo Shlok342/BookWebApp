@@ -235,7 +235,7 @@ async function getStats() {
     document.getElementById("miniMonth").textContent = data.pages_this_month;
 
     console.log("Old stats done ✅");
-
+    console.log(book.tags);
     // 🔥 wrap new ones
     console.log("Trying new stats...");
 
