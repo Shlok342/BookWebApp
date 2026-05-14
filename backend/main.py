@@ -105,11 +105,19 @@ def add_book(book: Book):
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         try:
             cursor.execute(
-            """
-            INSERT INTO books (title, author, total_pages, current_page, genre, cover_url, tags)
-            VALUES (%s, %s, %s, 0, %s, %s, %s)
-            """,
-            (book.title, book.author, book.total_pages, book.genre, book.cover_url, "[]")
+                """
+                INSERT INTO books (title, author, total_pages, current_page, genre, cover_url, tags)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    book.title,
+                    book.author,
+                    book.total_pages,
+                    book.current_page,   # ✅ FIXED
+                    book.genre,
+                    book.cover_url,
+                    "[]"
+                )
             )
             conn.commit()
         except Exception as e:
