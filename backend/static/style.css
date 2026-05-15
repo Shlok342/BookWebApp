@@ -850,18 +850,27 @@ body::after {
   margin: 0;
   font-size: 1.2rem;
 }
-
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
 .tags {
   display: flex;
-  gap: 6px;
+  gap: 5px;
+  flex-wrap: wrap;
+  max-width: 220px;
 }
 
 .tag {
-  background: #2e7d32;
+  background: #6f9b5b;
   color: white;
-  padding: 3px 8px;
+  padding: 2px 7px;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
 }
 .tag-chip {
   padding: 7px 12px;
