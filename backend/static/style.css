@@ -1353,9 +1353,28 @@ main {
   line-height: 1.2;
 }
 .tag-btn{
-  background: transparent;
+  background: rgba(73, 57, 90, 0.06);
   border-color: var(--purple);
   color: var(--text-ice);
+}
+.tag-btn:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(48, 64, 53, 0.95),
+    rgba(63, 45, 82, 0.92)
+  );
+
+  border-color: rgba(121, 96, 145, 0.75);
+
+  color: #f3efe8;
+
+  box-shadow:
+    0 4px 12px rgba(41, 29, 54, 0.18),
+    0 2px 6px rgba(30, 48, 39, 0.16);
+
+  transform: translateY(-1px);
+
+  letter-spacing: 0.03em;
 }
 /* ── Quote count hint ──────────────────────────────────── */
 .quote-count-hint {
