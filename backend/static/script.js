@@ -19,7 +19,18 @@ let activeBookId = null;
 let lastKnownGlobalStreak = 0;
 const tagsModal = document.getElementById("tagsModal");
 
-const AVAILABLE_TAGS = ["Witty", "Romantic"];
+const AVAILABLE_TAGS = ["Witty", 
+                        "Romantic",
+                        "Total Sobfest",
+                        "Pure Joy",
+                        "Page Turner",
+                        "Vibe Check",
+                        "Brain Melt",
+                        "Slow Burn",
+                        "Instant Classic",
+                        "Deep Dark",
+                        "Easy Breezy",
+                        "Chef's Kiss"];
 let selectedTags = [];
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 // Grab our shiny button
@@ -524,6 +535,11 @@ function renderTagOptions() {
       if (selectedTags.includes(tag)) {
         selectedTags = selectedTags.filter(t => t !== tag);
       } else {
+        if (selectedTags.length >= 3) {
+           showToast("You can only select up to 3 tags.");
+          return;
+        }
+      
         selectedTags.push(tag);
       }
 
