@@ -270,7 +270,26 @@ def update_notes(book_id: int, update: NotesUpdate):
         conn.commit()
 
     return {"message": "Notes updated"}
+class TagsUpdate(BaseModel):
+    tags: list[str]
 
+@app.patch("/books/{book_id}/tags")
+def update_tags(book_id: int, update: TagsUpdate):
+    with get_db() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            UPDATE books
+            SET tags = %s
+            WHERE id = %s
+            """,
+            (json.dumps(update.tags), book_id)
+        )
+
+        conn.commit()
+
+    return {"message": "Tags updated"}
 
 # ─── DELETE BOOK ─────────────────────────────────────────────────────────────
 @app.delete("/books/{book_id}")

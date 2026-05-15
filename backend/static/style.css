@@ -863,6 +863,19 @@ body::after {
   border-radius: 10px;
   font-size: 12px;
 }
+.tag-chip {
+  display: inline-block;
+  margin: 5px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: #ddd;
+  cursor: pointer;
+}
+
+.tag-chip.active {
+  background: #2e7d32;
+  color: white;
+}
 /* save */
 .save-btn {
   color: white;

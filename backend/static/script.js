@@ -507,19 +507,20 @@ function showProgressInput(book, currentPage, totalPages) {
 function renderTagOptions() {
   const container = document.getElementById("tagsContainer");
 
-  container.innerHTML = AVAILABLE_TAGS.map(tag => {
-    const active = selectedTags.includes(tag);
-    return `
-      <span class="tag-chip ${active ? "active" : ""}" data-tag="${tag}">
-        ${tag}
-      </span>
-    `;
-  }).join("");
+  container.innerHTML = "";
 
-  document.querySelectorAll(".tag-chip").forEach(el => {
-    el.addEventListener("click", () => {
-      const tag = el.dataset.tag;
+  AVAILABLE_TAGS.forEach(tag => {
+    const chip = document.createElement("span");
 
+    chip.classList.add("tag-chip");
+
+    if (selectedTags.includes(tag)) {
+      chip.classList.add("active");
+    }
+
+    chip.textContent = tag;
+
+    chip.addEventListener("click", () => {
       if (selectedTags.includes(tag)) {
         selectedTags = selectedTags.filter(t => t !== tag);
       } else {
@@ -528,6 +529,8 @@ function renderTagOptions() {
 
       renderTagOptions();
     });
+
+    container.appendChild(chip);
   });
 }
 document.getElementById("saveTagsBtn").addEventListener("click", async () => {
