@@ -19,10 +19,10 @@ let activeBookId = null;
 let lastKnownGlobalStreak = 0;
 const tagsModal = document.getElementById("tagsModal");
 
-const AVAILABLE_TAGS = ["Witty", 
-                        "Romantic",
-                        "Total Sobfest",
-                        "Pure Joy",
+const AVAILABLE_TAGS = ["⚡︎ Witty", 
+                        "𓆩❤︎𓆪 Romantic",
+                        "˙◠˙ Total Sobfest",
+                        "•ᴗ• Pure Joy",
                         "Page Turner",
                         "Vibe Check",
                         "Brain Melt",
