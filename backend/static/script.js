@@ -699,7 +699,6 @@ function renderBooks(filteredBooks = books) {
     progressFill.style.backgroundColor = getProgressColor(0);
     progressBar.appendChild(progressFill);
 
-    container.appendChild(progressBar);
     progressFill.offsetWidth; // force reflow
     requestAnimationFrame(() => {
       progressFill.style.width = `${progress}%`;
@@ -769,7 +768,7 @@ function renderBooks(filteredBooks = books) {
       }
     });
 
-    buttonsDiv.append(openBtn, quotesBtn, updateBtn, notesBtn, deleteBtn);
+    buttonsDiv.append(openBtn,tagBtn, quotesBtn, updateBtn, notesBtn, deleteBtn);
 
     const quoteHint = document.createElement("p");
     quoteHint.classList.add("quote-count-hint");
