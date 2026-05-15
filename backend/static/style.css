@@ -4,6 +4,7 @@
 /* ── CSS Variables ─────────────────────────────────────── */
 :root {
   /* Palette — warm parchment + deep forest */
+  --purple:#5D3FD3;
   --gold: #c9a84c;
   --gold-dark: #a8893d;
   --cream: #ede3d0;
@@ -31,6 +32,7 @@
   --text-mid: #5c4530;
   --text-muted: #9a8060;
   --text-faint: #030303;
+  --text-ice:#F4F5FC;
 
   /* Misc */
   --progress-bg: #ddd0b5;
@@ -1338,7 +1340,23 @@ main {
   background: linear-gradient(135deg, #d45555, #bb3333);
   box-shadow: 0 5px 16px rgba(180, 60, 60, 0.28);
 }
-
+.tag-btn{
+  padding: 5px 12px;
+  border-radius: var(--radius-btn);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.80rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.24s var(--ease-out);
+  border: 1.2px solid transparent;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.tag-btn{
+  background: transparent;
+  border-color: var(--purple);
+  color: var(--text-ice);
+}
 /* ── Quote count hint ──────────────────────────────────── */
 .quote-count-hint {
   font-size: 0.74rem;
