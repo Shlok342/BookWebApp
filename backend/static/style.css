@@ -862,7 +862,9 @@ body::after {
   flex-wrap: wrap;
   max-width: 220px;
 }
-
+#tag-h3{
+  color: #9673a6;
+}
 .tag {
   background: rgba(76, 125, 59, 0.14);
   color: #4b6f3f;

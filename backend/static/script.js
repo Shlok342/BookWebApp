@@ -19,18 +19,18 @@ let activeBookId = null;
 let lastKnownGlobalStreak = 0;
 const tagsModal = document.getElementById("tagsModal");
 
-const AVAILABLE_TAGS = ["⚡︎ Witty", 
+const AVAILABLE_TAGS = ["⋆˙⟡ Witty", 
                         "𓆩❤︎𓆪 Romantic",
                         "˙◠˙ Total Sobfest",
                         "•ᴗ• Pure Joy",
-                        "Page Turner",
-                        "Vibe Check",
-                        "Brain Melt",
-                        "Slow Burn",
-                        "Instant Classic",
-                        "Deep Dark",
-                        "Easy Breezy",
-                        "Chef's Kiss"];
+                        ">ᴗ< Page Turner",
+                        "♬ Vibe Check",
+                        "𖡎 Brain Melt",
+                        "☕︎ Slow Burn",
+                        "♛ Instant Classic",
+                        "ཐི༏ཋྀ Deep Dark",
+                        "⚡︎⚡︎ Easy Breezy",
+                        "✌︎㋡ Chef's Kiss"];
 let selectedTags = [];
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 // Grab our shiny button
