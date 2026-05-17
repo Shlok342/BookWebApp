@@ -520,16 +520,38 @@ function renderTagOptions() {
 
   container.innerHTML = "";
 
-  AVAILABLE_TAGS.forEach(tag => {
-    const chip = document.createElement("span");
+  // Add an array of awesome colors at the top
+  const chipColors = [
+    "#dfccfb", // ⋆˙✧ Witty (Playful lavender)
+    "#c4e4c5", // ʚ💚ɞ Romantic (Soft sage green to match the heart!)
+    "#b3c5ff", // ˙◠˙ Total Sobfest (Melancholic tear-drop blue)
+    "#fdedb3", // •ᴗ• Pure Joy (Warm sunshine yellow)
+    "#ffbfa3", // >u< Page Turner (Exciting coral peach)
+    "#bffee9", // ♬ Vibe Check (Chilled-out minty teal)
+    "#e8bcf0", // 🧠 Brain Melt (Trippy cosmic orchid)
+    "#e1c7a5", // ☕ Slow Burn (Warm cozy espresso brown)
+    "#f3da90", // 👑 Instant Classic (Regal vintage gold)
+    "#a3b0cc", // 🦋 Deep Dark (Mysterious twilight slate)
+    "#c3ebf7", // ⚡⚡ Easy Breezy (Light crisp sky blue)
+    "#fca5a5"  // ✌︎ッ Chef's Kiss (Flawless gourmet rose)
+];
 
+// Update your loop to grab the index
+AVAILABLE_TAGS.forEach((tag, index) => {
+    const chip = document.createElement("span");
     chip.classList.add("tag-chip");
 
+    // Assign a color based on the index (modulo keeps it from breaking if you have more tags than colors!)
+    const assignedColor = chipColors[index % chipColors.length];
+    chip.style.setProperty("--custom-color", assignedColor);
+
     if (selectedTags.includes(tag)) {
-      chip.classList.add("active");
+        chip.classList.add("active");
     }
 
     chip.textContent = tag;
+    
+    // ... rest of your click listener and append code stays exactly the same!
 
     chip.addEventListener("click", () => {
       if (selectedTags.includes(tag)) {

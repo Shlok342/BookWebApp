@@ -890,7 +890,6 @@ body::after {
 .tag-chip {
   padding: 7px 12px;
   border-radius: 16px;
-  background: #ddd;
   cursor: pointer;
   transition: 0.2s ease;
 }
@@ -905,6 +904,21 @@ body::after {
   align-items: center;
   justify-content: center;
 }
+.tag-chip {
+  padding: 7px 12px;
+  border-radius: 16px;
+  /* Use the custom color, fallback to light grey if it misses */
+  background: var(--custom-color, #ddd); 
+  cursor: pointer;
+  transition: 0.2s ease;
+  color: #2d3436; /* Dark text so it's readable on bright colors */
+}
+
+/* Fix the hover selector name too! */
+.tag-chip:hover {
+  transform: translateY(-1px);
+}
+
 #tagsContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1863,7 +1877,7 @@ footer {
 
 .modal-content input,
 .modal-content textarea {
-  color: #a8893d;
+  color: #F8F8FF;
   background: rgba(0, 0, 0, 0.5);
   /* 🔥 dark glass effect */
   border: 1px solid rgba(255, 255, 255, 0.2);
