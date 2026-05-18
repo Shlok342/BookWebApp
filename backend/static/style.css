@@ -1893,18 +1893,43 @@ footer {
 
 /* Quote of the Day Button */
 .quote-btn {
-  padding: 10px 16px;
+  /* Layout & Spacing */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;                  /* Spaces the emoji and text perfectly */
+  padding: 14px 28px;         /* Generous padding for a modern, clickable look */
+  
+  /* Typography */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 600;           /* Semi-bold makes it pop without looking heavy */
+  color: #ffffff;
+  
+  /* Styling & Aesthetics */
+  background: linear-gradient(135deg, #dfc05d, #b3953b); /* Rich, smooth gold gradient */
   border: none;
-  background: var(--gold, #c9a84c);
-  color: white;
-  border-radius: 6px;
+  border-radius: 14px;        /* Clean, rounded corners to match modern UI */
   cursor: pointer;
-  font-size: 0.9rem;
-  letter-spacing: 0.3px;
+  
+  /* Depth & Shadows */
+  box-shadow: 0 4px 14px rgba(179, 149, 59, 0.3);
+  
+  /* Smooth transition for animations */
+  transition: all 0.25s ease;
 }
 
+/* Hover State (When you mouse over it) */
 .quote-btn:hover {
-  background: var(--gold-dark, #a8893d);
+  transform: translateY(-2px); /* Subtle lift effect */
+  box-shadow: 0 6px 20px rgba(179, 149, 59, 0.45); /* Shadow expands as it lifts */
+  background: linear-gradient(135deg, #e9cb6e, #c2a345); /* Slightly brighter gold */
+}
+
+/* Active State (When you click it) */
+.quote-btn:active {
+  transform: translateY(0); /* Pushes back down on click */
+  box-shadow: 0 3px 10px rgba(179, 149, 59, 0.3);
 }
 
 /* Quote Modal Inner */
