@@ -4,7 +4,7 @@
 /* ── CSS Variables ─────────────────────────────────────── */
 :root {
   /* Palette — warm parchment + deep forest */
-  --purple:#5D3FD3;
+  --purple: #5D3FD3;
   --gold: #c9a84c;
   --gold-dark: #a8893d;
   --cream: #ede3d0;
@@ -32,7 +32,7 @@
   --text-mid: #5c4530;
   --text-muted: #9a8060;
   --text-faint: #030303;
-  
+
 
   /* Misc */
   --progress-bg: #ddd0b5;
@@ -307,42 +307,52 @@ body::after {
 }
 
 
-#statusFilter, 
-#genreFilter, 
+#statusFilter,
+#genreFilter,
 #sortOption {
   /* Typography & Colors */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #2c2c2c;                  /* Premium charcoal text (softer than pure black) */
-  background-color: #ffffff;       /* Crisp white background to pop against the cream canvas */
-  
+  color: #2c2c2c;
+  /* Premium charcoal text (softer than pure black) */
+  background-color: #ffffff;
+  /* Crisp white background to pop against the cream canvas */
+
   /* Borders & Radii */
-  border: 1px solid #e2dcd5;       /* Soft, warm-toned border to blend with your theme */
-  border-radius: 8px;              /* Clean, modern rounded corners */
-  
+  border: 1px solid #e2dcd5;
+  /* Soft, warm-toned border to blend with your theme */
+  border-radius: 8px;
+  /* Clean, modern rounded corners */
+
   /* Depth & Shadows */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04); /* Subtle, elegant drop shadow */
-  
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  /* Subtle, elegant drop shadow */
+
   /* Smooth interaction setup */
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 /* Hover State (When you mouse over them) */
-#statusFilter:hover, 
-#genreFilter:hover, 
+#statusFilter:hover,
+#genreFilter:hover,
 #sortOption:hover {
-  background-color: #fcfbfa;       /* Very slight warm tint shift */
-  border-color: #b3953b;           /* Accent gold border color on hover */
-  box-shadow: 0 4px 10px rgba(179, 149, 59, 0.12); /* Soft golden depth shadow */
+  background-color: #fcfbfa;
+  /* Very slight warm tint shift */
+  border-color: #b3953b;
+  /* Accent gold border color on hover */
+  box-shadow: 0 4px 10px rgba(179, 149, 59, 0.12);
+  /* Soft golden depth shadow */
 }
 
 /* Focus State (When clicked/active) */
-#statusFilter:focus, 
-#genreFilter:focus, 
+#statusFilter:focus,
+#genreFilter:focus,
 #sortOption:focus {
-  outline: none;                   /* Removes default browser ring */
+  outline: none;
+  /* Removes default browser ring */
   border-color: #b3953b;
-  box-shadow: 0 0 0 3px rgba(179, 149, 59, 0.25); /* Elegant focus glow ring */
+  box-shadow: 0 0 0 3px rgba(179, 149, 59, 0.25);
+  /* Elegant focus glow ring */
 }
 
 .mood-ring-btn {
@@ -875,6 +885,7 @@ body::after {
 
   transition: all 0.22s ease;
 }
+
 .title-row {
   display: flex;
   justify-content: space-between;
@@ -885,21 +896,25 @@ body::after {
   margin: 0;
   font-size: 1.2rem;
 }
+
 .title-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 10px;
 }
+
 .tags {
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
   max-width: 220px;
 }
-#tag-h3{
+
+#tag-h3 {
   color: #9673a6;
 }
+
 .tag {
   background: rgba(76, 125, 59, 0.14);
   color: #4b6f3f;
@@ -916,20 +931,24 @@ body::after {
 
   backdrop-filter: blur(4px);
 }
+
 .tag:hover {
   transform: translateY(-1px);
   transition: 0.18s ease;
 }
+
 .tag-chip {
   padding: 7px 12px;
   border-radius: 16px;
   cursor: pointer;
   transition: 0.2s ease;
 }
+
 .tag-chip.active {
   background: #2e7d32;
   color: white;
 }
+
 .tag-chip {
   width: 100%;
 
@@ -937,14 +956,16 @@ body::after {
   align-items: center;
   justify-content: center;
 }
+
 .tag-chip {
   padding: 7px 12px;
   border-radius: 16px;
   /* Use the custom color, fallback to light grey if it misses */
-  background: var(--custom-color, #ddd); 
+  background: var(--custom-color, #ddd);
   cursor: pointer;
   transition: 0.2s ease;
-  color: #2d3436; /* Dark text so it's readable on bright colors */
+  color: #2d3436;
+  /* Dark text so it's readable on bright colors */
 }
 
 /* Fix the hover selector name too! */
@@ -958,11 +979,13 @@ body::after {
   gap: 16px 18px;
   margin-top: 22px;
 }
+
 #tagsModal .modal-content {
   padding: 28px 32px;
   width: 650px;
   max-width: 90%;
 }
+
 /* save */
 .save-btn {
   color: white;
@@ -1398,7 +1421,8 @@ main {
   background: linear-gradient(135deg, #d45555, #bb3333);
   box-shadow: 0 5px 16px rgba(180, 60, 60, 0.28);
 }
-.tag-btn{
+
+.tag-btn {
   padding: 5px 12px;
   border-radius: var(--radius-btn);
   font-family: 'DM Sans', sans-serif;
@@ -1410,17 +1434,17 @@ main {
   letter-spacing: 0.02em;
   line-height: 1.2;
 }
-.tag-btn{
+
+.tag-btn {
   background: rgba(73, 57, 90, 0.06);
   border-color: var(--purple);
   color: var(--text-mid);
 }
+
 .tag-btn:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(48, 64, 53, 0.95),
-    rgba(63, 45, 82, 0.92)
-  );
+  background: linear-gradient(135deg,
+      rgba(48, 64, 53, 0.95),
+      rgba(63, 45, 82, 0.92));
 
   border-color: rgba(121, 96, 145, 0.75);
 
@@ -1434,20 +1458,19 @@ main {
 
   letter-spacing: 0.03em;
 }
+
 #saveTagsBtn {
   padding: 6px 13px;
 
   margin-top: 18px;
   display: inline-block;
-  
+
   border-radius: 12px;
   border: 1px solid rgba(92, 112, 88, 0.28);
   backdrop-filter: blur(4px);
-  background: linear-gradient(
-    135deg,
-    rgba(45, 61, 50, 0.96),
-    rgba(58, 42, 74, 0.92)
-  );
+  background: linear-gradient(135deg,
+      rgba(45, 61, 50, 0.96),
+      rgba(58, 42, 74, 0.92));
 
   color: #f4efe7;
 
@@ -1462,6 +1485,7 @@ main {
     box-shadow 0.22s ease,
     border-color 0.22s ease;
 }
+
 #saveTagsBtn:hover {
   transform: translateY(-1px);
 
@@ -1471,6 +1495,7 @@ main {
     0 4px 10px rgba(39, 28, 52, 0.18),
     0 2px 5px rgba(36, 58, 44, 0.14);
 }
+
 /* ── Quote count hint ──────────────────────────────────── */
 .quote-count-hint {
   font-size: 0.74rem;
@@ -1930,38 +1955,47 @@ footer {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;                  /* Spaces the emoji and text perfectly */
-  padding: 10px 22px;         /* Generous padding for a modern, clickable look */
-  
+  gap: 10px;
+  /* Spaces the emoji and text perfectly */
+  padding: 10px 22px;
+  /* Generous padding for a modern, clickable look */
+
   /* Typography */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
-  font-weight: 600;           /* Semi-bold makes it pop without looking heavy */
+  font-weight: 600;
+  /* Semi-bold makes it pop without looking heavy */
   color: #ffffff;
-  
+
   /* Styling & Aesthetics */
-  background: linear-gradient(135deg, #dfc05d, #b3953b); /* Rich, smooth gold gradient */
+  background: linear-gradient(135deg, #dfc05d, #b3953b);
+  /* Rich, smooth gold gradient */
   border: none;
-  border-radius: 14px;        /* Clean, rounded corners to match modern UI */
+  border-radius: 14px;
+  /* Clean, rounded corners to match modern UI */
   cursor: pointer;
-  
+
   /* Depth & Shadows */
   box-shadow: 0 4px 14px rgba(179, 149, 59, 0.3);
-  
+
   /* Smooth transition for animations */
   transition: all 0.25s ease;
 }
 
 /* Hover State (When you mouse over it) */
 .quote-btn:hover {
-  transform: translateY(-2px); /* Subtle lift effect */
-  box-shadow: 0 6px 20px rgba(179, 149, 59, 0.45); /* Shadow expands as it lifts */
-  background: linear-gradient(135deg, #e9cb6e, #c2a345); /* Slightly brighter gold */
+  transform: translateY(-2px);
+  /* Subtle lift effect */
+  box-shadow: 0 6px 20px rgba(179, 149, 59, 0.45);
+  /* Shadow expands as it lifts */
+  background: linear-gradient(135deg, #e9cb6e, #c2a345);
+  /* Slightly brighter gold */
 }
 
 /* Active State (When you click it) */
 .quote-btn:active {
-  transform: translateY(0); /* Pushes back down on click */
+  transform: translateY(0);
+  /* Pushes back down on click */
   box-shadow: 0 3px 10px rgba(179, 149, 59, 0.3);
 }
 
@@ -2102,188 +2136,8 @@ body.dark-theme {
   --mtn-opacity-2: 1.0;
 }
 
-/* ═══════════════════════════════════════════════════════
-   RESPONSIVE — Tablet (≤ 1024px)
-═══════════════════════════════════════════════════════ */
-@media (max-width: 1024px) {
-  .topnav {
-    padding: 16px 28px;
-  }
 
-  .hero {
-    padding: 26px 28px 10px;
-  }
-
-  .sanctuary-panel {
-    width: min(80%, 900px);
-  }
-
-  main {
-    padding: 0 22px 32px;
-  }
-
-  .books-container {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 18px;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════
-   RESPONSIVE — Mobile (≤ 768px)
-═══════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-
-  /* Nav */
-  .topnav {
-    padding: 14px 18px;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .tagline-pill {
-    font-size: 0.76rem;
-    padding: 6px 13px 6px 10px;
-  }
-
-  /* Hero */
-  .hero {
-    padding: 18px 18px 8px;
-  }
-
-  .hero-title {
-    font-size: clamp(2.0rem, 8vw, 3.0rem);
-    margin-bottom: 10px;
-  }
-
-  .hero-meta {
-    font-size: 0.82rem;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 18px;
-  }
-
-  /* Sanctuary panel */
-  .sanctuary-panel {
-    width: 95%;
-    border-radius: 18px;
-  }
-
-  /* Main + grid */
-  main {
-    padding: 0 14px 28px;
-  }
-
-  .books-container {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding-top: 12px;
-  }
-
-  /* Book card */
-  .book-card {
-    padding: 22px 18px 18px;
-    border-radius: 16px;
-  }
-
-  .book-card h2 {
-    font-size: 1.15rem;
-    margin-bottom: 13px;
-  }
-
-  .pages-row .current-page {
-    font-size: 1.35rem;
-  }
-
-  /* Card buttons — stack more naturally on small screens */
-  .card-buttons {
-    gap: 7px;
-  }
-
-  .open-btn,
-  .quotes-btn,
-  .notes-btn,
-  .update-btn,
-  .delete-btn {
-    font-size: 0.77rem;
-    padding: 6px 13px;
-  }
-
-  /* Modals */
-  .modal-content {
-    width: min(95%, 360px);
-    padding: 26px 20px 22px;
-    border-radius: 18px;
-    margin: 12px auto;
-  }
-
-  .quotes-modal-content {
-    width: min(96%, 460px);
-    margin: 3% auto;
-  }
-
-  .notes-modal-content {
-    width: min(96%, 480px);
-    margin: 4% auto;
-  }
-
-  /* Add book modal */
-  #addBookModal .modal-content {
-    width: min(95%, 340px);
-    margin: 12px auto;
-  }
-
-  /* Leaves — reduce on small screens */
-  .leaf-3,
-  .leaf-4,
-  .leaf-6 {
-    display: none;
-  }
-
-  .leaf-1 {
-    font-size: 1.8rem;
-    top: 6%;
-    right: 3%;
-  }
-
-  .leaf-2 {
-    font-size: 1.3rem;
-    top: 14%;
-    right: 9%;
-  }
-
-  .leaf-5 {
-    font-size: 1.3rem;
-    top: 9%;
-    left: 2%;
-  }
-
-  /* Corner plants — smaller */
-  .corner-plant {
-    font-size: 2.2rem;
-    opacity: 0.30;
-  }
-
-  /* Mountain bg smaller height */
-  .mountain-bg {
-    height: 260px;
-  }
-
-  /* Footer */
-  footer {
-    padding: 22px 18px;
-  }
-
-  .footer-quote {
-    font-size: 0.88rem;
-  }
-
-  /* Brand */
-  .brand-sans,
-  .brand-serif {
-    font-size: 1.08rem;
-  }
-}
-
+/* ── Stats Container (Moved out of media queries) ──────── */
 .stats-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -2311,45 +2165,329 @@ body.dark-theme {
 }
 
 /* ═══════════════════════════════════════════════════════
-   RESPONSIVE — Small Mobile (≤ 480px)
+   RESPONSIVE LAYOUTS — Modern Breakpoints
 ═══════════════════════════════════════════════════════ */
-@media (max-width: 480px) {
+
+/* ── Large Tablets (≤ 1024px) ── */
+@media (max-width: 1024px) {
   .topnav {
-    padding: 12px 14px;
+    padding: 16px 4vw;
   }
 
   .hero {
-    padding: 14px 14px 6px;
-  }
-
-  .hero-title {
-    font-size: clamp(1.75rem, 9vw, 2.4rem);
-  }
-
-  main {
-    padding: 0 10px 22px;
+    padding: 26px 4vw 16px;
   }
 
   .sanctuary-panel {
-    width: 98%;
-    border-radius: 14px;
+    width: clamp(60%, 800px, 90%);
+  }
+
+  main {
+    padding: 0 4vw 32px;
   }
 
   .books-container {
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* ── Tablets (≤ 768px) ── */
+@media (max-width: 768px) {
+  .topnav {
+    padding: 14px 4vw;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tagline-pill {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    margin-bottom: 0.8rem;
+  }
+
+  .hero-meta {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .sanctuary-panel {
+    width: 92%;
+    border-radius: 1.2rem;
+  }
+
+  .books-container {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.2rem;
+    padding-top: 1rem;
+  }
+
+  .book-card {
+    padding: 1.5rem;
+    border-radius: 1.2rem;
+  }
+
+  .book-card h2 {
+    font-size: clamp(1.1rem, 4vw, 1.25rem);
+    margin-bottom: 1rem;
+  }
+
+  .pages-row .current-page {
+    font-size: clamp(1.2rem, 5vw, 1.4rem);
+  }
+
+  .card-buttons {
+    gap: 0.5rem;
+  }
+
+  /* Buttons adjustment */
+  .open-btn,
+  .quotes-btn,
+  .notes-btn,
+  .update-btn,
+  .delete-btn,
+  .tag-btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.8rem;
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  /* Modals */
+  .modal-content,
+  .quotes-modal-content,
+  .notes-modal-content,
+  #addBookModal .modal-content {
+    width: 90vw;
+    max-width: 500px;
+    padding: 2rem 1.5rem;
+    margin: 10vh auto;
+    border-radius: 1.2rem;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  /* Background Elements */
+  .leaf-3,
+  .leaf-4,
+  .leaf-6 {
+    display: none;
+  }
+
+  .leaf-1 {
+    font-size: 1.6rem;
+    top: 5%;
+    right: 5%;
+  }
+
+  .leaf-2 {
+    font-size: 1.2rem;
+    top: 15%;
+    right: 10%;
+  }
+
+  .leaf-5 {
+    font-size: 1.2rem;
+    top: 10%;
+    left: 5%;
+  }
+
+  .corner-plant {
+    font-size: 2rem;
+    opacity: 0.25;
+  }
+
+  .mountain-bg {
+    height: 30vh;
+  }
+
+  footer {
+    padding: 2rem 4vw;
+  }
+
+  .footer-quote {
+    font-size: 0.9rem;
+  }
+}
+
+/* ── Phones (≤ 600px) ── */
+@media (max-width: 600px) {
+  .topnav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .controls {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .controls select {
+    width: 100%;
+  }
+
+  .mood-ring-btn {
+    width: 100%;
+    grid-column: 1 / -1;
+  }
+
+  .books-container {
+    grid-template-columns: 1fr;
+  }
+
+  .book-card {
+    padding: 1.2rem;
+  }
+
+  .card-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .open-btn,
+  .quotes-btn,
+  .notes-btn,
+  .update-btn,
+  .delete-btn,
+  .tag-btn {
+    width: 100%;
+  }
+
+  /* Modals */
+  .modal-content,
+  .quotes-modal-content,
+  .notes-modal-content,
+  #addBookModal .modal-content {
+    width: 95vw;
+    max-width: none;
+    margin: 5vh auto;
+    padding: 1.5rem 1.2rem;
+    max-height: 90vh;
+  }
+
+  .title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .tags {
+    max-width: 100%;
+  }
+
+  #tagsContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Small Phones (≤ 480px) ── */
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: clamp(1.5rem, 8vw, 2rem);
+  }
+
+  .hero-meta {
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .mini-stat {
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .add-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .brand-sans,
+  .brand-serif {
+    font-size: 1.1rem;
+  }
+
+  .hero-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .hero-actions>* {
+    width: 100%;
+    text-align: center;
+  }
+
+  .sanctuary-panel {
+    width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  /* Mobile adjustments for delete popup */
+  .delete-confirm-popup {
+    width: 92vw;
+    padding: 26px 20px 22px;
+  }
+
+  .delete-confirm-title {
+    font-size: 1.3rem;
+  }
+
+  .delete-confirm-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* ── Very Small Phones (≤ 360px) ── */
+@media (max-width: 360px) {
+  .topnav {
+    padding: 1rem 2vw;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .book-card {
+    padding: 1rem;
+  }
+
+  .book-card h2 {
+    font-size: 1rem;
+  }
+
+  .pages-row .current-page {
+    font-size: 1.1rem;
+  }
+
+  .card-buttons {
+    gap: 0.4rem;
   }
 
   .modal-content {
-    width: 96%;
-    padding: 22px 16px 18px;
-    border-radius: 16px;
-    margin: 8px auto;
-  }
-
-
-  .add-btn {
-    padding: 9px 20px;
-    font-size: 0.83rem;
+    padding: 1.2rem 0.8rem;
   }
 }
 
@@ -2596,21 +2734,4 @@ body.dark-theme {
 
 .dc-delete-btn:active {
   transform: translateY(0);
-}
-
-/* ── Mobile adjustments for delete popup ───────────────── */
-@media (max-width: 480px) {
-  .delete-confirm-popup {
-    width: 92vw;
-    padding: 26px 20px 22px;
-  }
-
-  .delete-confirm-title {
-    font-size: 1.3rem;
-  }
-
-  .delete-confirm-actions {
-    flex-direction: column;
-    gap: 8px;
-  }
 }
