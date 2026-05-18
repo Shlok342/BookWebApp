@@ -306,10 +306,43 @@ body::after {
   border-radius: 6px;
 }
 
-#searchInput,
-#statusFilter {
-  padding: 8px;
-  border-radius: 6px;
+
+#statusFilter, 
+#genreFilter, 
+#sortOption {
+  /* Typography & Colors */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #2c2c2c;                  /* Premium charcoal text (softer than pure black) */
+  background-color: #ffffff;       /* Crisp white background to pop against the cream canvas */
+  
+  /* Borders & Radii */
+  border: 1px solid #e2dcd5;       /* Soft, warm-toned border to blend with your theme */
+  border-radius: 8px;              /* Clean, modern rounded corners */
+  
+  /* Depth & Shadows */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04); /* Subtle, elegant drop shadow */
+  
+  /* Smooth interaction setup */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover State (When you mouse over them) */
+#statusFilter:hover, 
+#genreFilter:hover, 
+#sortOption:hover {
+  background-color: #fcfbfa;       /* Very slight warm tint shift */
+  border-color: #b3953b;           /* Accent gold border color on hover */
+  box-shadow: 0 4px 10px rgba(179, 149, 59, 0.12); /* Soft golden depth shadow */
+}
+
+/* Focus State (When clicked/active) */
+#statusFilter:focus, 
+#genreFilter:focus, 
+#sortOption:focus {
+  outline: none;                   /* Removes default browser ring */
+  border-color: #b3953b;
+  box-shadow: 0 0 0 3px rgba(179, 149, 59, 0.25); /* Elegant focus glow ring */
 }
 
 .mood-ring-btn {
@@ -1898,7 +1931,7 @@ footer {
   align-items: center;
   justify-content: center;
   gap: 10px;                  /* Spaces the emoji and text perfectly */
-  padding: 14px 28px;         /* Generous padding for a modern, clickable look */
+  padding: 10px 22px;         /* Generous padding for a modern, clickable look */
   
   /* Typography */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
