@@ -411,8 +411,18 @@ body::after {
 .brand-name {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;        /* keep "Botanical Library" on one line always */
   gap: 6px;
-  /* was 0 */
+  white-space: nowrap;
+}
+
+/* ── Nav Right ──────────────────────────────────────────── */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;          /* allow wrapping when there is not enough room */
+  justify-content: flex-end;
 }
 
 .brand-sans {
@@ -2197,18 +2207,26 @@ body.dark-theme {
   .topnav {
     padding: 14px 4vw;
     flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
+    gap: 0.75rem;
+    justify-content: space-between; /* brand left, nav-right right */
+    align-items: flex-start;
+  }
+
+  .nav-right {
+    gap: 8px;
+    justify-content: flex-end;
+    flex: 1;                       /* take remaining width */
+    min-width: 0;                  /* allow flex children to shrink */
+  }
+
+  /* Hide tagline on tablets — too cramped */
+  .tagline-pill {
+    display: none;
   }
 
   .controls {
     flex-wrap: wrap;
     justify-content: center;
-  }
-
-  .tagline-pill {
-    font-size: 0.85rem;
-    padding: 0.5rem 1rem;
   }
 
   .hero-title {
@@ -2329,8 +2347,35 @@ body.dark-theme {
 /* ── Phones (≤ 600px) ── */
 @media (max-width: 600px) {
   .topnav {
-    flex-direction: column;
-    gap: 1rem;
+    /* keep row layout — column caused Challenges to fall below Dark Mode */
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 12px 3vw;
+  }
+
+  .brand {
+    flex-shrink: 0; /* brand never squishes */
+  }
+
+  .nav-right {
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  /* Shrink nav buttons on phones so they fit in one row */
+  #dark-mode-toggle,
+  #quoteBtn,
+  #challengeBtn {
+    font-size: 0.75rem;
+    padding: 8px 12px;
+  }
+
+  /* Hide streak badge and quote button on very small phones to save room */
+  #globalStreak {
+    display: none;
   }
 
   .controls {
@@ -2424,7 +2469,12 @@ body.dark-theme {
 
   .brand-sans,
   .brand-serif {
-    font-size: 1.1rem;
+    font-size: 1rem;  /* slightly smaller on very small phones */
+  }
+
+  /* On very small phones, hide quote btn — leave dark mode + challenges */
+  #quoteBtn {
+    display: none;
   }
 
   .hero-actions {
