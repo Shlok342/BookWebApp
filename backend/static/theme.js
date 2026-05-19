@@ -50,19 +50,4 @@ export function clearTheme() {
       const btn = m.querySelector("button");
       if (btn) btn.style.background = "";
     });
-  }
-export async function getColorsFromImage(url) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "Anonymous";
-      img.src = url;
-  
-      img.onload = () => {
-        Vibrant.from(img).getPalette()
-          .then(palette => resolve(palette))
-          .catch(err => reject(err));
-      };
-  
-      img.onerror = reject;
-    });
-  }
+}

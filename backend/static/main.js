@@ -1,7 +1,9 @@
 const container = document.querySelector(".books-container");
 import { API } from "./api_service/api.js";
 import { TOAST } from './shows_message/toast.js';
-import { applyThemeFromCover, clearTheme, getColorsFromImage } from "./theme.js";
+import { applyThemeFromCover, clearTheme } from "./theme.js";
+import { applyFilters } from "./filters.js";
+import { store } from "./store.js";
 // Example usage inside main.js:
 
 // #region agent log
@@ -18,9 +20,9 @@ fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
   }),
 }).catch(() => { });
 // #endregion
-let books = [];
-let activeBookId = null;
-let lastKnownGlobalStreak = 0;
+store.books = [];
+store.activeBookId = null;
+store.lastKnownGlobalStreak = 0;
 const tagsModal = document.getElementById("tagsModal");
 
 const AVAILABLE_TAGS = ["⋆˙⟡ Witty", 
@@ -35,7 +37,7 @@ const AVAILABLE_TAGS = ["⋆˙⟡ Witty",
                         "ཐི༏ཋྀ Deep Dark",
                         "⚡︎⚡︎ Easy Breezy",
                         "✌︎㋡ Chef's Kiss"];
-let selectedTags = [];
+store.selectedTags = [];
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 // Grab our shiny button
 const toggleBtn = document.getElementById('dark-mode-toggle');
@@ -163,7 +165,7 @@ function getProgressColor(pct) {
 }
 async function getBooks() {
   try {
-    books = await API.getBooks();
+    store.books = await API.getBooks();
     applyFilters();
   } catch (error) {
     console.error("Failed to fetch books:", error);
@@ -330,7 +332,7 @@ function renderGlobalStreak(count, lastReadDate, freezeCount) {
   last.setHours(0, 0, 0, 0);
 
   const diffDays = (today - last) / (1000 * 60 * 60 * 24);
-  lastKnownGlobalStreak = count;
+  store.lastKnownGlobalStreak = count;
   const usableFreezes = freezeCount || 0;
 
   // ── Read today ──
@@ -465,7 +467,7 @@ function showProgressInput(book, currentPage, totalPages) {
          TOAST.showToast("📖 Read at least 2 pages to count for streak!");
       }
 
-      if (data && data.global_streak > lastKnownGlobalStreak) {
+      if (data && data.global_streak > store.lastKnownGlobalStreak) {
          TOAST.showToast(`🔥 ${data.global_streak}-day global streak!`);
       }
 
@@ -519,7 +521,7 @@ AVAILABLE_TAGS.forEach((tag, index) => {
     const assignedColor = chipColors[index % chipColors.length];
     chip.style.setProperty("--custom-color", assignedColor);
 
-    if (selectedTags.includes(tag)) {
+    if (store.selectedTags.includes(tag)) {
         chip.classList.add("active");
     }
 
@@ -528,15 +530,15 @@ AVAILABLE_TAGS.forEach((tag, index) => {
     // ... rest of your click listener and append code stays exactly the same!
 
     chip.addEventListener("click", () => {
-      if (selectedTags.includes(tag)) {
-        selectedTags = selectedTags.filter(t => t !== tag);
+      if (store.selectedTags.includes(tag)) {
+        store.selectedTags = store.selectedTags.filter(t => t !== tag);
       } else {
-        if (selectedTags.length >= 3) {
+        if (store.selectedTags.length >= 3) {
            TOAST.showToast("You can only select up to 3 tags.");
           return;
         }
       
-        selectedTags.push(tag);
+        store.selectedTags.push(tag);
       }
 
       renderTagOptions();
@@ -546,17 +548,17 @@ AVAILABLE_TAGS.forEach((tag, index) => {
   });
 }
 document.getElementById("saveTagsBtn").addEventListener("click", async () => {
-  if (!activeBookId) return;
+  if (!store.activeBookId) return;
 
   try{
-    await fetch(`/books/${activeBookId}/tags`, {
+    await fetch(`/books/${store.activeBookId}/tags`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tags: selectedTags })
+      body: JSON.stringify({ tags: store.selectedTags })
       
     })
     tagsModal.style.display = "none";
-    activeBookId = null;
+    store.activeBookId = null;
     await getBooks();
 
   }
@@ -565,9 +567,9 @@ document.getElementById("saveTagsBtn").addEventListener("click", async () => {
   }});
 document.getElementById("tagsClose").addEventListener("click", () => {
   tagsModal.style.display = "none";
-  activeBookId = null;
+  store.activeBookId = null;
 });
-function renderBooks(filteredBooks = books) {
+function renderBooks(filteredBooks = store.books) {
   container.innerHTML = "";
 
   if (!filteredBooks || filteredBooks.length === 0) {
@@ -681,8 +683,8 @@ function renderBooks(filteredBooks = books) {
     tagBtn.textContent = "Tags";
 
     tagBtn.addEventListener("click", () => {
-      activeBookId = book.id;
-      selectedTags = [...(book.tags || [])];
+      store.activeBookId = book.id;
+      store.selectedTags = [...(book.tags || [])];
 
       renderTagOptions();
       tagsModal.style.display = "block";
@@ -740,73 +742,12 @@ function renderBooks(filteredBooks = books) {
     container.appendChild(card);
   }); // ✅ forEach closes here
 }
-// Function Aplly filters: 
-function applyFilters() {
-  const searchValue = document.getElementById("searchInput").value.toLowerCase();
-  const filterValue = document.getElementById("statusFilter").value;
-  const sortValue = document.getElementById("sortOption").value;
-  const genreValue = document.getElementById("genreFilter").value.toLowerCase();
-
-  let filtered = books.filter(book => {
-    console.log(books.map(b => ({ title: b.title, genre: b.genre })));
-    const matchesSearch = book.title.toLowerCase().includes(searchValue);
-    const matchesGenre = !genreValue || (book.genre || "").toLowerCase() === genreValue.toLowerCase();
-
-    let status = "not-started";
-    if (book.current_page === 0) status = "not-started";
-    else if (book.current_page === book.total_pages) status = "completed";
-    else status = "in-progress";
-
-    const matchesFilter = filterValue === "all" || status === filterValue;
-
-    return matchesSearch && matchesFilter && matchesGenre;
-  });
-
-  // 🔥 SORTING LOGIC
-
-
-  // 📊 PROGRESS
-  if (sortValue === "progress-asc") {
-    filtered.sort((a, b) => {
-      const progA = (a.current_page || 0) / (a.total_pages || 1);
-      const progB = (b.current_page || 0) / (b.total_pages || 1);
-      return progA - progB;
-    });
-  }
-
-  if (sortValue === "progress-desc") {
-    filtered.sort((a, b) => {
-      const progA = (a.current_page || 0) / (a.total_pages || 1);
-      const progB = (b.current_page || 0) / (b.total_pages || 1);
-      return progB - progA;
-    });
-  }
-
-  // 🕒 DATE (THIS IS WHAT YOU WANTED)
-  if (sortValue === "date-desc") {
-    filtered.sort((a, b) => {
-      const dateA = new Date(a.created_at || 0).getTime();
-      const dateB = new Date(b.created_at || 0).getTime();
-      return dateB - dateA;
-    });
-  }
-
-  if (sortValue === "date-asc") {
-    filtered.sort((a, b) => {
-      const dateA = new Date(a.created_at || 0).getTime();
-      const dateB = new Date(b.created_at || 0).getTime();
-      return dateA - dateB;
-    });
-  }
-
-  renderBooks(filtered);
-}
 // ─── QUOTES MODAL ─────────────────────────────────────────────────────────────
 const quotesModal = document.getElementById("quotesModal");
 const addBookModal = document.getElementById("addBookModal");
 
 async function openQuotesModal(book) {
-  activeBookId = book.id;
+  store.activeBookId = book.id;
   document.getElementById("quotesModalTitle").textContent = book.title;
   renderQuotesList(book.quotes || []);
   quotesModal.style.display = "block";
@@ -825,13 +766,13 @@ function renderQuotesList(quotes) {
 document.getElementById("quotesClose").addEventListener("click", () => {
   clearTheme();
   quotesModal.style.display = "none";
-  activeBookId = null;
+  store.activeBookId = null;
   document.getElementById("quoteInput").value = "";
 });
 
 document.getElementById("addQuoteBtn").addEventListener("click", async () => {
   const text = document.getElementById("quoteInput").value.trim();
-  const book = books.find(b => b.id === activeBookId);
+  const book = store.books.find(b => b.id === store.activeBookId);
   const quotes = [...(book?.quotes || [])];
 
   if (!text || !book) return;
@@ -843,7 +784,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
   quotes.push(text);
 
   try {
-    const data = await API.updateQuotes(activeBookId, quotes);
+    const data = await API.updateQuotes(store.activeBookId, quotes);
 
     if (data.streak_count > 1) {
        TOAST.showToast(`🔥 ${data.streak_count}-day reading streak!`);
@@ -853,7 +794,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
 
     await getBooks();
 
-    const updated = books.find(b => b.id === activeBookId);
+    const updated = store.books.find(b => b.id === store.activeBookId);
     if (updated) renderQuotesList(updated.quotes || []);
 
   } catch (err) {
@@ -870,7 +811,7 @@ function countWords(text) {
 }
 
 async function openNotesModal(book) {
-  activeBookId = book.id;
+  store.activeBookId = book.id;
   document.getElementById("notesModalTitle").textContent = `Notes — ${book.title}`;
   const existing = book.notes || "";
   document.getElementById("notesInput").value = existing;
@@ -890,18 +831,18 @@ document.getElementById("notesInput").addEventListener("input", () => {
 document.getElementById("notesClose").addEventListener("click", () => {
   clearTheme()
   notesModal.style.display = "none";
-  activeBookId = null;
+  store.activeBookId = null;
 });
 
 document.getElementById("saveNotesBtn").addEventListener("click", async () => {
   const notes = document.getElementById("notesInput").value.trim();
-  if (!activeBookId) return;
+  if (!store.activeBookId) return;
 
   try {
-    await API.updateNotes(activeBookId, notes);
+    await API.updateNotes(store.activeBookId, notes);
 
     notesModal.style.display = "none";
-    activeBookId = null;
+    store.activeBookId = null;
 
     await getBooks();
 
@@ -952,13 +893,13 @@ window.addEventListener("click", (event) => {
   if (event.target === addBookModal) { addBookModal.style.display = "none"; clearTheme(); }
   if (event.target === quotesModal) {
     quotesModal.style.display = "none";
-    activeBookId = null;
+    store.activeBookId = null;
     document.getElementById("quoteInput").value = "";
     clearTheme();
   }
   if (event.target === notesModal) {
     notesModal.style.display = "none";
-    activeBookId = null;
+    store.activeBookId = null;
     clearTheme();
   }
   if (event.target === openBookModalEl) {
