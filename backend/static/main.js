@@ -199,27 +199,9 @@ function renderChallenges(data) {
     </div>
   `;
 }
-async function getColorsFromImage(url) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.src = url;
-
-    img.onload = () => {
-      Vibrant.from(img).getPalette()
-        .then(palette => resolve(palette))
-        .catch(err => reject(err));
-    };
-
-    img.onerror = reject;
-  });
-}
-
 // ─── FETCH STATS ──────────────────────────────────────────────────────────────
 // FIX: was using `${BASE_URL}/stats` (full origin URL) — everything else uses
 //      a relative path, so this was inconsistent and would break behind a proxy.
-
-
 async function getStats() {
   try {
     console.log("Fetching stats...");
