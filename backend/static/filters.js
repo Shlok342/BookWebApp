@@ -1,3 +1,4 @@
+import { store } from "./store.js";
 export function applyFilters() {
   const searchValue = document.getElementById("searchInput").value.toLowerCase();
   const filterValue = document.getElementById("statusFilter").value;
