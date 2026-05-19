@@ -63,15 +63,6 @@ export const API = {
       return res.json();
     },
 
-    async getTags(){
-      
-      await fetch(`/books/${activeBookId}/tags`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tags: selectedTags })
-        
-      })},
-  
     // ─── GLOBAL STREAK ─────────────────────────────────
     async getGlobalStreak() {
       const res = await fetch("/streak");

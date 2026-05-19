@@ -567,7 +567,12 @@ document.getElementById("saveTagsBtn").addEventListener("click", async () => {
   if (!activeBookId) return;
 
   try{
-    API.getTags()
+    await fetch(`/books/${activeBookId}/tags`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tags: selectedTags })
+      
+    })
     tagsModal.style.display = "none";
     activeBookId = null;
     await getBooks();
