@@ -1,5 +1,9 @@
 const container = document.querySelector(".books-container");
-import { API } from "./frontend_services/api.js";
+import { API } from "./api_service/api.js";
+import { TOAST } from './shows_message/toast.js';
+
+// Example usage inside main.js:
+
 // #region agent log
 fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
   method: "POST",
@@ -92,18 +96,6 @@ window.addEventListener("click", (e) => {
     challengeModal.style.display = "none";
   }
 });
-function showToast(message) {
-  const toast = document.createElement("div");
-  toast.textContent = message;
-  toast.style.cssText = `
-    position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
-    background:#333; color:white; padding:12px 20px; border-radius:8px;
-    font-size:14px; z-index:9999; opacity:1; transition:opacity 0.5s;
-  `;
-  document.body.appendChild(toast);
-  setTimeout(() => { toast.style.opacity = "0"; setTimeout(() => toast.remove(), 500); }, 3000);
-}
-
 // ─── Botanical Delete Confirmation Popup ──────────────────────────────────────
 function showDeleteConfirm(bookTitle) {
   return new Promise((resolve) => {
@@ -470,12 +462,12 @@ function showProgressInput(book, currentPage, totalPages) {
 
     // Validation
     if (isNaN(newPage)) {
-      showToast("Enter a valid number 📘");
+      TOAST.showToast("Enter a valid number 📘");
       return;
     }
 
     if (newPage < 0 || newPage > totalPages) {
-      showToast(`Enter between 0 and ${totalPages}`);
+      TOAST.showToast(`Enter between 0 and ${totalPages}`);
       return;
     }
 
@@ -488,11 +480,11 @@ function showProgressInput(book, currentPage, totalPages) {
       const data = json.data; // 👈 KEEP THIS if your backend returns { data: ... }
 
       if (data && !data.qualified_for_streak && data.global_streak === 0) {
-        showToast("📖 Read at least 2 pages to count for streak!");
+         TOAST.showToast("📖 Read at least 2 pages to count for streak!");
       }
 
       if (data && data.global_streak > lastKnownGlobalStreak) {
-        showToast(`🔥 ${data.global_streak}-day global streak!`);
+         TOAST.showToast(`🔥 ${data.global_streak}-day global streak!`);
       }
 
       popup.remove();
@@ -504,7 +496,7 @@ function showProgressInput(book, currentPage, totalPages) {
 
     } catch (err) {
       console.error("Failed to update progress:", err);
-      showToast("Could not update progress.");
+      TOAST.showToast("Could not update progress.");
     }
     finally {
       saveBtn.disabled = false;
@@ -558,7 +550,7 @@ AVAILABLE_TAGS.forEach((tag, index) => {
         selectedTags = selectedTags.filter(t => t !== tag);
       } else {
         if (selectedTags.length >= 3) {
-           showToast("You can only select up to 3 tags.");
+           TOAST.showToast("You can only select up to 3 tags.");
           return;
         }
       
@@ -574,21 +566,16 @@ AVAILABLE_TAGS.forEach((tag, index) => {
 document.getElementById("saveTagsBtn").addEventListener("click", async () => {
   if (!activeBookId) return;
 
-  try {
-    await fetch(`/books/${activeBookId}/tags`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tags: selectedTags })
-    });
-
+  try{
+    API.getTags()
     tagsModal.style.display = "none";
     activeBookId = null;
-
     await getBooks();
-  } catch (err) {
-    console.error("Failed to save tags:", err);
+
   }
-});
+  catch (err) {
+    console.error("Failed to save tags:", err);
+  }});
 document.getElementById("tagsClose").addEventListener("click", () => {
   tagsModal.style.display = "none";
   activeBookId = null;
@@ -805,7 +792,7 @@ function renderBooks(filteredBooks = books) {
 
       } catch (err) {
         console.error("Delete failed:", err);
-        showToast("🍂 Could not delete the book.");
+        TOAST.showToast("🍂 Could not delete the book.");
       }
     });
 
@@ -915,7 +902,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
 
   if (!text || !book) return;
   if (quotes.length >= 5) {
-    showToast("Maximum 5 quotes per book.");
+     TOAST.showToast("Maximum 5 quotes per book.");
     return;
   }
 
@@ -925,7 +912,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
     const data = await API.updateQuotes(activeBookId, quotes);
 
     if (data.streak_count > 1) {
-      showToast(`🔥 ${data.streak_count}-day reading streak!`);
+       TOAST.showToast(`🔥 ${data.streak_count}-day reading streak!`);
     }
 
     document.getElementById("quoteInput").value = "";
@@ -937,7 +924,7 @@ document.getElementById("addQuoteBtn").addEventListener("click", async () => {
 
   } catch (err) {
     console.error("Failed to save quote:", err);
-    showToast("Could not save quote.");
+    TOAST.showToast("Could not save quote.");
   }
 });
 
@@ -986,7 +973,7 @@ document.getElementById("saveNotesBtn").addEventListener("click", async () => {
 
   } catch (err) {
     console.error("Failed to save notes:", err);
-    showToast("Could not save notes. Is the server running?");
+    TOAST.showToast("Could not save notes. Is the server running?");
   }
 });
 
@@ -1057,11 +1044,11 @@ document.getElementById("saveBook").addEventListener("click", async () => {
   const genre = document.getElementById("genreInput").value;
 
   if (!title || isNaN(totalPages)) {
-    showToast("Please enter a valid title and total pages.");
+    TOAST.showToast("Please enter a valid title and total pages.");
     return;
   }
   if (currentPage < 0 || currentPage > totalPages) {
-    showToast(`Pages read must be between 0 and ${totalPages}.`);
+    TOAST.showToast(`Pages read must be between 0 and ${totalPages}.`);
     return;
   }
 

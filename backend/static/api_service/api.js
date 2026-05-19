@@ -62,6 +62,15 @@ export const API = {
       if (!res.ok) throw new Error("Failed to fetch stats");
       return res.json();
     },
+
+    async getTags(){
+      
+      await fetch(`/books/${activeBookId}/tags`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tags: selectedTags })
+        
+      })},
   
     // ─── GLOBAL STREAK ─────────────────────────────────
     async getGlobalStreak() {
