@@ -1,4 +1,5 @@
 import { store } from "./store.js";
+import { renderBooks } from "./main.js";
 export function applyFilters() {
   const searchValue = document.getElementById("searchInput").value.toLowerCase();
   const filterValue = document.getElementById("statusFilter").value;

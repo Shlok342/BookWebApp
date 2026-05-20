@@ -569,7 +569,7 @@ document.getElementById("tagsClose").addEventListener("click", () => {
   tagsModal.style.display = "none";
   store.activeBookId = null;
 });
-function renderBooks(filteredBooks = store.books) {
+export function renderBooks(filteredBooks = store.books) {
   container.innerHTML = "";
 
   if (!filteredBooks || filteredBooks.length === 0) {
