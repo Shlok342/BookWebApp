@@ -51,3 +51,21 @@ export function clearTheme() {
       if (btn) btn.style.background = "";
     });
 }
+export function initThemeToggle() {
+  const toggleBtn = document.getElementById('dark-mode-toggle');
+
+  if (!toggleBtn) return;
+
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+
+    toggleBtn.textContent =
+      document.body.classList.contains('dark-theme')
+        ? '☀️ My eyes! Go back!'
+        : '🌙 Go Dark!';
+  });
+}
+export function getProgressColor(pct) {
+  const hue = (pct / 100) * 270;
+  return `hsl(${hue}, 80%, 50%)`;
+}

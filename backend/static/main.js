@@ -2,10 +2,12 @@ const container = document.querySelector(".books-container");
 import { API } from "./api_service/api.js";
 import { showDeleteConfirm } from "./frontend_helpers/show_delete_popup.js";
 import { TOAST } from './shows_message/toast.js';
-import { applyThemeFromCover, clearTheme } from "./theme.js";
 import { applyFilters } from "./filters.js";
 import { store } from "./store.js";
 import { closeModal } from "./close.js";
+import { initThemeToggle, applyThemeFromCover, clearTheme, getProgressColor } from "./theme.js";
+
+
 // Example usage inside main.js:
 
 // #region agent log
@@ -41,20 +43,7 @@ const AVAILABLE_TAGS = ["⋆˙⟡ Witty",
                         "✌︎㋡ Chef's Kiss"];
 store.selectedTags = [];
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
-// Grab our shiny button
-const toggleBtn = document.getElementById('dark-mode-toggle');
-
-if (toggleBtn) {
-  toggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark-theme');
-
-    if (document.body.classList.contains('dark-theme')) {
-      toggleBtn.textContent = '☀️ My eyes! Go back!';
-    } else {
-      toggleBtn.textContent = '🌙 Go Dark!';
-    }
-  });
-}
+initThemeToggle();
 // QUOTE OF THE DAY
 const quoteModal = document.getElementById("quoteModal");
 const quoteBtn = document.getElementById("quoteBtn");
@@ -102,10 +91,6 @@ window.addEventListener("click", (e) => {
 });
 // ─── Botanical Delete Confirmation Popup ──────────────────────────────────────
 
-function getProgressColor(pct) {
-  const hue = (pct / 100) * 270;
-  return `hsl(${hue}, 80%, 50%)`;
-}
 async function getBooks() {
   try {
     store.books = await API.getBooks();
