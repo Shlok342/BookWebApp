@@ -56,6 +56,21 @@ export const API = {
       return res.json();
     },
   
+    async updateTags(bookId, tags) {
+      const response = await fetch(`/books/${bookId}/tags`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ tags })
+      });
+    
+      if (!response.ok) {
+        throw new Error("Failed to update tags");
+      }
+    
+      return response.json();
+    },
     // ─── STATS ─────────────────────────────────────────
     async getStats() {
       const res = await fetch("/stats");

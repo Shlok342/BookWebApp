@@ -9,7 +9,10 @@ export function applyFilters() {
   let filtered = store.books.filter(book => {
     console.log(store.books.map(b => ({ title: b.title, genre: b.genre })));
     const matchesSearch = book.title.toLowerCase().includes(searchValue);
-    const matchesGenre = !genreValue || (book.genre || "").toLowerCase() === genreValue.toLowerCase();
+    const matchesGenre =
+                      genreValue === "all" ||
+                      !genreValue ||
+                      (book.genre || "").toLowerCase() === genreValue;
 
     let status = "not-started";
     if (book.current_page === 0) status = "not-started";

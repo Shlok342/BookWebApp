@@ -1,9 +1,11 @@
 const container = document.querySelector(".books-container");
 import { API } from "./api_service/api.js";
+import { showDeleteConfirm } from "./frontend_helpers/show_delete_popup.js";
 import { TOAST } from './shows_message/toast.js';
 import { applyThemeFromCover, clearTheme } from "./theme.js";
 import { applyFilters } from "./filters.js";
 import { store } from "./store.js";
+import { closeModal } from "./close.js";
 // Example usage inside main.js:
 
 // #region agent log
@@ -99,66 +101,7 @@ window.addEventListener("click", (e) => {
   }
 });
 // ─── Botanical Delete Confirmation Popup ──────────────────────────────────────
-function showDeleteConfirm(bookTitle) {
-  return new Promise((resolve) => {
-    // backdrop
-    const overlay = document.createElement("div");
-    overlay.className = "delete-confirm-overlay";
 
-    // popup container
-    const popup = document.createElement("div");
-    popup.className = "delete-confirm-popup";
-
-    popup.innerHTML = `
-      <div class="delete-confirm-leaves">
-        <span class="dc-leaf dc-leaf-1">🍂</span>
-        <span class="dc-leaf dc-leaf-2">🌿</span>
-        <span class="dc-leaf dc-leaf-3">🍃</span>
-      </div>
-      <div class="delete-confirm-icon">🥀</div>
-      <h3 class="delete-confirm-title">Let this one go?</h3>
-      <p class="delete-confirm-book">"${bookTitle}"</p>
-      <p class="delete-confirm-msg">This book will be removed from your sanctuary.<br>This cannot be undone.</p>
-      <div class="delete-confirm-actions">
-        <button class="dc-cancel-btn">Keep it 🌱</button>
-        <button class="dc-delete-btn">Remove 🍂</button>
-      </div>
-    `;
-
-    overlay.appendChild(popup);
-    document.body.appendChild(overlay);
-
-    // force reflow then add visible class for animation
-    overlay.offsetWidth;
-    overlay.classList.add("dc-visible");
-
-    const cleanup = (result) => {
-      overlay.classList.remove("dc-visible");
-      overlay.classList.add("dc-closing");
-      setTimeout(() => {
-        overlay.remove();
-        resolve(result);
-      }, 280);
-    };
-
-    popup.querySelector(".dc-cancel-btn").addEventListener("click", () => cleanup(false));
-    popup.querySelector(".dc-delete-btn").addEventListener("click", () => cleanup(true));
-
-    // clicking backdrop = cancel
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) cleanup(false);
-    });
-
-    // ESC key = cancel
-    const escHandler = (e) => {
-      if (e.key === "Escape") {
-        document.removeEventListener("keydown", escHandler);
-        cleanup(false);
-      }
-    };
-    document.addEventListener("keydown", escHandler);
-  });
-}
 function getProgressColor(pct) {
   const hue = (pct / 100) * 270;
   return `hsl(${hue}, 80%, 50%)`;
@@ -550,19 +493,14 @@ AVAILABLE_TAGS.forEach((tag, index) => {
 document.getElementById("saveTagsBtn").addEventListener("click", async () => {
   if (!store.activeBookId) return;
 
-  try{
-    await fetch(`/books/${store.activeBookId}/tags`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tags: store.selectedTags })
-      
-    })
-    tagsModal.style.display = "none";
-    store.activeBookId = null;
+  try {
+    await API.updateTags(store.activeBookId, store.selectedTags);
+  
+    closeModal(tagsModal);
+  
     await getBooks();
-
-  }
-  catch (err) {
+  
+  } catch (err) {
     console.error("Failed to save tags:", err);
   }});
 document.getElementById("tagsClose").addEventListener("click", () => {
@@ -936,6 +874,8 @@ document.getElementById("saveBook").addEventListener("click", async () => {
       genre,
       cover_url: cover
     });
+    closeModal(addBookModal)
+
 
     await getBooks();
     await getStats();
