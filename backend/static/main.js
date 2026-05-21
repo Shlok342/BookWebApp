@@ -14,7 +14,7 @@ import {
 import {
   initNotesModal,
   openNotesModal
-} from "./modals/notesModal.js";
+} from "./modal_helper/notesModal.js";
 
 
 
