@@ -2,9 +2,9 @@
 
 import { store } from "../store.js";
 
-import * as API from "../api_service/api.js";
+import { API } from "../api_service/api.js";
 
-import * as TOAST from "../shows_message/toast.js";
+import { TOAST } from "../shows_message/toast.js";
 
 import {
   applyThemeFromCover,
