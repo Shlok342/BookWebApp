@@ -100,7 +100,7 @@ window.addEventListener("click", (e) => {
 });
 // ─── Botanical Delete Confirmation Popup ──────────────────────────────────────
 
-async function getBooks() {
+export async function getBooks() {
   try {
     store.books = await API.getBooks();
     applyFilters();
