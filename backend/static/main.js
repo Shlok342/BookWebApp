@@ -6,10 +6,14 @@ import { applyFilters } from "./filters.js";
 import { store } from "./store.js";
 import { closeModal } from "./close.js";
 import { initThemeToggle, applyThemeFromCover, clearTheme, getProgressColor } from "./theme.js";
+import { scheduleMidnightCheck } from "./streak_helper/streak_helper.js";
+import {
+  openQuotesModal,
+  initQuotesModal
+} from "./modal_helper/quotesModal.js";
 
 
-// Example usage inside main.js:
-
+// Example usage inside main
 // #region agent log
 fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
   method: "POST",
@@ -150,8 +154,7 @@ async function getStats() {
     document.getElementById("miniMonth").textContent = data.pages_this_month;
 
     console.log("Old stats done ✅");
-    console.log(book.tags);
-    // 🔥 wrap new ones
+    
     console.log("Trying new stats...");
 
     document.getElementById("streakPages").textContent = data.streak_pages_read;
@@ -180,7 +183,7 @@ window.addEventListener("click", (e) => {
   }
 });
 // ─── FETCH GLOBAL STREAK ──────────────────────────────────────────────────────
-async function getGlobalStreak() {
+export async function getGlobalStreak() {
   try {
     const data = await API.getGlobalStreak();
     // #region agent log
@@ -206,31 +209,6 @@ async function getGlobalStreak() {
     console.error("Failed to fetch global streak:", err);
   }
 }
-
-
-// CHECKS IF THE DAY HAS CHANGED (reschedule at next local midnight)
-function scheduleMidnightCheck() {
-  function scheduleNext() {
-    const now = new Date();
-    const nextMidnight = new Date(now);
-    nextMidnight.setDate(nextMidnight.getDate() + 1);
-    nextMidnight.setHours(0, 0, 0, 0);
-
-    const delay = Math.max(0, nextMidnight - now);
-
-    setTimeout(async () => {
-      try {
-        console.log("🌙 Midnight hit — updating streak");
-        await getGlobalStreak();
-      } finally {
-        scheduleNext();
-      }
-    }, delay);
-  }
-
-  scheduleNext();
-}
-
 //FUNCTION GLOBAL STREAK WARNING:
 function renderGlobalStreak(count, lastReadDate, freezeCount) {
   const el = document.getElementById("globalStreak");
@@ -666,66 +644,7 @@ export function renderBooks(filteredBooks = store.books) {
   }); // ✅ forEach closes here
 }
 // ─── QUOTES MODAL ─────────────────────────────────────────────────────────────
-const quotesModal = document.getElementById("quotesModal");
-const addBookModal = document.getElementById("addBookModal");
-
-async function openQuotesModal(book) {
-  store.activeBookId = book.id;
-  document.getElementById("quotesModalTitle").textContent = book.title;
-  renderQuotesList(book.quotes || []);
-  quotesModal.style.display = "block";
-  await applyThemeFromCover(book);
-
-}
-
-function renderQuotesList(quotes) {
-  document.getElementById("quotesCount").textContent = quotes.length;
-  document.getElementById("quotesList").innerHTML = quotes.length === 0
-    ? `<p class="no-quotes">No quotes yet. Add one below.</p>`
-    : quotes.map(q => `<div class="quote-item">&#8220;${q}&#8221;</div>`).join("");
-  document.getElementById("addQuoteArea").style.display = quotes.length >= 5 ? "none" : "block";
-}
-
-document.getElementById("quotesClose").addEventListener("click", () => {
-  clearTheme();
-  quotesModal.style.display = "none";
-  store.activeBookId = null;
-  document.getElementById("quoteInput").value = "";
-});
-
-document.getElementById("addQuoteBtn").addEventListener("click", async () => {
-  const text = document.getElementById("quoteInput").value.trim();
-  const book = store.books.find(b => b.id === store.activeBookId);
-  const quotes = [...(book?.quotes || [])];
-
-  if (!text || !book) return;
-  if (quotes.length >= 5) {
-     TOAST.showToast("Maximum 5 quotes per book.");
-    return;
-  }
-
-  quotes.push(text);
-
-  try {
-    const data = await API.updateQuotes(store.activeBookId, quotes);
-
-    if (data.streak_count > 1) {
-       TOAST.showToast(`🔥 ${data.streak_count}-day reading streak!`);
-    }
-
-    document.getElementById("quoteInput").value = "";
-
-    await getBooks();
-
-    const updated = store.books.find(b => b.id === store.activeBookId);
-    if (updated) renderQuotesList(updated.quotes || []);
-
-  } catch (err) {
-    console.error("Failed to save quote:", err);
-    TOAST.showToast("Could not save quote.");
-  }
-});
-
+initQuotesModal();
 // ─── NOTES MODAL ──────────────────────────────────────────────────────────────
 const notesModal = document.getElementById("notesModal");
 
