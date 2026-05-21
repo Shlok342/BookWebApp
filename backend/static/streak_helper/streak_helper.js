@@ -1,4 +1,4 @@
-import { getGlobalStreak } from '../main.js';
+
 import API from "../api_service/api.js";
 import { store } from "../store.js";
 let streakTimer = null;
