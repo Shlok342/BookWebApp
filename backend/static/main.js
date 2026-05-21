@@ -15,6 +15,11 @@ import {
   initNotesModal,
   openNotesModal
 } from "./modal_helper/notesModal.js";
+import {
+  initQuoteOfDayModal
+} from "./show_message/quoteOfTheDayModal.js";
+
+initQuoteOfDayModal();
 
 
 
@@ -69,35 +74,7 @@ challengeBtn.addEventListener("click", async () => {
 challengeClose.addEventListener("click", () => {
   challengeModal.style.display = "none";
 });
-quoteBtn.onclick = async () => {
-  quoteModal.style.display = "block";
-  document.getElementById("quoteDayText").textContent = "Fetching wisdom...";
-  document.getElementById("quoteDayAuthor").textContent = "";
-
-  try {
-
-
-    const data = await API.getQuote();
-
-    document.getElementById("quoteDayText").textContent = data.quote;
-    document.getElementById("quoteDayAuthor").textContent =
-      data.author ? `— ${data.author}` : "";
-
-  } catch (err) {
-    console.error(err);
-    document.getElementById("quoteDayText").textContent =
-      "Could not load quote. Try again!";
-  }
-};
-
-quoteClose.onclick = () => quoteModal.style.display = "none";
-
-window.addEventListener("click", (e) => {
-  if (e.target === quoteModal) quoteModal.style.display = "none";
-  if (e.target === challengeModal) {
-    challengeModal.style.display = "none";
-  }
-});
+initQuoteOfDayModal();
 // ─── Botanical Delete Confirmation Popup ──────────────────────────────────────
 
 export async function getBooks() {

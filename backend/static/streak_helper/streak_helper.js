@@ -1,5 +1,5 @@
 
-import * as API from "../api_service/api.js";
+import {API} from "../api_service/api.js";
 import { store } from "../store.js";
 let streakTimer = null;
 export function scheduleMidnightCheck() {
