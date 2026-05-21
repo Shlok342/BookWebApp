@@ -9,7 +9,7 @@ import {
   clearTheme
 } from "../theme.js";
 
-import { getBooks } from "../books/books.js";
+import { getBooks } from "../main.js";
 
 const quotesModal = document.getElementById("quotesModal");
 
