@@ -21,6 +21,9 @@ import {
 import { renderTagOptions } from "./modal_helper/tagsModal.js";
 import { getStats } from "./modal_helper/statsModal.js";
 import { getChallenges } from "./modal_helper/challengeModal.js";
+import {
+  showProgressInput
+} from "./streak_helper/progressPopup.js";
 // Example usage inside main
 // #region agent log
 fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
@@ -71,86 +74,7 @@ function closeAll() {
 window.addEventListener("click", (e) => {
   if (e.target.classList.contains("modal")) closeAll();
 });
-//-Function Progress Input, placement like this to ensure reachability of data:
-function showProgressInput(book, currentPage, totalPages) {
-  const popup = document.createElement("div");
-  popup.className = "mini-progress-popup";
 
-  popup.innerHTML = `
-    <h3>🌿 ${book.title}</h3>
-    <p>Current: ${currentPage} / ${totalPages}</p>
-
-    <input
-      type="number"
-      class="page-input"
-      value="${currentPage}"
-      min="0"
-      max="${totalPages}"
-    >
-
-    <div class="popup-actions">
-      <button class="save-btn">Save</button>
-      <button class="cancel-btn">Cancel</button>
-    </div>
-  `;
-
-  document.body.appendChild(popup);
-
-  const input = popup.querySelector(".page-input");
-  const saveBtn = popup.querySelector(".save-btn");
-  const cancelBtn = popup.querySelector(".cancel-btn");
-
-  cancelBtn.onclick = () => popup.remove();
-
-  saveBtn.onclick = async () => {
-    const newPage = parseInt(input.value);
-
-    // Validation
-    if (isNaN(newPage)) {
-      TOAST.showToast("Enter a valid number 📘");
-      return;
-    }
-
-    if (newPage < 0 || newPage > totalPages) {
-      TOAST.showToast(`Enter between 0 and ${totalPages}`);
-      return;
-    }
-
-    // Loading state
-    saveBtn.disabled = true;
-    saveBtn.textContent = "Updating...";
-
-    try {
-      const json = await API.updateProgress(book.id, newPage);
-      const data = json.data; // 👈 KEEP THIS if your backend returns { data: ... }
-
-      if (data && !data.qualified_for_streak && data.global_streak === 0) {
-         TOAST.showToast("📖 Read at least 2 pages to count for streak!");
-      }
-
-      if (data && data.global_streak > store.lastKnownGlobalStreak) {
-         TOAST.showToast(`🔥 ${data.global_streak}-day global streak!`);
-      }
-
-      popup.remove();
-
-      await getBooks();
-      await getChallenges();
-      await getStats();
-      await getGlobalStreak();
-
-    } catch (err) {
-      console.error("Failed to update progress:", err);
-      TOAST.showToast("Could not update progress.");
-    }
-    finally {
-      saveBtn.disabled = false;
-      saveBtn.textContent = "Save";
-    }
-  };
-
-  input.focus();
-}
 renderTagOptions();
 export function renderBooks(filteredBooks = store.books) {
   container.innerHTML = "";
