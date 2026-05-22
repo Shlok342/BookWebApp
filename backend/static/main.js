@@ -20,6 +20,7 @@ import {
 } from "./shows_message/quoteOfTheDayModal.js";
 import { renderTagOptions } from "./modal_helper/tagsModal.js";
 import { getStats } from "./modal_helper/statsModal.js";
+import { getChallenges } from "./modal_helper/challengeModal.js";
 // Example usage inside main
 // #region agent log
 fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
@@ -42,16 +43,7 @@ store.lastKnownGlobalStreak = 0;
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 initThemeToggle();
 initQuoteOfDayModal();
-const challengeModal = document.getElementById("challengeModal");
-const challengeBtn = document.getElementById("challengeBtn");
-const challengeClose = document.getElementById("challengeClose");
-challengeBtn.addEventListener("click", async () => {
-  await getChallenges(); // always fresh
-  challengeModal.style.display = "block";
-});
-challengeClose.addEventListener("click", () => {
-  challengeModal.style.display = "none";
-});
+
 
 // ─── Botanical Delete Confirmation Popup ──────────────────────────────────────
 
@@ -64,35 +56,8 @@ export async function getBooks() {
     container.innerHTML = "<p>Could not load books. Is the server running?</p>";
   }
 }
-async function getChallenges() {
-  const data = await API.getChallenges();
-  renderChallenges(data);
-}
 
-function renderChallenges(data) {
-  const progressPercent = Math.min((data.monthly.progress / 2) * 100, 100);
 
-  document.getElementById("dailyChallenge").innerHTML = `
-    <div class="challenge-card ${data.daily.completed ? "done" : ""}">
-      <h3>📅 Daily Challenge</h3>
-      <p>
-        ${data.daily.completed ? "✅ Completed!" : "Read 20 pages in one session"}
-      </p>
-    </div>
-  `;
-
-  document.getElementById("monthlyChallenge").innerHTML = `
-    <div class="challenge-card ${data.monthly.completed ? "done" : ""}">
-      <h3>📚 Monthly Challenge</h3>
-
-      <div class="progress-bar">
-        <div class="progress" style="width:${progressPercent}%"></div>
-      </div>
-
-      <p>${data.monthly.progress} / 2 books</p>
-    </div>
-  `;
-}
 
 // ─── FETCH GLOBAL STREAK ──────────────────────────────────────────────────────
 
