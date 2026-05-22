@@ -19,7 +19,7 @@ import {
   initQuoteOfDayModal
 } from "./shows_message/quoteOfTheDayModal.js";
 import { renderTagOptions } from "./modal_helper/tagsModal.js";
-import { getStats } from "./modal_helper/challengesModal.js";
+import { getStats } from "./modal_helper/statsModal.js";
 // Example usage inside main
 // #region agent log
 fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
@@ -41,12 +41,7 @@ store.lastKnownGlobalStreak = 0;
 
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 initThemeToggle();
-// QUOTE OF THE DAY
-const quoteModal = document.getElementById("quoteModal");
-const quoteBtn = document.getElementById("quoteBtn");
-const quoteClose = document.getElementById("quoteClose");
-
-// CHALLENGES 
+initQuoteOfDayModal();
 const challengeModal = document.getElementById("challengeModal");
 const challengeBtn = document.getElementById("challengeBtn");
 const challengeClose = document.getElementById("challengeClose");
@@ -57,7 +52,7 @@ challengeBtn.addEventListener("click", async () => {
 challengeClose.addEventListener("click", () => {
   challengeModal.style.display = "none";
 });
-initQuoteOfDayModal();
+
 // ─── Botanical Delete Confirmation Popup ──────────────────────────────────────
 
 export async function getBooks() {
