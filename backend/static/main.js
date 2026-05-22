@@ -18,7 +18,8 @@ import {
 import {
   initQuoteOfDayModal
 } from "./shows_message/quoteOfTheDayModal.js";
-
+import { renderTagOptions } from "./modal_helper/tagsModal.js";
+import { getStats } from "./modal_helper/challengesModal.js";
 // Example usage inside main
 // #region agent log
 fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
@@ -97,55 +98,7 @@ function renderChallenges(data) {
     </div>
   `;
 }
-// ─── FETCH STATS ──────────────────────────────────────────────────────────────
-// FIX: was using `${BASE_URL}/stats` (full origin URL) — everything else uses
-//      a relative path, so this was inconsistent and would break behind a proxy.
-async function getStats() {
-  try {
-    console.log("Fetching stats...");
 
-
-
-    const data = await API.getStats();
-    console.log("DATA:", data);
-
-    document.getElementById("totalBooks").textContent = data.total_books;
-    document.getElementById("totalPages").textContent = data.total_pages_read;
-    document.getElementById("monthlyPages").textContent = data.pages_this_month;
-    document.getElementById("avgPages").textContent = data.avg_pages_per_month;
-    document.getElementById("miniBooks").textContent = data.total_books;
-    document.getElementById("miniPages").textContent = data.total_pages_read;
-    document.getElementById("miniMonth").textContent = data.pages_this_month;
-
-    console.log("Old stats done ✅");
-    
-    console.log("Trying new stats...");
-
-    document.getElementById("streakPages").textContent = data.streak_pages_read;
-    document.getElementById("streakMonthly").textContent = data.streak_pages_this_month;
-    document.getElementById("streakAvg").textContent = data.avg_streak_pages_per_month;
-
-    console.log("New stats done ✅");
-
-  } catch (err) {
-    console.error("Stats error:", err);
-  }
-}
-const statsModal = document.getElementById("statsModal");
-
-document.getElementById("openStats").addEventListener("click", () => {
-  statsModal.style.display = "flex";
-});
-
-document.getElementById("closeStats").addEventListener("click", () => {
-  statsModal.style.display = "none";
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target === statsModal) {
-    statsModal.style.display = "none";
-  }
-});
 // ─── FETCH GLOBAL STREAK ──────────────────────────────────────────────────────
 
 function closeAll() {
@@ -238,80 +191,7 @@ function showProgressInput(book, currentPage, totalPages) {
 
   input.focus();
 }
-// ─── RENDER BOOKS ─────────────────────────────────────────────────────────────
-function renderTagOptions() {
-  const container = document.getElementById("tagsContainer");
-
-  container.innerHTML = "";
-
-  // Add an array of awesome colors at the top
-  const chipColors = [
-    "#dfccfb", // ⋆˙✧ Witty (Playful lavender)
-    "#c4e4c5", // ʚ💚ɞ Romantic (Soft sage green to match the heart!)
-    "#b3c5ff", // ˙◠˙ Total Sobfest (Melancholic tear-drop blue)
-    "#fdedb3", // •ᴗ• Pure Joy (Warm sunshine yellow)
-    "#ffbfa3", // >u< Page Turner (Exciting coral peach)
-    "#bffee9", // ♬ Vibe Check (Chilled-out minty teal)
-    "#e8bcf0", // 🧠 Brain Melt (Trippy cosmic orchid)
-    "#e1c7a5", // ☕ Slow Burn (Warm cozy espresso brown)
-    "#f3da90", // 👑 Instant Classic (Regal vintage gold)
-    "#a3b0cc", // 🦋 Deep Dark (Mysterious twilight slate)
-    "#c3ebf7", // ⚡⚡ Easy Breezy (Light crisp sky blue)
-    "#fca5a5"  // ✌︎ッ Chef's Kiss (Flawless gourmet rose)
-];
-
-// Update your loop to grab the index
-AVAILABLE_TAGS.forEach((tag, index) => {
-    const chip = document.createElement("span");
-    chip.classList.add("tag-chip");
-
-    // Assign a color based on the index (modulo keeps it from breaking if you have more tags than colors!)
-    const assignedColor = chipColors[index % chipColors.length];
-    chip.style.setProperty("--custom-color", assignedColor);
-
-    if (store.selectedTags.includes(tag)) {
-        chip.classList.add("active");
-    }
-
-    chip.textContent = tag;
-    
-    // ... rest of your click listener and append code stays exactly the same!
-
-    chip.addEventListener("click", () => {
-      if (store.selectedTags.includes(tag)) {
-        store.selectedTags = store.selectedTags.filter(t => t !== tag);
-      } else {
-        if (store.selectedTags.length >= 3) {
-           TOAST.showToast("You can only select up to 3 tags.");
-          return;
-        }
-      
-        store.selectedTags.push(tag);
-      }
-
-      renderTagOptions();
-    });
-
-    container.appendChild(chip);
-  });
-}
-document.getElementById("saveTagsBtn").addEventListener("click", async () => {
-  if (!store.activeBookId) return;
-
-  try {
-    await API.updateTags(store.activeBookId, store.selectedTags);
-  
-    closeModal(tagsModal);
-  
-    await getBooks();
-  
-  } catch (err) {
-    console.error("Failed to save tags:", err);
-  }});
-document.getElementById("tagsClose").addEventListener("click", () => {
-  tagsModal.style.display = "none";
-  store.activeBookId = null;
-});
+renderTagOptions();
 export function renderBooks(filteredBooks = store.books) {
   container.innerHTML = "";
 
