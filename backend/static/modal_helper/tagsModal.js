@@ -28,7 +28,7 @@ const AVAILABLE_TAGS = ["⋆˙⟡ Witty",
 import {store} from "../store.js"
 import { TOAST } from "../shows_message/toast.js";
 import {API} from "../api_service/api.js"
-import { getBooks } from "../main.js";
+import { getBooks } from "./getBooks.js";
 import { closeModal } from "../close.js";
 const tagsModal = document.getElementById("tagsModal");
   // ─── RENDER TAG OPTIONS ─────────────────────────────────────────────────────

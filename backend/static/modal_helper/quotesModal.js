@@ -10,7 +10,7 @@ import {
   clearTheme
 } from "../theme.js";
 
-import { getBooks } from "../main.js";
+import { getBooks } from "./getBooks.js";
 
 const quotesModal = document.getElementById("quotesModal");
 

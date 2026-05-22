@@ -2,7 +2,7 @@ import { TOAST } from "../shows_message/toast.js";
 import { API } from "../api_service/api.js";
 import { store } from "../store.js";
 
-import { getBooks } from "../main.js";
+import { getBooks } from "../modal_helper/getBooks.js";
 
 import { getChallenges }
   from "../modal_helper/challengeModal.js";
