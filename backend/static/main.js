@@ -24,6 +24,7 @@ import { getChallenges } from "./modal_helper/challengeModal.js";
 import {
   showProgressInput
 } from "./streak_helper/progressPopup.js";
+import { getBooks } from "./modal_helper/getBooks.js";
 // Example usage inside main
 // #region agent log
 fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
@@ -46,34 +47,6 @@ store.lastKnownGlobalStreak = 0;
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 initThemeToggle();
 initQuoteOfDayModal();
-
-
-// ─── Botanical Delete Confirmation Popup ──────────────────────────────────────
-
-export async function getBooks() {
-  try {
-    store.books = await API.getBooks();
-    applyFilters();
-  } catch (error) {
-    console.error("Failed to fetch books:", error);
-    container.innerHTML = "<p>Could not load books. Is the server running?</p>";
-  }
-}
-
-
-
-// ─── FETCH GLOBAL STREAK ──────────────────────────────────────────────────────
-
-function closeAll() {
-  clearTheme();
-  quotesModal.style.display = "none";
-  notesModal.style.display = "none";
-  openBookModalEl.style.display = "none";
-}
-
-window.addEventListener("click", (e) => {
-  if (e.target.classList.contains("modal")) closeAll();
-});
 
 renderTagOptions();
 export function renderBooks(filteredBooks = store.books) {
