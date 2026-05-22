@@ -17,11 +17,7 @@ import {
 } from "./modal_helper/notesModal.js";
 import {
   initQuoteOfDayModal
-} from "./show_message/quoteOfTheDayModal.js";
-
-initQuoteOfDayModal();
-
-
+} from "./shows_message/quoteOfTheDayModal.js";
 
 // Example usage inside main
 // #region agent log
@@ -41,21 +37,7 @@ fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
 store.books = [];
 store.activeBookId = null;
 store.lastKnownGlobalStreak = 0;
-const tagsModal = document.getElementById("tagsModal");
 
-const AVAILABLE_TAGS = ["⋆˙⟡ Witty", 
-                        "𓆩❤︎𓆪 Romantic",
-                        "˙◠˙ Total Sobfest",
-                        "•ᴗ• Pure Joy",
-                        ">ᴗ< Page Turner",
-                        "♬ Vibe Check",
-                        "𖡎 Brain Melt",
-                        "☕︎ Slow Burn",
-                        "♛ Instant Classic",
-                        "ཐི༏ཋྀ Deep Dark",
-                        "⚡︎⚡︎ Easy Breezy",
-                        "✌︎㋡ Chef's Kiss"];
-store.selectedTags = [];
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
 initThemeToggle();
 // QUOTE OF THE DAY
