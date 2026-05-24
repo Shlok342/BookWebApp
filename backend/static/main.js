@@ -25,21 +25,8 @@ import {
   showProgressInput
 } from "./streak_helper/progressPopup.js";
 import { getBooks } from "./modal_helper/getBooks.js";
-import { saveBookHandler } from "./integration_handlers/saveBook.js";
-// Example usage inside main
-// #region agent log
-fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
-  method: "POST",
-  headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "f3a808" },
-  body: JSON.stringify({
-    sessionId: "f3a808",
-    location: "script.js:afterImport",
-    message: "module evaluated after api import",
-    data: { hasAPI: typeof API !== "undefined" },
-    hypothesisId: "H_import",
-    timestamp: Date.now(),
-  }),
-}).catch(() => { });
+import { saveBookHandler } from "./integration_handler/saveBook.js";
+import { openBookModal } from "./integration_handler/open_book.js";
 // #endregion
 store.books = [];
 store.activeBookId = null;
@@ -227,33 +214,6 @@ export function renderBooks(filteredBooks = store.books) {
 initQuotesModal();
 // ─── NOTES MODAL ──────────────────────────────────────────────────────────────
 initNotesModal();
-// ─── OPEN BOOK MODAL ──────────────────────────────────────────────────────────
-const openBookModalEl = document.getElementById("openBookModal");
-
-async function openBookModal(book) {
-  document.getElementById("openBookTitle").textContent = book.title;
-  document.getElementById("openBookAuthor").textContent = book.author ? `by ${book.author}` : "";
-  openBookModalEl.style.display = "block";
-  await applyThemeFromCover(book);
-  const current = book.current_page ?? 0;
-  const total = book.total_pages ?? 0;
-  document.getElementById("openBookProgress").textContent = `${current} / ${total} pages`;
-
-  const quotesDiv = document.getElementById("openBookQuotes");
-  quotesDiv.innerHTML = !book.quotes || book.quotes.length === 0
-    ? "<p>No quotes yet.</p>"
-    : book.quotes.map(q => `<p>"${q}"</p>`).join("");
-
-  const notes = book.notes?.trim();
-  document.getElementById("openBookNotes").textContent = notes || "No notes yet.";
-
-
-}
-
-document.getElementById("openBookClose").addEventListener("click", () => {
-  clearTheme();
-  openBookModalEl.style.display = "none";
-});
 
 // ─── ADD BOOK MODAL ───────────────────────────────────────────────────────────
 document.querySelector(".add-btn").addEventListener("click", () => {
