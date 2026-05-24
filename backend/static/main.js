@@ -25,7 +25,7 @@ import {
   showProgressInput
 } from "./streak_helper/progressPopup.js";
 import { getBooks } from "./modal_helper/getBooks.js";
-import { saveBookHandler } from "./handlers/saveBook.js";
+import { saveBookHandler } from "./integration_handlers/saveBook.js";
 // Example usage inside main
 // #region agent log
 fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
