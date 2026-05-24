@@ -19,7 +19,12 @@ export async function openBookModal(book) {
 
 
 }
-
+window.addEventListener("click", (event) => {
+    if (event.target === openBookModalEl) {
+       openBookModalEl.style.display = "none";
+       clearTheme();
+    }
+ });
 document.getElementById("openBookClose").addEventListener("click", () => {
   clearTheme();
   openBookModalEl.style.display = "none";

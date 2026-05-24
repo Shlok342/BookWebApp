@@ -237,10 +237,7 @@ window.addEventListener("click", (event) => {
     store.activeBookId = null;
     clearTheme();
   }
-  if (event.target === openBookModalEl) {
-    openBookModalEl.style.display = "none";
-    clearTheme();
-  }
+  
 });
 
 // ─── ADD BOOK ─────────────────────────────────────────────────────────────────
