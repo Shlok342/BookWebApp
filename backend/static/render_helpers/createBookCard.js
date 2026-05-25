@@ -1,5 +1,5 @@
 import { API } from "./api_service/api.js";
-import { showDeleteConfirm } from "./frontend_helpers/show_delete_popup.js";
+
 import { TOAST } from './shows_message/toast.js';
 import {getProgressColor } from "../theme.js";
 import { openNotesModal} from "../modal_helper/notesModal.js";
