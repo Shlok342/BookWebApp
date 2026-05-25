@@ -216,6 +216,7 @@ initQuotesModal();
 initNotesModal();
 
 // ─── ADD BOOK MODAL ───────────────────────────────────────────────────────────
+export const addBookModal = document.getElementById("addBookModal")
 document.querySelector(".add-btn").addEventListener("click", () => {
   addBookModal.style.display = "block";
 });
