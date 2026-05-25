@@ -4,7 +4,6 @@ import { showDeleteConfirm } from "./frontend_helpers/show_delete_popup.js";
 import { TOAST } from './shows_message/toast.js';
 import { applyFilters } from "./filters.js";
 import { store } from "./store.js";
-import { closeModal } from "./close.js";
 import { initThemeToggle, applyThemeFromCover, clearTheme, getProgressColor } from "./theme.js";
 import { scheduleMidnightCheck, getGlobalStreak } from "./streak_helper/streak_helper.js";
 import {

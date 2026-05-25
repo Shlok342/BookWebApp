@@ -3,6 +3,7 @@ import { API } from "../api_service/api.js";
 import { getBooks } from "../modal_helper/getBooks.js";
 import { getStats } from "../modal_helper/statsModal.js";
 import { addBookModal } from "../main.js";
+import { closeModal } from "../close.js";
 export async function saveBookHandler(){
         const totalPages = parseInt(document.getElementById("totalPagesInput").value);
         const currentPage = parseInt(document.getElementById("currentPageInput").value) || 0;
