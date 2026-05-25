@@ -1,6 +1,6 @@
-import { API } from "./api_service/api.js";
+import { API } from "../api_service/api.js";
 
-import { TOAST } from './shows_message/toast.js';
+import { TOAST } from '../shows_message/toast.js';
 import {getProgressColor } from "../theme.js";
 import { openNotesModal} from "../modal_helper/notesModal.js";
 import { openBookModal} from "../integration_handler/open_book.js";
