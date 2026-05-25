@@ -2,16 +2,14 @@ import { TOAST } from "../shows_message/toast.js";
 import { API } from "../api_service/api.js";
 import { getBooks } from "../modal_helper/getBooks.js";
 import { getStats } from "../modal_helper/statsModal.js";
-
-const totalPages = parseInt(document.getElementById("totalPagesInput").value);
-const currentPage = parseInt(document.getElementById("currentPageInput").value) || 0;
-const genre = document.getElementById("genreInput").value;
-const title = document.getElementById("titleInput").value.trim();
-const author = document.getElementById("authorInput").value.trim();
-const cover = document.getElementById("coverInput").value.trim();
 import { addBookModal } from "../main.js";
 export async function saveBookHandler(){
-         
+        const totalPages = parseInt(document.getElementById("totalPagesInput").value);
+        const currentPage = parseInt(document.getElementById("currentPageInput").value) || 0;
+        const genre = document.getElementById("genreInput").value;
+        const title = document.getElementById("titleInput").value.trim();
+        const author = document.getElementById("authorInput").value.trim();
+        const cover = document.getElementById("coverInput").value.trim();
         
         console.log("COVER INPUT:", cover);
         
