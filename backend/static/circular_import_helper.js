@@ -1,0 +1,1 @@
+export const addBookModal = document.getElementById("addBookModal")

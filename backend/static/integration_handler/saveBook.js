@@ -2,7 +2,7 @@ import { TOAST } from "../shows_message/toast.js";
 import { API } from "../api_service/api.js";
 import { getBooks } from "../modal_helper/getBooks.js";
 import { getStats } from "../modal_helper/statsModal.js";
-import { addBookModal } from "../main.js";
+import { addBookModal } from "../circular_import_helper.js";
 import { closeModal } from "../close.js";
 export async function saveBookHandler(){
         const totalPages = parseInt(document.getElementById("totalPagesInput").value);

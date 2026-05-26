@@ -13,6 +13,7 @@ import { getBooks } from "./modal_helper/getBooks.js";
 import { saveBookHandler } from "./integration_handler/saveBook.js";
 import { updateLibraryStats} from "./render_helpers/updateLibraryStats.js";
 import { createBookCard } from "./render_helpers/createBookCard.js";
+import { addBookModal } from "./circular_import_helper.js";
 store.books = [];
 store.activeBookId = null;
 store.lastKnownGlobalStreak = 0;
@@ -43,7 +44,7 @@ initQuotesModal();
 initNotesModal();
 
 // ─── ADD BOOK MODAL ───────────────────────────────────────────────────────────
-export const addBookModal = document.getElementById("addBookModal")
+
 document.querySelector(".add-btn").addEventListener("click", () => {
   addBookModal.style.display = "block";
 });
