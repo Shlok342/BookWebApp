@@ -56,17 +56,17 @@ def home():
 #─── GET ALL BOOKS ───────────────────────────────────────────────────────────
 @app.get("/books")
 def modularized_get_books():
-    get_books()
+    return get_books()
 
 @app.post("/books")
 def modularized_add_book():
-    add_book()
+    return add_book()
 
 # ─── GET SINGLE BOOK ─────────────────────────────────────────────────────────
 
 @app.patch("/books/{book_id}")
 def modularized_update_progress():
-    update_progress()
+    return update_progress()
         
 
 # ─── GET GLOBAL STREAK ───────────────────────────────────────────────────────
