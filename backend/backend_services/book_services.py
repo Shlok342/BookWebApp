@@ -4,7 +4,7 @@ import time
 from datetime import date
 from pathlib import Path
 from fastapi import HTTPException
-from backend.database import get_connection
+from backend.db.connection import get_connection
 from psycopg2.extras import RealDictCursor
 
 _AGENT_LOG_PATH = Path(__file__).resolve().parent.parent.parent / "debug-f3a808.log"

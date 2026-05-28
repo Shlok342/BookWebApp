@@ -1,4 +1,4 @@
-from backend.get_books_connection_db.get_books import get_connection
+from backend.db.connection import get_connection
 def init_db():
     with get_connection() as conn:
         with conn.cursor() as cursor:

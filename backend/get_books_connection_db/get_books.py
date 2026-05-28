@@ -1,11 +1,10 @@
-import os 
-from psycopg2 import connect
+from backend.db.connection import get_db
 import json
 from pathlib import Path
 from dotenv import load_dotenv
-from contextlib import contextmanager
 from psycopg2.extras import RealDictCursor
 from pydantic import BaseModel
+
 class PageUpdate(BaseModel):
     current_page: int
 class Book(BaseModel):
@@ -15,18 +14,11 @@ class Book(BaseModel):
     current_page: int = 0
     genre: str = ""
     cover_url: str = ""
-from backend.backend_services.book_services import update_progress_service
+def update_progress(book_id: int, update: PageUpdate):
+    from backend.backend_services.book_services import update_progress_service
+    return update_progress_service(book_id, update)
 # Load env
 load_dotenv(dotenv_path=Path(__file__).with_name(".env"))
-def get_connection():
-    return connect(os.getenv("DATABASE_URL"))
-@contextmanager
-def get_db():
-    conn = get_connection()
-    try:
-        yield conn
-    finally:
-        conn.close()
 
 def row_to_book(row):
     return {
@@ -80,4 +72,4 @@ def add_book(book: Book):
             raise
     print(book)
 def update_progress(book_id: int, update: PageUpdate):
-    return update_progress_service(book_id, update)
+    return update_progress(book_id, update)
