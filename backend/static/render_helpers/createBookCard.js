@@ -6,8 +6,12 @@ import { openNotesModal} from "../modal_helper/notesModal.js";
 import { openBookModal} from "../integration_handler/open_book.js";
 import { openQuotesModal} from "../modal_helper/quotesModal.js";
 import { showDeleteConfirm } from "../frontend_helpers/show_delete_popup.js";
+import { renderTagOptions } from "../modal_helper/tagsModal.js";
+import {showProgressInput} from "../streak_helper/progressPopup.js"
+import { getStats} from "../modal_helper/statsModal.js";
+import { getBooks } from "../modal_helper/getBooks.js";
 export function createBookCard(book){
-    
+
         const currentPage = Number(book.current_page) || 0;
         const totalPages = Number(book.total_pages) || 0;
         const progress = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
@@ -107,6 +111,7 @@ export function createBookCard(book){
           store.selectedTags = [...(book.tags || [])];
     
           renderTagOptions();
+          const tagsModal = document.getElementById("tagsModal");
           tagsModal.style.display = "block";
         });
         // ── Quotes ──
