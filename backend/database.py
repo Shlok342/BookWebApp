@@ -1,14 +1,4 @@
-import os
-from pathlib import Path
-from dotenv import load_dotenv
-from psycopg2 import connect 
-
-# Load env
-load_dotenv(dotenv_path=Path(__file__).with_name(".env"))
-
-def get_connection():
-    return connect(os.getenv("DATABASE_URL"))
-
+from backend.get_books_connection_db.get_books import get_connection
 def init_db():
     with get_connection() as conn:
         with conn.cursor() as cursor:

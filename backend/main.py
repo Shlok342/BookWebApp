@@ -3,10 +3,9 @@ import json
 import asyncio
 import urllib.request
 from pathlib import Path
-from contextlib import contextmanager
 from datetime import date
 from typing import List
-from dotenv import load_dotenv
+from webbrowser import get
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -14,14 +13,12 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from pathlib import Path
 from psycopg2.extras import RealDictCursor
-from backend.backend_services.book_services import update_progress_service
-
+from backend.database import init_db
+from backend.get_books_connection_db.get_books import get_db, get_books, add_book, update_progress
 BASE_DIR = Path(__file__).resolve().parent
-# Ensure environment variables are loaded from `backend/.env` regardless of CWD.
-load_dotenv(dotenv_path=Path(__file__).with_name(".env"))
 class PageUpdate(BaseModel):
     current_page: int
-from backend.database import init_db, get_connection
+
 app=FastAPI()
 app.mount("/static", StaticFiles(directory=BASE_DIR/"static"), name="static")
 init_db()
@@ -53,83 +50,23 @@ def favicon():
 @app.get("/")
 def home():
     return FileResponse(BASE_DIR / "static" / "index.html")
-class Book(BaseModel):
-    title: str
-    author: str = ""
-    total_pages: int
-    current_page: int = 0
-    genre: str = ""
-    cover_url: str = ""
-# ─── DB HELPER ───────────────────────────────────────────────────────────────
-@contextmanager
-def get_db():
-    conn = get_connection()
-    try:
-        yield conn
-    finally:
-        conn.close()
 
-def row_to_book(row):
-    return {
-        "id":             row["id"],
-        "title":          row["title"],
-        "author":         row.get("author") or "",
-        "total_pages":    row["total_pages"],
-        "current_page":   row["current_page"],
-        "quotes":         json.loads(row["quotes"]) if row.get("quotes") else [],
-        "notes":          row.get("notes") or "",
-        "last_read_date": str(row["last_read_date"]) if row.get("last_read_date") else None,
-        "streak_count":   row.get("streak_count") or 0,
-        "created_at":     str(row["created_at"]) if row.get("created_at") else None,
-        "genre":          row.get("genre") or "",
-        "cover_url":      row.get("cover_url") or "",
-        "tags" :  json.loads(row["tags"]) if row.get("tags") else []
-   
 
-    }
 
-# ─── GET ALL BOOKS ───────────────────────────────────────────────────────────
+#─── GET ALL BOOKS ───────────────────────────────────────────────────────────
 @app.get("/books")
-def get_books():
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute(
-            "SELECT id, title, author, total_pages, current_page, quotes, notes, last_read_date, streak_count, created_at, genre,  cover_url, tags FROM books"
-        )
-        rows = cursor.fetchall()
-    return [row_to_book(row) for row in rows]
+def modularized_get_books():
+    get_books()
 
 @app.post("/books")
-def add_book(book: Book):
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
-        try:
-            cursor.execute(
-                """
-                INSERT INTO books (title, author, total_pages, current_page, genre, cover_url, tags)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-                """,
-                (
-                    book.title,
-                    book.author,
-                    book.total_pages,
-                    book.current_page,   # ✅ FIXED
-                    book.genre,
-                    book.cover_url,
-                    "[]"
-                )
-            )
-            conn.commit()
-        except Exception as e:
-            print("ERROR:", e)
-            raise
-    print(book)
+def modularized_add_book():
+    add_book()
 
 # ─── GET SINGLE BOOK ─────────────────────────────────────────────────────────
 
 @app.patch("/books/{book_id}")
-def update_progress(book_id: int, update: PageUpdate):
-    return update_progress_service(book_id, update)
+def modularized_update_progress():
+    update_progress()
         
 
 # ─── GET GLOBAL STREAK ───────────────────────────────────────────────────────
