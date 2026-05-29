@@ -16,11 +16,13 @@ from backend.db.connection import get_db
 from backend.schemas.schemas import TagsUpdate,QuotesUpdate, NotesUpdate
 from backend.routers.streak import router as streak_router
 from backend.routers.stats import router as stat_router 
+from backend.routers.book_update import router as books_router
 BASE_DIR = Path(__file__).resolve().parent
 
 app=FastAPI()
 app.include_router(stat_router)
 app.include_router(streak_router)
+app.include_router(books_router)
 app.mount("/static", StaticFiles(directory=BASE_DIR/"static"), name="static")
 init_db()
 
@@ -116,67 +118,6 @@ def get_challenges():
             }
         }    
 
-#─── UPDATE QUOTES ───────────────────────────────────────────────────────────
-
-
-
-@app.patch("/books/{book_id}/quotes")
-def update_quotes(book_id: int, update: QuotesUpdate):
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
-
-        cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
-        if not cursor.fetchone():
-            raise HTTPException(status_code=404, detail="Book not found")
-
-        cursor.execute(
-            "UPDATE books SET quotes = %s WHERE id = %s",
-            (json.dumps(update.quotes), book_id)
-        )
-        conn.commit()
-
-    return {"message": "Quotes updated"}
-
-
-# ─── UPDATE NOTES ────────────────────────────────────────────────────────────
-
-@app.patch("/books/{book_id}/notes")
-def update_notes(book_id: int, update: NotesUpdate):
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
-
-        cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
-        if not cursor.fetchone():
-            raise HTTPException(status_code=404, detail="Book not found")
-
-        cursor.execute(
-            "UPDATE books SET notes = %s WHERE id = %s",
-            (update.notes, book_id)
-        )
-        conn.commit()
-
-    return {"message": "Notes updated"}
-
-
-@app.patch("/books/{book_id}/tags")
-def update_tags(book_id: int, update: TagsUpdate):
-    with get_db() as conn:
-        cursor = conn.cursor()
-
-        cursor.execute(
-            """
-            UPDATE books
-            SET tags = %s
-            WHERE id = %s
-            """,
-            (json.dumps(update.tags), book_id)
-        )
-
-        conn.commit()
-
-    return {"message": "Tags updated"}
-
-# ─── DELETE BOOK ─────────────────────────────────────────────────────────────
 @app.delete("/books/{book_id}")
 def delete_book(book_id: int):
     with get_db() as conn:
