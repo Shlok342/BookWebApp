@@ -4,9 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from psycopg2.extras import RealDictCursor
 from pydantic import BaseModel
-
-class PageUpdate(BaseModel):
-    current_page: int
+from backend.schemas.schemas import PageUpdate
 class Book(BaseModel):
     title: str
     author: str = ""
