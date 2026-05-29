@@ -1,4 +1,4 @@
-from backend.database import get_db
+from backend.db.connection import get_db
 from psycopg2.extras import RealDictCursor
 def get_stats_data():
     MIN_PAGES_FOR_STREAK = 2
