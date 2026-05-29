@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from psycopg2.extras import RealDictCursor
 from pydantic import BaseModel
 from backend.schemas.schemas import PageUpdate
+from fastapi import HTTPException
 class Book(BaseModel):
     title: str
     author: str = ""
@@ -69,5 +70,17 @@ def add_book(book: Book):
             print("ERROR:", e)
             raise
     print(book)
+def delete_books(book_id: int):
+    with get_db() as conn:
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+        cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
+        if not cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Book not found")
+
+        cursor.execute("DELETE FROM books WHERE id = %s", (book_id,))
+        conn.commit()
+
+    return {"message": "Book deleted"}
 def update_progress(book_id: int, update: PageUpdate):
     return update_progress(book_id, update)

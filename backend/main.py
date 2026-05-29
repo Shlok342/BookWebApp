@@ -4,16 +4,15 @@ import asyncio
 import urllib.request
 from pathlib import Path
 from datetime import date
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from psycopg2.extras import RealDictCursor
 from backend.database import init_db
-from backend.db.get_books import get_books, add_book, update_progress
+from backend.routers.delete_add_get_books import router as core_book_functionality
 from backend.db.connection import get_db
-from backend.schemas.schemas import TagsUpdate,QuotesUpdate, NotesUpdate
 from backend.routers.streak import router as streak_router
 from backend.routers.stats import router as stat_router 
 from backend.routers.book_update import router as books_router
@@ -23,6 +22,7 @@ app=FastAPI()
 app.include_router(stat_router)
 app.include_router(streak_router)
 app.include_router(books_router)
+app.include_router(core_book_functionality)
 app.mount("/static", StaticFiles(directory=BASE_DIR/"static"), name="static")
 init_db()
 
@@ -53,24 +53,6 @@ def favicon():
 @app.get("/")
 def home():
     return FileResponse(BASE_DIR / "static" / "index.html")
-
-
-
-#─── GET ALL BOOKS ───────────────────────────────────────────────────────────
-@app.get("/books")
-def modularized_get_books():
-    return get_books()
-
-@app.post("/books")
-def modularized_add_book():
-    return add_book()
-
-# ─── GET SINGLE BOOK ─────────────────────────────────────────────────────────
-
-@app.patch("/books/{book_id}")
-def modularized_update_progress():
-    return update_progress()
-        
 
 # ─── GET GLOBAL STREAK ───────────────────────────────────────────────────────
 @app.get("/challenges")
@@ -116,21 +98,7 @@ def get_challenges():
                 "progress": monthly_books,
                 "completed": monthly_books >= 2
             }
-        }    
-
-@app.delete("/books/{book_id}")
-def delete_book(book_id: int):
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
-
-        cursor.execute("SELECT id FROM books WHERE id = %s", (book_id,))
-        if not cursor.fetchone():
-            raise HTTPException(status_code=404, detail="Book not found")
-
-        cursor.execute("DELETE FROM books WHERE id = %s", (book_id,))
-        conn.commit()
-
-    return {"message": "Book deleted"}
+        }     
 @app.get("/quote")
 async def get_quote():
     def _fetch_quote():
