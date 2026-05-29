@@ -6,6 +6,7 @@ from psycopg2.extras import RealDictCursor
 from pydantic import BaseModel
 from backend.schemas.schemas import PageUpdate
 from fastapi import HTTPException
+from backend.schemas.schemas import Book
 def update_progress(book_id: int, update: PageUpdate):
     from backend.backend_services.book_services import update_progress_service
     return update_progress_service(book_id, update)
