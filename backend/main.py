@@ -11,7 +11,8 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from psycopg2.extras import RealDictCursor
 from backend.database import init_db
-from backend.db.get_books import get_db, get_books, add_book, update_progress
+from backend.db.get_books import get_books, add_book, update_progress
+from backend.db.connection import get_db
 from backend.schemas.schemas import TagsUpdate,QuotesUpdate, NotesUpdate
 from backend.routers.streak import router as streak_router
 from backend.routers.stats import router as stat_router 
