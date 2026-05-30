@@ -6,13 +6,7 @@ from psycopg2.extras import RealDictCursor
 from pydantic import BaseModel
 from backend.schemas.schemas import PageUpdate
 from fastapi import HTTPException
-class Book(BaseModel):
-    title: str
-    author: str = ""
-    total_pages: int
-    current_page: int = 0
-    genre: str = ""
-    cover_url: str = ""
+from backend.schemas.schemas import Book
 def update_progress(book_id: int, update: PageUpdate):
     from backend.backend_services.book_services import update_progress_service
     return update_progress_service(book_id, update)
@@ -82,5 +76,3 @@ def delete_books(book_id: int):
         conn.commit()
 
     return {"message": "Book deleted"}
-def update_progress(book_id: int, update: PageUpdate):
-    return update_progress(book_id, update)
