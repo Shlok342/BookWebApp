@@ -51,8 +51,13 @@ export async function openNotesModal(book) {
     .textContent = countWords(existing);
 
   notesModal.style.display = "block";
+  const modalContent =
+  document.querySelector("#notesModal .modal-content");
+  
 
-  await applyThemeFromCover(book);
+  await applyThemeFromCover(book, modalContent);
+ 
+  
 }
 
 

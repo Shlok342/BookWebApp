@@ -4,7 +4,9 @@ export async function openBookModal(book) {
   document.getElementById("openBookTitle").textContent = book.title;
   document.getElementById("openBookAuthor").textContent = book.author ? `by ${book.author}` : "";
   openBookModalEl.style.display = "block";
-  await applyThemeFromCover(book);
+  const modalContent =
+  document.querySelector("#openBookModal .modal-content");
+  await applyThemeFromCover(book, modalContent);
   const current = book.current_page ?? 0;
   const total = book.total_pages ?? 0;
   document.getElementById("openBookProgress").textContent = `${current} / ${total} pages`;

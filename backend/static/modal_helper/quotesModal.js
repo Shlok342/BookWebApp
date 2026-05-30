@@ -29,8 +29,10 @@ export async function openQuotesModal(book) {
   renderQuotesList(book.quotes || []);
 
   quotesModal.style.display = "block";
+  const modalContent =
+  document.querySelector("#quotesModal .modal-content");
 
-  await applyThemeFromCover(book);
+  await applyThemeFromCover(book, modalContent);
 }
 
 

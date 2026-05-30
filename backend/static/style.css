@@ -972,9 +972,19 @@ body::after {
 }
 
 .tag-chip.active {
+  background: linear-gradient(
+    135deg,
+    #4c7d3b,
+    #5f8f4e
+  );
+
+  color: #fdfcf7;
+
+  border: 1px solid rgba(255,255,255,0.15);
+
   box-shadow:
-    0 0 12 px var(--custom-color),
-    0 0 24px var(--custom-color);
+    0 6px 18px rgba(76,125,59,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.15);
 
   transform: translateY(-2px);
 }
