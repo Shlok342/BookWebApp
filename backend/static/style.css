@@ -222,6 +222,15 @@ body::after {
   position: relative;
   z-index: 10;
 }
+.nav-right {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.tagline-pill {
+  margin-left:auto;
+}
 
 /* 1. The Base Badge */
 .global-streak-badge {

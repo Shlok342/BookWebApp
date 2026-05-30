@@ -115,47 +115,50 @@ export function initNotesModal() {
 
   // SAVE NOTES
   document
-    .getElementById("saveNotesBtn")
-    .addEventListener("click", async () => {
+  .getElementById("saveNotesBtn")
+  .addEventListener("click", async () => {
 
-      const notes =
-        document.getElementById("notesInput")
-          .value
-          .trim();
+    const saveNotesBtn =
+      document.getElementById("saveNotesBtn");
 
+    const notes =
+      document.getElementById("notesInput")
+        .value
+        .trim();
 
+    if (!store.activeBookId) return;
 
-      if (!store.activeBookId) return;
+    saveNotesBtn.disabled = true;
+    saveNotesBtn.textContent = "Saving...";
 
+    try {
 
+      await API.updateNotes(
+        store.activeBookId,
+        notes
+      );
 
-      try {
+      notesModal.style.display = "none";
 
-        await API.updateNotes(
-          store.activeBookId,
-          notes
-        );
+      store.activeBookId = null;
 
+      await getBooks();
 
+    } catch (err) {
 
-        notesModal.style.display = "none";
+      console.error(
+        "Failed to save notes:",
+        err
+      );
 
-        store.activeBookId = null;
+      TOAST.showToast(
+        "Could not save notes. Is the server running?"
+      );
 
+    } finally {
 
+      saveNotesBtn.disabled = false;
+      saveNotesBtn.textContent = "Save Notes";
 
-        await getBooks();
-
-      } catch (err) {
-
-        console.error(
-          "Failed to save notes:",
-          err
-        );
-
-        TOAST.showToast(
-          "Could not save notes. Is the server running?"
-        );
-      }
-    });
-}
+    }
+});}

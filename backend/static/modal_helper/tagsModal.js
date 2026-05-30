@@ -79,24 +79,38 @@ const tagsModal = document.getElementById("tagsModal");
   
     // ─── SAVE TAGS ────────────────────────────────────────────────────────────
     document.getElementById("saveTagsBtn").onclick = async () => {
-  
+
+      const saveTagsBtn =
+        document.getElementById("saveTagsBtn");
+    
       if (!store.activeBookId) return;
-  
+    
+      saveTagsBtn.disabled = true;
+      saveTagsBtn.textContent = "Saving...";
+    
       try {
-  
+    
         await API.updateTags(
           store.activeBookId,
           store.selectedTags
         );
-  
+    
         closeModal(tagsModal);
-  
+    
         await getBooks();
-  
+    
       } catch (err) {
-  
-        console.error("Failed to save tags:", err);
-  
+    
+        console.error(
+          "Failed to save tags:",
+          err
+        );
+    
+      } finally {
+    
+        saveTagsBtn.disabled = false;
+        saveTagsBtn.textContent = "Save Tags";
+    
       }
     };
   

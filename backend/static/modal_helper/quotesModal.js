@@ -88,7 +88,8 @@ export function initQuotesModal() {
   document
     .getElementById("addQuoteBtn")
     .addEventListener("click", async () => {
-
+      const addQuoteBtn =
+      document.getElementById("addQuoteBtn");
       const text =
         document.getElementById("quoteInput")
           .value
@@ -117,7 +118,8 @@ export function initQuotesModal() {
       // ADD NEW QUOTE
       quotes.push(text);
 
-
+      addQuoteBtn.disabled = true;
+      addQuoteBtn.textContent = "Saving...";
 
       try {
 
@@ -127,7 +129,7 @@ export function initQuotesModal() {
         );
 
 
-
+        
         // STREAK TOAST
         if (data.streak_count > 1) {
           TOAST.showToast(
@@ -167,5 +169,10 @@ export function initQuotesModal() {
           "Could not save quote."
         );
       }
+       finally{
+        
+        addQuoteBtn.textContent = "Save Quote";
+        addQuoteBtn.disabled = false;
+       }
     });
 }
