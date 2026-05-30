@@ -1,13 +1,8 @@
 export async function applyThemeFromCover(book, modal) {
-  if (!modal) return;
-
-  if (typeof Vibrant === "undefined") {
-    console.error("Vibrant not loaded");
-    return;
-  }
+  if (!modal || typeof Vibrant === "undefined") return;
 
   try {
-    if (!book.cover_url?.trim()) return;
+    if (!book.cover_url?.trim()) throw new Error("No cover");
 
     const img = new Image();
     img.crossOrigin = "Anonymous";
@@ -15,55 +10,83 @@ export async function applyThemeFromCover(book, modal) {
 
     await new Promise((resolve, reject) => {
       img.onload = resolve;
-      img.onerror = () => reject(new Error("Image load failed"));
+      img.onerror = reject;
     });
 
     const palette = await Vibrant.from(img).getPalette();
 
-    const accent =
+    const vibrant =
       palette.Vibrant?.hex ||
-      palette.DarkVibrant?.hex ||
-      palette.Muted?.hex ||
       palette.LightVibrant?.hex ||
       "#ffcc00";
 
-    const textAccent =
+    const dark =
+      palette.DarkVibrant?.hex ||
+      palette.DarkMuted?.hex ||
+      vibrant;
+
+    const light =
       palette.LightVibrant?.hex ||
+      palette.LightMuted?.hex ||
       "#ffffff";
 
-    modal.style.background =
-      `radial-gradient(circle at top left,
-      color-mix(in srgb, ${accent} 15%, #1f1f22),
-      #09090b)`;
+    const muted =
+      palette.Muted?.hex ||
+      vibrant;
 
-    modal.style.border =
-      `1px solid color-mix(in srgb, ${accent} 25%, transparent)`;
+    console.log(book.title, {
+      vibrant,
+      dark,
+      light,
+      muted
+    });
+    console.log(book.title, palette);
 
-    modal.style.boxShadow =
-      `0 15px 35px -10px color-mix(in srgb, ${accent} 30%, transparent),
-       0 5px 15px rgba(0,0,0,0.5)`;
+    // Cover colour dominates now
+    modal.style.background = `
+      radial-gradient(
+        circle at top left,
+        color-mix(in srgb, ${vibrant} 85%, white),
+        color-mix(in srgb, ${dark} 80%, black)
+      )
+    `;
+
+    modal.style.border = `
+      2px solid ${light}
+    `;
+
+    modal.style.boxShadow = `
+      0 20px 50px -10px
+      color-mix(in srgb, ${vibrant} 70%, transparent)
+    `;
 
     modal.style.color = "#ffffff";
 
-    modal.querySelectorAll("h1, h2, h3, h4").forEach(heading => {
-      heading.style.color = textAccent;
+    modal.querySelectorAll("h1,h2,h3,h4").forEach(h => {
+      h.style.color = light;
+      h.style.textShadow = `
+        0 0 12px
+        color-mix(in srgb, ${light} 40%, transparent)
+      `;
     });
 
     modal.querySelectorAll("button").forEach(btn => {
-      btn.style.background = accent;
-      btn.style.color = "#000";
-      btn.style.border = "none";
-      btn.style.fontWeight = "bold";
+      btn.style.background = vibrant;
+      btn.style.color = "#ffffff";
+      btn.style.border = `1px solid ${light}`;
+      btn.style.fontWeight = "600";
 
-      btn.style.boxShadow =
-        `0 4px 15px -3px color-mix(in srgb, ${accent} 60%, transparent)`;
+      btn.style.boxShadow = `
+        0 8px 20px
+        color-mix(in srgb, ${vibrant} 60%, transparent)
+      `;
     });
 
   } catch (err) {
-    console.warn("Theme failed, fallback used:", err);
-
+    console.warn("Theme failed:", err);
+    
     modal.style.background =
-      "radial-gradient(circle at top left, #1f2937, #111827)";
+      "linear-gradient(135deg, #1f2937, #111827)";
 
     modal.style.border =
       "1px solid #374151";
@@ -71,7 +94,10 @@ export async function applyThemeFromCover(book, modal) {
     modal.style.color =
       "#ffffff";
 
-    modal.style.boxShadow = "";
+    modal.querySelectorAll("h1,h2,h3,h4").forEach(h => {
+      h.style.color = "";
+      h.style.textShadow = "";
+    });
 
     modal.querySelectorAll("button").forEach(btn => {
       btn.style.background = "";
