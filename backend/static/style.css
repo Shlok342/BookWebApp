@@ -951,21 +951,32 @@ body::after {
   backdrop-filter: blur(4px);
 }
 
-.tag:hover {
-  transform: translateY(-1px);
-  transition: 0.18s ease;
-}
-
 .tag-chip {
   padding: 7px 12px;
   border-radius: 16px;
+  background: var(--custom-color, #ddd);
   cursor: pointer;
-  transition: 0.2s ease;
+  color: #2d3436;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.25s ease;
+}
+
+.tag-chip:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 16px var(--custom-color),
+    0 0 32px var(--custom-color);
 }
 
 .tag-chip.active {
-  background: #2e7d32;
-  color: white;
+  box-shadow:
+    0 0 12 px var(--custom-color),
+    0 0 24px var(--custom-color);
+
+  transform: translateY(-2px);
 }
 
 .tag-chip {
@@ -974,22 +985,6 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.tag-chip {
-  padding: 7px 12px;
-  border-radius: 16px;
-  /* Use the custom color, fallback to light grey if it misses */
-  background: var(--custom-color, #ddd);
-  cursor: pointer;
-  transition: 0.2s ease;
-  color: #2d3436;
-  /* Dark text so it's readable on bright colors */
-}
-
-/* Fix the hover selector name too! */
-.tag-chip:hover {
-  transform: translateY(-1px);
 }
 
 #tagsContainer {
