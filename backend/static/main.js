@@ -116,5 +116,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("sortOption")
     .addEventListener("change", applyFilters);
+  
+  document
+    .getElementById("genreFilter")
+    .addEventListener("change", applyFilters);
 
 });

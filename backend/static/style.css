@@ -1973,145 +1973,198 @@ footer {
   backdrop-filter: blur(12px);
 }
 
-/* Quote of the Day Button */
-.quote-btn {
-  /* Layout & Spacing */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  /* Spaces the emoji and text perfectly */
-  padding: 10px 22px;
-  /* Generous padding for a modern, clickable look */
-
-  /* Typography */
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  /* Semi-bold makes it pop without looking heavy */
-  color: #ffffff;
-
-  /* Styling & Aesthetics */
-  background: linear-gradient(135deg, #dfc05d, #b3953b);
-  /* Rich, smooth gold gradient */
-  border: none;
-  border-radius: 14px;
-  /* Clean, rounded corners to match modern UI */
-  cursor: pointer;
-
-  /* Depth & Shadows */
-  box-shadow: 0 4px 14px rgba(179, 149, 59, 0.3);
-
-  /* Smooth transition for animations */
-  transition: all 0.25s ease;
-}
-
-/* Hover State (When you mouse over it) */
-.quote-btn:hover {
-  transform: translateY(-2px);
-  /* Subtle lift effect */
-  box-shadow: 0 6px 20px rgba(179, 149, 59, 0.45);
-  /* Shadow expands as it lifts */
-  background: linear-gradient(135deg, #e9cb6e, #c2a345);
-  /* Slightly brighter gold */
-}
-
-/* Active State (When you click it) */
-.quote-btn:active {
-  transform: translateY(0);
-  /* Pushes back down on click */
-  box-shadow: 0 3px 10px rgba(179, 149, 59, 0.3);
-}
-
-/* Quote Modal Inner */
-#quoteModalContent {
-  text-align: center;
-  padding: 42px 36px;
-
-  background: linear-gradient(145deg, #fdf6e8, #f3e7d2);
-  border-radius: 20px;
-
-  box-shadow:
-    0 20px 60px rgba(60, 40, 10, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-
-  position: relative;
-  overflow: hidden;
-}
-
-#quoteModalContent::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at top right, rgba(255, 220, 150, 0.25), transparent 60%);
-  pointer-events: none;
-}
-
-.quote-day-label {
-  font-size: 0.75rem;
-  letter-spacing: 2px;
-  color: var(--sage) !important;
-  opacity: 0.85;
-}
-
-.quote-day-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  font-style: italic;
-  line-height: 1.8;
-
-  color: var(--bark) !important;
-
-  margin: 20px 0;
-
-  position: relative;
-  padding: 0 10px;
-}
-
-.quote-day-text::before {
-  content: "“";
-  position: absolute;
-  left: -10px;
-  top: -20px;
-  font-size: 3rem;
-  color: rgba(180, 140, 80, 0.25);
-}
-
-.quote-day-text::after {
-  content: "”";
-  position: absolute;
-  right: -10px;
-  bottom: -25px;
-  font-size: 3rem;
-  color: rgba(180, 140, 80, 0.25);
-}
-
-.quote-day-author {
-  font-size: 0.95rem;
-  color: #7a6a55 !important;
-
-  font-family: 'DM Sans', sans-serif;
-  letter-spacing: 0.05em;
-
-  opacity: 0.85;
-}
-
-@keyframes quoteFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
+/* ========================================================
+   Botanical Library Theme - Variables
+   ======================================================== */
+   :root {
+    --forest-base: #1b2e23;       /* Deep, rich forest green */
+    --forest-dark: #0f1c15;       /* Shadowy green for backgrounds */
+    --parchment: #f5f1e7;         /* Cozy, warm off-white for text */
+    --brass-accent: #c1a675;      /* Professional gold/brass for borders & accents */
+    --leaf-highlight: #2c4a38;    /* Lighter green for hover states */
   }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  
+  /* ========================================================
+     Quote Button (Uses specific class, safe)
+     ======================================================== */
+  .quote-btn {
+    background-color: var(--forest-base);
+    color: var(--parchment);
+    border: 1px solid var(--brass-accent);
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(15, 28, 21, 0.4);
   }
-}
-
-#quoteModalContent {
-  animation: quoteFadeIn 0.4s ease;
-}
-
+  
+  .quote-btn:hover {
+    background-color: var(--leaf-highlight);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(15, 28, 21, 0.6);
+  }
+  
+  /* ========================================================
+     Modal Background (Scoped to #quoteModal)
+     ======================================================== */
+  #quoteModal.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 28, 21, 0.85); 
+    backdrop-filter: blur(4px); 
+    overflow: auto;
+  }
+  
+  /* ========================================================
+     Modal Content Box (Scoped to #quoteModal)
+     ======================================================== */
+  #quoteModal .modal-content {
+    background-color: var(--forest-base);
+    color: var(--parchment);
+    margin: 10% auto;
+    padding: 40px 50px;
+    border: 2px solid var(--brass-accent);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    background-image: radial-gradient(circle at top left, #233b2d 0%, var(--forest-base) 60%, var(--forest-dark) 100%);
+    animation: modalFadeIn 0.4s ease-out forwards;
+  }
+  
+  /* Elegant CSS-only Vine/Leaf Corner Accents (Scoped to #quoteModal) */
+  #quoteModal .modal-content::before,
+  #quoteModal .modal-content::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c1a675' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22c4-4 8-9 8-14a8 8 0 1 0-16 0c0 5 4 10 8 14z'/%3E%3Cpath d='M12 22V10'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.15; 
+    pointer-events: none;
+  }
+  
+  #quoteModal .modal-content::before {
+    top: 15px;
+    left: 15px;
+    transform: rotate(-45deg);
+  }
+  
+  #quoteModal .modal-content::after {
+    bottom: 15px;
+    right: 15px;
+    transform: rotate(135deg);
+  }
+  
+  /* ========================================================
+     Close Button (Scoped to #quoteModal)
+     ======================================================== */
+  #quoteModal .close {
+    color: var(--brass-accent);
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: normal;
+    transition: color 0.2s ease, transform 0.2s ease;
+    line-height: 1;
+  }
+  
+  #quoteModal .close:hover,
+  #quoteModal .close:focus {
+    color: var(--parchment);
+    text-decoration: none;
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+  
+  /* ========================================================
+     Typography & Inner Content (Scoped to #quoteModal)
+     ======================================================== */
+  #quoteModal .quote-modal-inner {
+    text-align: center;
+    position: relative;
+    z-index: 2; 
+  }
+  
+  #quoteModal .quote-day-label {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+    color: var(--brass-accent);
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(193, 166, 117, 0.3);
+    padding-bottom: 10px;
+    display: inline-block;
+  }
+  
+  #quoteModal .quote-day-text {
+    font-family: 'Georgia', 'Playfair Display', serif; 
+    font-size: 1.6rem;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 20px 0;
+    color: var(--parchment);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+  
+  #quoteModal .quote-day-text::before {
+    content: "“";
+    color: var(--brass-accent);
+    font-size: 2.5rem;
+    line-height: 0;
+    vertical-align: bottom;
+    margin-right: 5px;
+    opacity: 0.7;
+  }
+  
+  #quoteModal .quote-day-text::after {
+    content: "”";
+    color: var(--brass-accent);
+    font-size: 2.5rem;
+    line-height: 0;
+    vertical-align: bottom;
+    margin-left: 5px;
+    opacity: 0.7;
+  }
+  
+  #quoteModal .quote-day-author {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--brass-accent);
+    margin-top: 15px;
+  }
+  
+  #quoteModal .quote-day-author::before {
+    content: "— ";
+  }
+  
+  /* ========================================================
+     Animations
+     ======================================================== */
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 /* ── Midnight Woods Dark Mode 🦇✨ ─────────────────────── */
 body.dark-theme {
   /* Swapping out the sun for the moon! */
