@@ -30,7 +30,7 @@ export function createBookMeta(book) {
     const streakCount = book.streak_count ?? 0;
 
     if (streakCount > 0) {
-        streakBadge.textContent = '🌱 Nurtured for ${streakCount} days';
+        streakBadge.textContent = `🌱 Nurtured for ${streakCount} days`;
     } else {
         streakBadge.textContent = "Start your streak today";
         streakBadge.classList.add("streak-badge--cold");
