@@ -29,6 +29,7 @@ export function renderBooks(filteredBooks = store.books) {
   filteredBooks.forEach(book => {
     const card = createBookCard(book);
     container.appendChild(card);
+    console.log(store.books[0]); 
   });
 }
 

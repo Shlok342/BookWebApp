@@ -12,7 +12,7 @@ export function applyFilters() {
     const matchesGenre =
     !genreValue ||
     (book.genre || "").toLowerCase() === genreValue.toLowerCase();
-
+    
     let status = "not-started";
     if (book.current_page === 0) status = "not-started";
     else if (book.current_page === book.total_pages) status = "completed";

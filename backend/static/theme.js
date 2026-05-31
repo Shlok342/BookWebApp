@@ -2,100 +2,118 @@ export async function applyThemeFromCover(book, modal) {
   if (!modal || typeof Vibrant === "undefined") return;
 
   try {
-    if (!book.cover_url?.trim()) throw new Error("No cover");
+    if (!book.cover_url?.trim()) {
+      throw new Error("No cover URL");
+    }
 
     const img = new Image();
     img.crossOrigin = "Anonymous";
-    img.src = book.cover_url;
 
     await new Promise((resolve, reject) => {
       img.onload = resolve;
       img.onerror = reject;
+      img.src = book.cover_url;
     });
 
     const palette = await Vibrant.from(img).getPalette();
 
-    const vibrant =
+    const accent =
       palette.Vibrant?.hex ||
       palette.LightVibrant?.hex ||
-      "#ffcc00";
+      palette.Muted?.hex ||
+      "#7c3aed";
 
-    const dark =
-      palette.DarkVibrant?.hex ||
+    const secondary =
+      palette.Muted?.hex ||
       palette.DarkMuted?.hex ||
-      vibrant;
+      accent;
 
-    const light =
+    const highlight =
       palette.LightVibrant?.hex ||
       palette.LightMuted?.hex ||
-      "#ffffff";
+      "#f8fafc";
 
-    const muted =
-      palette.Muted?.hex ||
-      vibrant;
+    const depth =
+      palette.DarkMuted?.hex ||
+      palette.DarkVibrant?.hex ||
+      "#111827";
 
-    console.log(book.title, {
-      vibrant,
-      dark,
-      light,
-      muted
+    console.log(`🎨 Theme palette for "${book.title}"`);
+    console.log({
+      accent,
+      secondary,
+      highlight,
+      depth
     });
-    console.log(book.title, palette);
 
-    // Cover colour dominates now
     modal.style.background = `
-      radial-gradient(
-        circle at top left,
-        color-mix(in srgb, ${vibrant} 85%, white),
-        color-mix(in srgb, ${dark} 80%, black)
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, ${depth} 75%, black),
+        color-mix(in srgb, ${secondary} 35%, ${depth})
       )
     `;
 
     modal.style.border = `
-      2px solid ${light}
+      1px solid
+      color-mix(in srgb, ${highlight} 35%, transparent)
     `;
 
     modal.style.boxShadow = `
-      0 20px 50px -10px
-      color-mix(in srgb, ${vibrant} 70%, transparent)
+      0 24px 60px -12px
+      color-mix(in srgb, ${accent} 25%, transparent)
     `;
 
     modal.style.color = "#ffffff";
 
-    modal.querySelectorAll("h1,h2,h3,h4").forEach(h => {
-      h.style.color = light;
-      h.style.textShadow = `
-        0 0 12px
-        color-mix(in srgb, ${light} 40%, transparent)
-      `;
+    modal.querySelectorAll(
+      "h1,h2,h3,h4,h5,h6"
+    ).forEach(h => {
+      h.style.color = highlight;
+      h.style.textShadow = "none";
+    });
+
+    modal.querySelectorAll(
+      "p,span,label,li,textarea,input"
+    ).forEach(el => {
+      el.style.color = "#ffffff";
     });
 
     modal.querySelectorAll("button").forEach(btn => {
-      btn.style.background = vibrant;
+      btn.style.background = accent;
       btn.style.color = "#ffffff";
-      btn.style.border = `1px solid ${light}`;
-      btn.style.fontWeight = "600";
+      btn.style.border = `
+        1px solid
+        color-mix(in srgb, ${highlight} 30%, transparent)
+      `;
 
       btn.style.boxShadow = `
-        0 8px 20px
-        color-mix(in srgb, ${vibrant} 60%, transparent)
+        0 8px 24px
+        color-mix(in srgb, ${accent} 30%, transparent)
       `;
+
+      btn.style.fontWeight = "600";
     });
 
   } catch (err) {
-    console.warn("Theme failed:", err);
-    
+    console.error(
+      `❌ Theme generation failed for "${book.title}"`,
+      err
+    );
+
     modal.style.background =
-      "linear-gradient(135deg, #1f2937, #111827)";
+      "linear-gradient(135deg, #1e293b, #0f172a)";
 
     modal.style.border =
-      "1px solid #374151";
+      "1px solid rgba(255,255,255,0.1)";
 
     modal.style.color =
       "#ffffff";
 
-    modal.querySelectorAll("h1,h2,h3,h4").forEach(h => {
-      h.style.color = "";
+    modal.querySelectorAll(
+      "h1,h2,h3,h4,h5,h6"
+    ).forEach(h => {
+      h.style.color = "#ffffff";
       h.style.textShadow = "";
     });
 

@@ -3,7 +3,6 @@ import { createProgressSection } from "./createProgressSection.js";
 import { createCardButtons } from "./createCardButtons.js";
 
 export function createBookCard(book) {
-
     const currentPage = Number(book.current_page) || 0;
     const totalPages = Number(book.total_pages) || 0;
 
