@@ -97,5 +97,14 @@ export const API = {
       const res = await fetch("/quote");
       if (!res.ok) throw new Error("Failed to fetch quote");
       return res.json();
+    },
+    async getHeatmap() {
+      const res = await fetch("/heatmap");
+  
+      if (!res.ok) {
+          throw new Error("Failed to fetch heatmap");
+      }
+  
+      return res.json();
     }
   };

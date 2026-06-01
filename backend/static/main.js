@@ -8,6 +8,7 @@ import { updateLibraryStats} from "./render_helpers/updateLibraryStats.js";
 import { createBookCard } from "./render_helpers/createBookCard.js";
 import { addBookModal } from "./circular_import_helper.js";
 import { initMain } from "./integration_handler/init.js";
+
 store.books = [];
 store.activeBookId = null;
 store.lastKnownGlobalStreak = 0;

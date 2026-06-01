@@ -12,8 +12,11 @@ from backend.routers.book_update import router as books_router
 from backend.routers.challenges import router as challenges_router
 from backend.routers.quotes import router as quote_router
 BASE_DIR = Path(__file__).resolve().parent
+from backend.routers.heatmap_router import router as heatmap_router
+
 
 app=FastAPI()
+app.include_router(heatmap_router)
 app.include_router(stat_router)
 app.include_router(streak_router)
 app.include_router(books_router)
