@@ -24,6 +24,9 @@
       </span>
     </div>
   <div class="nav-right">
+    <button id="activityBtn">
+      📅🌿 Reading Activity Heatmap
+    </button>
     <!-- The Magical Switch -->
     <button id="dark-mode-toggle" class="mood-ring-btn">🌙 Go Dark!</button>
     <span id="globalStreak" class="global-streak-badge global-streak-badge--cold">
@@ -32,7 +35,17 @@
     <!-- In  <header>, near streaks -->
   <button class="quote-btn" id="quoteBtn">✨ Quote of the Day</button>
  
+  <div id="activityModal" class="modal">
+    <div class="modal-content">
 
+        <span id="activityClose" class="close">&times;</span>
+
+        <h2>Reading Activity</h2>
+
+        <div id="heatmap-container"></div>
+
+    </div>
+  </div>
   <!-- New modal — add before </body> -->
   <div id="quoteModal" class="modal">
     <div class="modal-content" id="quoteModalContent">

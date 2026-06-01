@@ -1982,7 +1982,39 @@ footer {
 .modal-content {
   backdrop-filter: blur(12px);
 }
+#heatmap-container {
+  display: grid;
+  grid-template-columns: repeat(53, 12px);
+  gap: 3px;
 
+  margin-top: 1rem;
+}
+
+.heatmap-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.level-0 {
+  background: #ebedf0;
+}
+
+.level-1 {
+  background: #9be9a8;
+}
+
+.level-2 {
+  background: #40c463;
+}
+
+.level-3 {
+  background: #30a14e;
+}
+
+.level-4 {
+  background: #216e39;
+}
 /* ========================================================
    Botanical Library Theme - Variables
    ======================================================== */

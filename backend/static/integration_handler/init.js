@@ -6,12 +6,14 @@ import {initNotesModal} from "../modal_helper/notesModal.js";
 import {initQuoteOfDayModal} from "../shows_message/quoteOfTheDayModal.js";
 import { initThemeToggle,} from "../theme.js";
 import { scheduleMidnightCheck, getGlobalStreak } from "../streak_helper/streak_helper.js";
+import { initHeatmap} from "../heatmap/heatmap.js";
 export function initMain(){
     initThemeToggle();
     initQuoteOfDayModal();
     initQuotesModal();
 // ─── NOTES MODAL ──────────────────────────────────────────────────────────────
     initNotesModal();
+    
     getBooks();
     getChallenges();
     getStats();
