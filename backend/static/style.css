@@ -1982,6 +1982,43 @@ footer {
 .modal-content {
   backdrop-filter: blur(12px);
 }
+#activityBtn {
+  /* Layout & Alignment */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Gives the emojis room to breathe */
+  padding: 8px 18px; /* Creates that soft, touchable pill shape */
+  
+  /* Botanical Typography */
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #3b4a30; /* Deep, grounded olive green text */
+  
+  /* Cozy Aesthetics */
+  background-color: #fbfbf9; /* An incredibly soft, warm off-white */
+  border: 1px solid #dce3d6; /* A gentle sage-green outline */
+  border-radius: 999px; /* Matches the pill-shape of your other buttons */
+  
+  /* Soft Interaction */
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(75, 94, 64, 0.06); /* A slightly green-tinted shadow */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Gentle hover effect */
+#activityBtn:hover {
+  background-color: #f2f7ec; /* Shifts to a very pale sage on hover */
+  border-color: #c5d1bb;
+  transform: translateY(-1px); /* Slight floating effect */
+  box-shadow: 0 4px 8px rgba(75, 94, 64, 0.08);
+}
+
+/* Satisfying click effect */
+#activityBtn:active {
+  transform: translateY(1px); /* Presses into the page */
+  box-shadow: 0 1px 2px rgba(75, 94, 64, 0.04);
+}
 #heatmap-container {
   display: grid;
 
