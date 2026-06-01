@@ -2004,6 +2004,25 @@ footer {
 
   border-radius: 2px;
 }
+#heatmap-wrapper {
+  position: relative;
+}
+
+#heatmap-months {
+  position: relative;
+
+  height: 20px;
+
+  margin-bottom: 8px;
+}
+
+.month-label {
+  position: absolute;
+
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
 
 .level-0 {
   background: #d0d7de;

@@ -30,7 +30,7 @@ function renderHeatmap(days) {
     const startDate = new Date(today);
 
     startDate.setDate(today.getDate() - 364);
-
+    renderMonthLabels(startDate);
     const startDay = startDate.getDay();
 
     for (let i = startDay; i > 0; i--) {
@@ -55,6 +55,48 @@ function renderHeatmap(days) {
         const cell = createCell(dateString, pages);
     
         container.appendChild(cell);
+    }
+}
+function renderMonthLabels(startDate) {
+    const monthsContainer =
+        document.getElementById("heatmap-months");
+
+    monthsContainer.innerHTML = "";
+
+    const CELL_SIZE = 12;
+    const GAP_SIZE = 3;
+    const COLUMN_WIDTH = CELL_SIZE + GAP_SIZE;
+
+    let previousMonth = -1;
+
+    for (let i = 0; i <= 364; i++) {
+        const current = new Date(startDate);
+
+        current.setDate(startDate.getDate() + i);
+
+        const month = current.getMonth();
+
+        if (month !== previousMonth) {
+            previousMonth = month;
+
+            const weekIndex = Math.floor(i / 7);
+
+            const label =
+                document.createElement("div");
+
+            label.classList.add("month-label");
+
+            label.textContent =
+                current.toLocaleString(
+                    "default",
+                    { month: "short" }
+                );
+
+            label.style.left =
+                `${weekIndex * COLUMN_WIDTH}px`;
+
+            monthsContainer.appendChild(label);
+        }
     }
 }
 function createCell(date, pages) {
