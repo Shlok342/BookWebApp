@@ -1984,7 +1984,13 @@ footer {
 }
 #heatmap-container {
   display: grid;
-  grid-template-columns: repeat(53, 12px);
+
+  grid-template-rows: repeat(7, 12px);
+
+  grid-auto-flow: column;
+
+  grid-auto-columns: 12px;
+
   gap: 3px;
 
   margin-top: 1rem;
@@ -1993,13 +1999,15 @@ footer {
 .heatmap-cell {
   width: 12px;
   height: 12px;
+  
+  border: 1px solid rgba(0,0,0,0.08);
+
   border-radius: 2px;
 }
 
 .level-0 {
-  background: #ebedf0;
+  background: #d0d7de;
 }
-
 .level-1 {
   background: #9be9a8;
 }

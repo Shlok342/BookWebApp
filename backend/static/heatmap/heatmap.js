@@ -27,17 +27,33 @@ function renderHeatmap(days) {
 
     const today = new Date();
 
+    const startDate = new Date(today);
+
+    startDate.setDate(today.getDate() - 364);
+
+    const startDay = startDate.getDay();
+
+    for (let i = startDay; i > 0; i--) {
+        const emptyCell = document.createElement("div");
+
+        emptyCell.classList.add("heatmap-cell");
+        emptyCell.classList.add("level-0");
+
+        container.appendChild(emptyCell);
+    }
+
     for (let i = 364; i >= 0; i--) {
         const current = new Date(today);
-
+    
         current.setDate(today.getDate() - i);
-
-        const dateString = current.toISOString().split("T")[0];
-
+    
+        const dateString =
+            `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}-${String(current.getDate()).padStart(2, "0")}`;
+    
         const pages = lookup[dateString] || 0;
-
+    
         const cell = createCell(dateString, pages);
-
+    
         container.appendChild(cell);
     }
 }
