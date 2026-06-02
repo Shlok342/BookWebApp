@@ -1,5 +1,12 @@
 import {API} from "../api_service/api.js";
-
+function getTooltip() {
+    return document.getElementById(
+        "heatmap-tooltip"
+    );
+}
+const CELL_SIZE = 12;
+const GAP_SIZE = 3;
+const COLUMN_WIDTH = CELL_SIZE + GAP_SIZE;
 export async function initHeatmap() {
     try {
         const data = await API.getHeatmap();
@@ -10,8 +17,23 @@ export async function initHeatmap() {
     }
 }
 function renderHeatmap(days) {
-    const container = document.getElementById("heatmap-container");
+    const container =
+    document.getElementById(
+        "heatmap-container"
+    );
 
+    if (!container) {
+        console.warn(
+            "Heatmap container not found"
+        );
+        return;
+    }
+
+    if (!days.length) {
+        container.innerHTML =
+            "<p>No reading activity yet.</p>";
+        return;
+    }
     console.log(days);
     console.log(document.getElementById("heatmap-container"));
     if (!container) {
@@ -20,10 +42,13 @@ function renderHeatmap(days) {
     }
     container.innerHTML = "";
 
-    const lookup = {};
+    const lookup = new Map();
 
     days.forEach(day => {
-        lookup[day.day] = day.total_pages;
+        lookup.set(
+            day.day,
+            day.total_pages
+        );
     });
     const maxPages = Math.max(
         ...days.map(day => day.total_pages),
@@ -54,7 +79,8 @@ function renderHeatmap(days) {
         const dateString =
             `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}-${String(current.getDate()).padStart(2, "0")}`;
     
-        const pages = lookup[dateString] || 0;
+        const pages =
+            lookup.get(dateString) || 0;
     
         const cell = createCell(
             dateString,
@@ -67,7 +93,7 @@ function renderHeatmap(days) {
         
         container.appendChild(cell);
     
-        container.appendChild(cell);
+        
     }
 }
 function renderMonthLabels(startDate) {
@@ -76,9 +102,7 @@ function renderMonthLabels(startDate) {
 
     monthsContainer.innerHTML = "";
 
-    const CELL_SIZE = 12;
-    const GAP_SIZE = 3;
-    const COLUMN_WIDTH = CELL_SIZE + GAP_SIZE;
+    
 
     let previousMonth = -1;
 
@@ -163,68 +187,54 @@ function renderMonthLabels(startDate) {
 }
 function renderHeatmapStats(stats) {
 
-    document.getElementById(
-        "pages-this-year"
-    ).textContent =
-        stats.pages_this_year.toLocaleString();
+    const currentStreakElement =
+        document.getElementById(
+            "current-streak"
+        );
 
-    document.getElementById(
-        "current-streak"
-    ).textContent =
+    const longestStreakElement =
+        document.getElementById(
+            "longest-streak"
+        );
+
+    const activeDaysElement =
+        document.getElementById(
+            "active-days"
+        );
+
+    const pagesThisYearElement =
+        document.getElementById(
+            "pages-this-year"
+        );
+
+    currentStreakElement.textContent =
         `${stats.current_streak} days`;
 
-    document.getElementById(
-        "longest-streak"
-    ).textContent =
+    longestStreakElement.textContent =
         `${stats.longest_streak} days`;
 
-    document.getElementById(
-        "active-days"
-    ).textContent =
+    activeDaysElement.textContent =
         stats.active_days;
+
+    pagesThisYearElement.textContent =
+        stats.pages_this_year
+            .toLocaleString();
 }
-function createCell(date, pages) {
+function createCell(date, pages, maxPages) {
     const cell = document.createElement("div");
 
     cell.classList.add("heatmap-cell");
 
     cell.dataset.date = date;
-    const tooltip =
-    document.getElementById(
-        "heatmap-tooltip"
-    );
+    
 
     cell.addEventListener(
         "mouseenter",
-        (e) => {
-
-        const formattedDate =
-            new Date(date)
-            .toLocaleDateString(
-                undefined,
-                {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                }
-            );
-
-        tooltip.innerHTML =
-            pages > 0
-                ? `
-                    <strong>${pages} pages read</strong>
-                    <br>
-                    ${formattedDate}
-                  `
-                : `
-                    <strong>No reading activity</strong>
-                    <br>
-                    ${formattedDate}
-                  `;
-
-        tooltip.style.opacity = "1";
-    }
-);
+        () => showTooltip(
+            date,
+            pages
+        )
+    );
 
 cell.addEventListener(
     "mousemove",
@@ -251,6 +261,18 @@ cell.addEventListener(
 
     return cell;
 }
+function formatDate(date) {
+
+    return new Date(date)
+        .toLocaleDateString(
+            undefined,
+            {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }
+        );
+}
 function getIntensityClass(
     pages,
     maxPages
@@ -276,4 +298,27 @@ function getIntensityClass(
     }
 
     return "level-4";
+}
+function showTooltip(
+    date,
+    pages
+) {
+    const tooltip = getTooltip();
+    const formattedDate =
+        formatDate(date);
+
+    tooltip.innerHTML =
+        pages > 0
+            ? `
+                <strong>${pages} pages read</strong>
+                <br>
+                ${formattedDate}
+              `
+            : `
+                <strong>No reading activity</strong>
+                <br>
+                ${formattedDate}
+              `;
+
+    tooltip.style.opacity = "1";
 }
