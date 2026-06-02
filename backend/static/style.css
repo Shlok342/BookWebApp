@@ -2081,6 +2081,15 @@ footer {
   color: var(--text-muted);
   white-space: nowrap;
 }
+.month-highlight {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+}
+
+.month-dim {
+  opacity: 0.25;
+  transition: 0.15s ease;
+}
 .level-0 {
   background: #ebedf0;
 }

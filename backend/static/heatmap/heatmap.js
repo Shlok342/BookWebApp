@@ -56,7 +56,16 @@ function renderHeatmap(days) {
     
         const pages = lookup[dateString] || 0;
     
-        const cell = createCell(dateString, pages, maxPages);
+        const cell = createCell(
+            dateString,
+            pages,
+            maxPages
+        );
+        
+        cell.dataset.month =
+            current.getMonth();
+        
+        container.appendChild(cell);
     
         container.appendChild(cell);
     }
@@ -89,7 +98,8 @@ function renderMonthLabels(startDate) {
                 document.createElement("div");
 
             label.classList.add("month-label");
-
+            label.dataset.month =month;
+    
             label.textContent =
                 current.toLocaleString(
                     "default",
@@ -100,6 +110,54 @@ function renderMonthLabels(startDate) {
                 `${weekIndex * COLUMN_WIDTH}px`;
 
             monthsContainer.appendChild(label);
+            label.addEventListener(
+                "mouseenter",
+                () => {
+            
+                    const cells =
+                        document.querySelectorAll(
+                            ".heatmap-cell"
+                        );
+            
+                    cells.forEach(cell => {
+            
+                        if (
+                            cell.dataset.month ===
+                            String(month)
+                        ) {
+                            cell.classList.add(
+                                "month-highlight"
+                            );
+                        }
+                        else {
+                            cell.classList.add(
+                                "month-dim"
+                            );
+                        }
+                    });
+                }
+            );
+            
+            label.addEventListener(
+                "mouseleave",
+                () => {
+            
+                    document
+                        .querySelectorAll(
+                            ".heatmap-cell"
+                        )
+                        .forEach(cell => {
+            
+                            cell.classList.remove(
+                                "month-highlight"
+                            );
+            
+                            cell.classList.remove(
+                                "month-dim"
+                            );
+                        });
+                }
+            );
         }
     }
 }
