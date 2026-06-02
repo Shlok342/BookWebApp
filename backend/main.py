@@ -16,6 +16,12 @@ from backend.routers.heatmap_router import router as heatmap_router
 
 
 app=FastAPI()
+# Standard FastAPI explicit decorators for both methods
+@app.get("/healthz")
+@app.head("/healthz")
+def health_check():
+    """Guaranteed to match before any sub-routers or file mounts interfere."""
+    return {"status": "healthy"}
 app.include_router(heatmap_router)
 app.include_router(stat_router)
 app.include_router(streak_router)
@@ -58,3 +64,5 @@ def home():
 @app.get("/test")
 def test():
     return {"files": os.listdir()}
+
+
