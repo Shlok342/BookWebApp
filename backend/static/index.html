@@ -44,36 +44,23 @@
         <div class="heatmap-stats">
 
           <div class="heatmap-stat">
-              <div class="stat-value"
-                   id="current-streak">
-                  0
-              </div>
-      
-              <div class="stat-label">
-                  Current Streak
-              </div>
+              <span class="stat-label">Pages This Year:</span>
+              <span class="stat-value" id="pages-this-year">0</span>
           </div>
       
           <div class="heatmap-stat">
-              <div class="stat-value"
-                   id="longest-streak">
-                  0
-              </div>
-      
-              <div class="stat-label">
-                  Longest Streak
-              </div>
+              <span class="stat-label">Current Streak:</span>
+              <span class="stat-value" id="current-streak">0</span>
           </div>
       
           <div class="heatmap-stat">
-              <div class="stat-value"
-                   id="active-days">
-                  0
-              </div>
+              <span class="stat-label">Longest Streak:</span>
+              <span class="stat-value" id="longest-streak">0</span>
+          </div>
       
-              <div class="stat-label">
-                  Active Days
-              </div>
+          <div class="heatmap-stat">
+              <span class="stat-label">Active Days:</span>
+              <span class="stat-value" id="active-days">0</span>
           </div>
       
       </div>
@@ -82,18 +69,16 @@
       
           <div id="heatmap-container"></div>
           <div class="heatmap-legend">
-
-            <div class="legend-cell level-0" title="0 pages"></div>
+            <span>Less</span>
         
-            <div class="legend-cell level-1" title="1-10 pages"></div>
+            <div class="legend-cell level-0"></div>
+            <div class="legend-cell level-1"></div>
+            <div class="legend-cell level-2"></div>
+            <div class="legend-cell level-3"></div>
+            <div class="legend-cell level-4"></div>
         
-            <div class="legend-cell level-2" title="11-25 pages"></div>
-        
-            <div class="legend-cell level-3" title="26-50 pages"></div>
-        
-            <div class="legend-cell level-4" title="50+ pages"></div>
-        
-        </div>
+            <span>More</span>
+          </div>
           <div id="heatmap-tooltip"></div>
           
         </div>

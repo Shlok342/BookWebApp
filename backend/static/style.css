@@ -2052,7 +2052,28 @@ footer {
 
   margin-bottom: 8px;
 }
+.heatmap-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
 
+.heatmap-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.stat-value {
+  font-weight: 700;
+  font-size: 0.8;
+}
 .month-label {
   position: absolute;
 

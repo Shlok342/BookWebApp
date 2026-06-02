@@ -11,6 +11,7 @@ export async function initHeatmap() {
 }
 function renderHeatmap(days) {
     const container = document.getElementById("heatmap-container");
+
     console.log(days);
     console.log(document.getElementById("heatmap-container"));
     if (!container) {
@@ -24,7 +25,10 @@ function renderHeatmap(days) {
     days.forEach(day => {
         lookup[day.day] = day.total_pages;
     });
-
+    const maxPages = Math.max(
+        ...days.map(day => day.total_pages),
+        1
+    );
     const today = new Date();
 
     const startDate = new Date(today);
@@ -52,7 +56,7 @@ function renderHeatmap(days) {
     
         const pages = lookup[dateString] || 0;
     
-        const cell = createCell(dateString, pages);
+        const cell = createCell(dateString, pages, maxPages);
     
         container.appendChild(cell);
     }
@@ -101,28 +105,24 @@ function renderMonthLabels(startDate) {
 }
 function renderHeatmapStats(stats) {
 
-    const current =
-        document.getElementById(
-            "current-streak"
-        );
+    document.getElementById(
+        "pages-this-year"
+    ).textContent =
+        stats.pages_this_year.toLocaleString();
 
-    const longest =
-        document.getElementById(
-            "longest-streak"
-        );
-
-    const active =
-        document.getElementById(
-            "active-days"
-        );
-
-    current.textContent =
+    document.getElementById(
+        "current-streak"
+    ).textContent =
         `${stats.current_streak} days`;
 
-    longest.textContent =
+    document.getElementById(
+        "longest-streak"
+    ).textContent =
         `${stats.longest_streak} days`;
 
-    active.textContent =
+    document.getElementById(
+        "active-days"
+    ).textContent =
         stats.active_days;
 }
 function createCell(date, pages) {
@@ -189,15 +189,33 @@ cell.addEventListener(
 );
     
 
-    cell.classList.add(getIntensityClass(pages));
+    cell.classList.add(getIntensityClass(pages,maxPages));
 
     return cell;
 }
-function getIntensityClass(pages) {
-    if (pages === 0) return "level-0";
-    if (pages <= 10) return "level-1";
-    if (pages <= 25) return "level-2";
-    if (pages <= 50) return "level-3";
+function getIntensityClass(
+    pages,
+    maxPages
+) {
+
+    if (pages === 0) {
+        return "level-0";
+    }
+
+    const ratio =
+        pages / maxPages;
+
+    if (ratio <= 0.25) {
+        return "level-1";
+    }
+
+    if (ratio <= 0.50) {
+        return "level-2";
+    }
+
+    if (ratio <= 0.75) {
+        return "level-3";
+    }
 
     return "level-4";
 }

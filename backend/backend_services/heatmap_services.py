@@ -18,7 +18,10 @@ def get_heatmap_data():
         """)
 
         rows = cursor.fetchall()
-
+        pages_this_year = sum(
+        row["total_pages"]
+        for row in rows
+        )
     active_dates = {
     row["day"] for row in rows
 }
@@ -77,6 +80,7 @@ def get_heatmap_data():
         "stats": {
             "active_days": active_days,
             "current_streak": current_streak,
-            "longest_streak": longest_streak
+            "longest_streak": longest_streak,
+            "pages_this_year": pages_this_year
         }
     }
