@@ -41,23 +41,64 @@
         <span id="activityClose" class="close">&times;</span>
 
         <h2>Reading Activity</h2>
+        <div class="heatmap-stats">
 
+          <div class="heatmap-stat">
+              <div class="stat-value"
+                   id="current-streak">
+                  0
+              </div>
+      
+              <div class="stat-label">
+                  Current Streak
+              </div>
+          </div>
+      
+          <div class="heatmap-stat">
+              <div class="stat-value"
+                   id="longest-streak">
+                  0
+              </div>
+      
+              <div class="stat-label">
+                  Longest Streak
+              </div>
+          </div>
+      
+          <div class="heatmap-stat">
+              <div class="stat-value"
+                   id="active-days">
+                  0
+              </div>
+      
+              <div class="stat-label">
+                  Active Days
+              </div>
+          </div>
+      
+      </div>
         <div id="heatmap-wrapper">
           <div id="heatmap-months"></div>
       
           <div id="heatmap-container"></div>
-      
-          <div id="heatmap-legend">
-              <span>Less</span>
-      
-              <div class="heatmap-cell level-0"></div>
-              <div class="heatmap-cell level-1"></div>
-              <div class="heatmap-cell level-2"></div>
-              <div class="heatmap-cell level-3"></div>
-              <div class="heatmap-cell level-4"></div>
-      
-              <span>More</span>
+          <div class="heatmap-legend">
+
+            <span>Less</span>
+        
+            <div class="legend-cell level-0"></div>
+            <div class="legend-cell level-1"></div>
+            <div class="legend-cell level-2"></div>
+            <div class="legend-cell level-3"></div>
+            <div class="legend-cell level-4"></div>
+        
+            <span>More</span>
+        
           </div>
+          <p class="legend-note">
+            0, 1-10, 11-25, 26-50, 50+ pages
+          </p>
+          <div id="heatmap-tooltip"></div>
+          
         </div>
 
     </div>

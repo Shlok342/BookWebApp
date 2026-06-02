@@ -3,7 +3,7 @@ import {API} from "../api_service/api.js";
 export async function initHeatmap() {
     try {
         const data = await API.getHeatmap();
-
+        renderHeatmapStats(data.stats);
         renderHeatmap(data.days);
     } catch (err) {
         console.error("Failed to load heatmap", err);
@@ -99,14 +99,95 @@ function renderMonthLabels(startDate) {
         }
     }
 }
+function renderHeatmapStats(stats) {
+
+    const current =
+        document.getElementById(
+            "current-streak"
+        );
+
+    const longest =
+        document.getElementById(
+            "longest-streak"
+        );
+
+    const active =
+        document.getElementById(
+            "active-days"
+        );
+
+    current.textContent =
+        `${stats.current_streak} days`;
+
+    longest.textContent =
+        `${stats.longest_streak} days`;
+
+    active.textContent =
+        stats.active_days;
+}
 function createCell(date, pages) {
     const cell = document.createElement("div");
 
     cell.classList.add("heatmap-cell");
 
     cell.dataset.date = date;
+    const tooltip =
+    document.getElementById(
+        "heatmap-tooltip"
+    );
 
-    cell.title = `${date}: ${pages} pages`;
+    cell.addEventListener(
+        "mouseenter",
+        (e) => {
+
+        const formattedDate =
+            new Date(date)
+            .toLocaleDateString(
+                undefined,
+                {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                }
+            );
+
+        tooltip.innerHTML =
+            pages > 0
+                ? `
+                    <strong>${pages} pages read</strong>
+                    <br>
+                    ${formattedDate}
+                  `
+                : `
+                    <strong>No reading activity</strong>
+                    <br>
+                    ${formattedDate}
+                  `;
+
+        tooltip.style.opacity = "1";
+    }
+);
+
+cell.addEventListener(
+    "mousemove",
+    (e) => {
+
+        tooltip.style.left =
+            `${e.clientX + 15}px`;
+
+        tooltip.style.top =
+            `${e.clientY + 15}px`;
+    }
+);
+
+cell.addEventListener(
+    "mouseleave",
+    () => {
+
+        tooltip.style.opacity = "0";
+    }
+);
+    
 
     cell.classList.add(getIntensityClass(pages));
 
