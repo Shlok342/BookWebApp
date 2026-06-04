@@ -2,5 +2,4 @@ fastapi
 uvicorn
 psycopg2-binary
 python-dotenv
-gunicorn
 jinja2
