@@ -1,0 +1,46 @@
+<main>
+
+  <div class="controls">
+
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search books..."
+    >
+
+    <select id="statusFilter">
+      <option value="all">All</option>
+      <option value="completed">Completed</option>
+      <option value="in-progress">In Progress</option>
+      <option value="not-started">Not Started</option>
+    </select>
+
+    <select id="genreFilter">
+      <option value="">All Genres</option>
+      <option value="Fiction">Fiction</option>
+      <option value="Fantasy">Fantasy</option>
+      <option value="Sci-Fi">Sci-Fi</option>
+      <option value="Mystery">Mystery</option>
+      <option value="Thriller">Thriller</option>
+      <option value="Romance">Romance</option>
+      <option value="Non-Fiction">Non-Fiction</option>
+      <option value="Biography">Biography</option>
+      <option value="Self-Help">Self-Help</option>
+      <option value="Philosophy">Philosophy</option>
+      <option value="Adventure">Adventure</option>
+      <option value="Classics">Classics</option>
+    </select>
+
+    <select id="sortOption">
+      <option value="none">No Sorting</option>
+      <option value="progress-asc">Progress (Least → Most)</option>
+      <option value="progress-desc">Progress (Most → Least)</option>
+      <option value="date-desc">Newest First</option>
+      <option value="date-asc">Oldest First</option>
+    </select>
+
+  </div>
+
+  <div class="books-container"></div>
+
+</main>

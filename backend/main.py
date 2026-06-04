@@ -1,8 +1,9 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pathlib import Path
 from backend.database import init_db
 from backend.routers.core_books import router as core_book_functionality
@@ -14,6 +15,8 @@ from backend.routers.quotes import router as quote_router
 BASE_DIR = Path(__file__).resolve().parent
 from backend.routers.heatmap_router import router as heatmap_router
 
+TEMPLATES_DIR = BASE_DIR / "static" / "templates"
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 app=FastAPI()
 # Standard FastAPI explicit decorators for both methods
@@ -57,8 +60,8 @@ def favicon():
 
 
 @app.get("/")
-def home():
-    return FileResponse(BASE_DIR / "static" / "index.html")    
+def home(request: Request):
+    return templates.TemplateResponse(request, "index.html")
 
 
 @app.get("/test")
