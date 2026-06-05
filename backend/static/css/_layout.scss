@@ -241,6 +241,21 @@
     gap: 10px;
     margin-bottom: 12px;
   }
+  .sanctuary-layout {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+}.botanical-muse {
+  position: fixed;
+
+  top: 220px;
+  right: 120px;
+
+  width: 220px;
+
+  z-index: 4;
+}
   
   .sanctuary-icon-circle {
     width: 30px;
