@@ -1,14 +1,13 @@
-/* ── Google Fonts ──────────────────────────────────────── */
+@use "base";
+@use "dark_theme";
+@use "delete_confirmation";
+@use "layout";
+@use "main_layout";
+@use "modals/modal_default";
+@use "modals/notes_quotes_modal";
+@use "modals/stats_tags_modal";
+/*Google Fonts*/
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap');
-
-@import "base";
-@import "dark_theme";
-@import "delete_confirmation";
-@import "layout";
-@import "main_layout";
-@import "modals/modal_default";
-@import "modals/notes_and_quotes_modal";
-@import "modals/stats_tags_modal";
 #statusFilter,
 #genreFilter,
 #sortOption {
