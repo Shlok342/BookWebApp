@@ -1,0 +1,208 @@
+/* Variables and defaults */
+:root {
+    /* Palette — warm parchment + deep forest */
+    --purple: #5D3FD3;
+    --gold: #c9a84c;
+    --gold-dark: #a8893d;
+    --cream: #ede3d0;
+    --parchment: #f7f0e2;
+    --parchment-mid: #f2e9d5;
+    --sand: #d4c09a;
+    --sand-light: #e5d5b5;
+    --bark: #6b4f2e;
+    --bark-light: #8a6640;
+    --bark-pale: #c4a882;
+    --forest: #2c4827;
+    --forest-mid: #3a5e33;
+    --moss: #56754a;
+    --moss-light: #7a9e6c;
+    --sage: #a8bf9a;
+    --sage-pale: #d4e3cc;
+  
+    /* Surfaces */
+    --card-bg: #fdf8ee;
+    --card-bg-alt: #faf4e8;
+    --modal-bg: #f9f3e5;
+  
+    /* Text */
+    --text-dark: #251c0d;
+    --text-mid: #5c4530;
+    --text-muted: #9a8060;
+    --text-faint: #030303;
+  
+  
+    /* Misc */
+    --progress-bg: #ddd0b5;
+    --shadow-sm: rgba(70, 45, 15, 0.08);
+    --shadow-md: rgba(70, 45, 15, 0.13);
+    --shadow-lg: rgba(70, 45, 15, 0.20);
+    --shadow-glow: rgba(90, 122, 69, 0.15);
+    --radius-card: 20px;
+    --radius-btn: 50px;
+    --radius-input: 12px;
+  
+    /* Transitions */
+    --ease-smooth: cubic-bezier(0.34, 1.04, 0.64, 1);
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --speed-fast: 0.22s;
+    --speed-mid: 0.30s;
+    --speed-slow: 0.60s;
+  
+    /* Premium Background Architecture */
+    --bg-gradient-top: rgba(255, 253, 245, 0.85);
+    --bg-gradient-mid: rgba(232, 221, 200, 0.65);
+    --bg-gradient-bottom: rgba(210, 195, 168, 0.80);
+    --noise-texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+    --glow-top-right: rgba(255, 245, 210, 0.55);
+    --glow-bottom-left: rgba(180, 210, 160, 0.18);
+    --glass-blur: 10px;
+  
+    /* Mountain Silhouette Layers */
+    --mtn-layer-1: linear-gradient(180deg, #cbb797 0%, #b8a382 100%);
+    --mtn-opacity-1: 0.75;
+    --mtn-layer-2: linear-gradient(180deg, #b09870 0%, #8a7350 100%);
+    --mtn-opacity-2: 0.88;
+  }
+
+  .leaf {
+    position: fixed;
+    font-size: 2rem;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.50;
+    filter: drop-shadow(0 2px 4px rgba(70, 90, 50, 0.15));
+  }
+  
+  .leaf-1 {
+    top: 8%;
+    right: 4%;
+    font-size: 2.4rem;
+    animation: drift1 9s ease-in-out infinite alternate;
+    transform: rotate(-15deg);
+  }
+  
+  .leaf-2 {
+    top: 18%;
+    right: 12%;
+    font-size: 1.6rem;
+    animation: drift2 11s ease-in-out infinite alternate;
+    transform: rotate(25deg);
+  }
+  
+  .leaf-3 {
+    top: 5%;
+    right: 22%;
+    font-size: 1.8rem;
+    animation: drift3 8s ease-in-out infinite alternate;
+    transform: rotate(-8deg);
+  }
+  
+  .leaf-4 {
+    top: 35%;
+    right: 2%;
+    font-size: 1.4rem;
+    animation: drift1 10s ease-in-out infinite alternate;
+    transform: rotate(40deg);
+  }
+  
+  .leaf-5 {
+    top: 12%;
+    left: 3%;
+    font-size: 1.6rem;
+    animation: drift2 12s ease-in-out infinite alternate;
+    transform: rotate(-20deg);
+  }
+  
+  .leaf-6 {
+    top: 28%;
+    left: 8%;
+    font-size: 1.2rem;
+    animation: drift3 9.5s ease-in-out infinite alternate;
+    transform: rotate(15deg);
+  }
+  
+  @keyframes drift1 {
+    from {
+      transform: translateY(0px) rotate(-15deg);
+    }
+  
+    to {
+      transform: translateY(-14px) rotate(-6deg);
+    }
+  }
+  
+  @keyframes drift2 {
+    from {
+      transform: translateY(0px) rotate(25deg);
+    }
+  
+    to {
+      transform: translateY(-10px) rotate(18deg);
+    }
+  }
+  
+  @keyframes drift3 {
+    from {
+      transform: translateY(0px) rotate(-8deg);
+    }
+  
+    to {
+      transform: translateY(-16px) rotate(2deg);
+    }
+  }
+/* ── Reset & Base ──────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #e8ddc8;
+  background-image:
+    linear-gradient(160deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 55%, var(--bg-gradient-bottom) 100%),
+    var(--noise-texture);
+  background-attachment: fixed;
+  color: var(--text-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  transition: background-image var(--speed-slow) var(--ease-smooth), background-color var(--speed-slow) var(--ease-smooth);
+}
+
+/* Soft ambient light blob top-right */
+body::before {
+  content: "";
+  position: fixed;
+  top: -80px;
+  right: -80px;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, var(--glow-top-right) 0%, transparent 68%);
+  z-index: 0;
+  pointer-events: none;
+  transition: background var(--speed-slow) var(--ease-smooth);
+}
+
+/* Soft warm glow bottom-left */
+body::after {
+  content: "";
+  position: fixed;
+  bottom: -60px;
+  left: -60px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, var(--glow-bottom-left) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+  transition: background var(--speed-slow) var(--ease-smooth);
+}

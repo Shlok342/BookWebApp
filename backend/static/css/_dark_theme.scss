@@ -1,0 +1,46 @@
+body.dark-theme {
+    /* Swapping out the sun for the moon! */
+    --cream: #1a221d;
+    --parchment: #121814;
+    --parchment-mid: #18201a;
+    --sand: #36453b;
+    --sand-light: #46594c;
+    --bark: #b5c4ad;
+    --bark-light: #99a891;
+    --bark-pale: #5e6e58;
+    --forest: #7a9e6c;
+    --forest-mid: #658558;
+    --moss: #8bb07d;
+    --moss-light: #a3c993;
+    --sage: #243026;
+    --sage-pale: #1b241c;
+  
+    /* Surfaces */
+    --card-bg: #151c17;
+    --card-bg-alt: #19211c;
+    --modal-bg: #151c17;
+  
+    /* Text */
+    --text-dark: #e2ebd9;
+    --text-mid: #b8c7af;
+    --text-muted: #82917a;
+    --text-faint: #556350;
+  
+    /* Misc */
+    --progress-bg: #253327;
+  
+    /* Premium Background Architecture - Deep Charcoal / Midnight */
+    --bg-gradient-top: #0b1014;
+    --bg-gradient-mid: #131b22;
+    --bg-gradient-bottom: #1a242c;
+    --noise-texture: url("https://www.transparenttextures.com/patterns/stardust.png");
+    --glow-top-right: rgba(140, 170, 200, 0.12);
+    --glow-bottom-left: rgba(80, 120, 100, 0.10);
+    --glass-blur: 16px;
+  
+    /* Mountain Silhouette Layers - Dark Mode Overrides */
+    --mtn-layer-1: linear-gradient(180deg, #1d2833 0%, #11181f 100%);
+    --mtn-opacity-1: 0.90;
+    --mtn-layer-2: linear-gradient(180deg, #253340 0%, #0d131a 100%);
+    --mtn-opacity-2: 1.0;
+  }
