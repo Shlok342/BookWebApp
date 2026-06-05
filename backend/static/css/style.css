@@ -697,11 +697,13 @@ body.dark-theme {
 }
 
 .botanical-muse {
-  position: fixed;
-  top: 220px;
-  right: 120px;
-  width: 220px;
-  z-index: 4;
+  width: 260px;
+  min-width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 120px;
 }
 
 .sanctuary-icon-circle {
@@ -752,7 +754,7 @@ body.dark-theme {
   position: relative;
   z-index: 5;
   margin: 0 auto 60px;
-  width: min(62%, 920px);
+  width: min(68%, 1000px);
   border-radius: 26px;
   background: rgba(252, 245, 228, 0.68);
   backdrop-filter: blur(var(--glass-blur));
