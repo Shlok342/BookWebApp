@@ -250,23 +250,26 @@
 }
 .botanical-muse {
   width: 260px;
-  min-width: 260px;
+  min-width: 280px;
 
   margin-right: -120px;
+  margin-left: -100px; /* ← moves whole muse left */
 
   position: relative;
   z-index: 8;
 
   padding-top: 45px;
 }
+
 .botanical-muse svg {
-  transform: rotate(-10deg) translateX(12px);
+  transform: translateX(-40px) rotate(-10deg); /* ← moves figure itself left */
   transform-origin: bottom center;
 
   filter:
     drop-shadow(0 8px 18px rgba(61, 98, 52, 0.12))
     drop-shadow(0 2px 4px rgba(61, 98, 52, 0.08));
 }
+
 .botanical-muse::after {
   content: "";
 
