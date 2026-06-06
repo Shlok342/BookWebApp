@@ -1,0 +1,166 @@
+
+/* ── Large Tablets (≤ 1024px) ── */
+@media (max-width: 1024px) {
+    .topnav {
+      padding: 16px 4vw;
+    }
+  
+    .hero {
+      padding: 26px 4vw 16px;
+    }
+  
+    .sanctuary-panel {
+      width: clamp(60%, 800px, 90%);
+    }
+  
+    main {
+      padding: 0 4vw 32px;
+    }
+  
+    .books-container {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+  }
+  
+  /* ── Tablets (≤ 768px) ── */
+  @media (max-width: 768px) {
+    .topnav {
+      padding: 14px 4vw;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: space-between; /* brand left, nav-right right */
+      align-items: flex-start;
+    }
+  
+    .nav-right {
+      gap: 8px;
+      justify-content: flex-end;
+      flex: 1;                       /* take remaining width */
+      min-width: 0;                  /* allow flex children to shrink */
+    }
+  
+    /* Hide tagline on tablets — too cramped */
+    .tagline-pill {
+      display: none;
+    }
+  
+    .controls {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  
+    .hero-title {
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      margin-bottom: 0.8rem;
+    }
+  
+    .hero-meta {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 1.2rem;
+    }
+  
+    .hero-actions {
+      justify-content: center;
+    }
+  
+    .sanctuary-panel {
+      width: 92%;
+      border-radius: 1.2rem;
+    }
+  
+    .books-container {
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem;
+      padding-top: 1rem;
+    }
+  
+    .book-card {
+      padding: 1.5rem;
+      border-radius: 1.2rem;
+    }
+  
+    .book-card h2 {
+      font-size: clamp(1.1rem, 4vw, 1.25rem);
+      margin-bottom: 1rem;
+    }
+  
+    .pages-row .current-page {
+      font-size: clamp(1.2rem, 5vw, 1.4rem);
+    }
+  
+    .card-buttons {
+      gap: 0.5rem;
+    }
+  
+    /* Buttons adjustment */
+    .open-btn,
+    .quotes-btn,
+    .notes-btn,
+    .update-btn,
+    .delete-btn,
+    .tag-btn {
+      font-size: 0.8rem;
+      padding: 0.5rem 0.8rem;
+      flex: 1 1 auto;
+      text-align: center;
+    }
+  
+    /* Modals */
+    .modal-content,
+    .quotes-modal-content,
+    .notes-modal-content,
+    #addBookModal .modal-content {
+      width: 90vw;
+      max-width: 500px;
+      padding: 2rem 1.5rem;
+      margin: 10vh auto;
+      border-radius: 1.2rem;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+  
+    /* Background Elements */
+    .leaf-3,
+    .leaf-4,
+    .leaf-6 {
+      display: none;
+    }
+  
+    .leaf-1 {
+      font-size: 1.6rem;
+      top: 5%;
+      right: 5%;
+    }
+  
+    .leaf-2 {
+      font-size: 1.2rem;
+      top: 15%;
+      right: 10%;
+    }
+  
+    .leaf-5 {
+      font-size: 1.2rem;
+      top: 10%;
+      left: 5%;
+    }
+  
+    .corner-plant {
+      font-size: 2rem;
+      opacity: 0.25;
+    }
+  
+    .mountain-bg {
+      height: 30vh;
+    }
+  
+    footer {
+      padding: 2rem 4vw;
+    }
+  
+    .footer-quote {
+      font-size: 0.9rem;
+    }
+  }

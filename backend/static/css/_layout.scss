@@ -319,3 +319,29 @@
     background-size: 28px 28px;
     transition: backdrop-filter var(--speed-mid) ease;
   }
+  /* ── Footer ────────────────────────────────────────────── */
+footer {
+  text-align: center;
+  padding: 30px 40px;
+  position: relative;
+  z-index: 5;
+}
+
+.footer-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.97rem;
+  color: var(--text-faint);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+.no-books-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--text-faint);
+  padding: 70px 0;
+  line-height: 1.7;
+}

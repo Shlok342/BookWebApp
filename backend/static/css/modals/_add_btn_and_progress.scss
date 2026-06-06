@@ -1,0 +1,144 @@
+/* ── Add Book Button ───────────────────────────────────── */
+.add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 28px;
+    background: linear-gradient(135deg, var(--forest) 0%, var(--forest-mid) 100%);
+    color: #f2ead6;
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    box-shadow:
+      0 5px 20px rgba(44, 72, 39, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transition:
+      background 0.28s var(--ease-out),
+      transform 0.22s var(--ease-smooth),
+      box-shadow 0.28s var(--ease-out);
+    position: relative;
+    z-index: 2;
+  }
+  
+  .add-btn:hover {
+    background: linear-gradient(135deg, var(--forest-mid) 0%, var(--moss) 100%);
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 28px rgba(44, 72, 39, 0.38),
+      inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  }
+  
+  .add-btn:active {
+    transform: translateY(0px);
+    box-shadow: 0 3px 12px rgba(44, 72, 39, 0.28);
+  }
+  .reading-progress-label {
+    font-size: 0.63rem;
+    font-weight: 600;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 5px;
+  }
+
+.pages-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 9px;
+  }
+
+.pages-row .current-page {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1;
+  }
+
+.pages-row .total-pages {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    margin-left: 2px;
+  }
+
+.pages-row .pct-badge {
+    background: linear-gradient(120deg, var(--cream), var(--parchment-mid));
+    border: 1px solid var(--sand-light);
+    border-radius: 50px;
+    padding: 3px 11px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--bark);
+    letter-spacing: 0.02em;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+/* ── Progress Bar ──────────────────────────────────────── */
+#addBookModal {
+  overflow-y: auto;
+}
+
+#addBookModal .modal-content {
+  margin: 20px auto;
+  max-height: none;
+  overflow-y: visible;
+}
+.progress-bar,
+.progressBar {
+  --track-bg: #eee;
+  --bar-radius: 999px;
+
+  width: 100%;
+  height: 10px;
+  background-color: var(--track-bg);
+  border-radius: var(--bar-radius);
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress,
+.prgoress {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.6s ease, background-color 0.6s ease;
+  will-change: width, background-color;
+}
+
+#genreInput {
+  width: 100%;
+  padding: 11px 15px;
+  margin: 7px 0;
+  border: 1.5px solid var(--sand-light);
+  border-radius: var(--radius-input);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.90rem;
+  color: var(--text-dark);
+  background: rgba(255, 252, 245, 0.80);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2356754a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 10px;
+  cursor: pointer;
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background-color 0.22s ease;
+  box-sizing: border-box;
+}
+
+#genreInput:focus {
+  border-color: var(--moss);
+  box-shadow:
+    0 0 0 3px rgba(86, 117, 74, 0.13),
+    0 2px 8px rgba(86, 117, 74, 0.08);
+  background-color: rgba(255, 253, 248, 0.95);
+}
+  

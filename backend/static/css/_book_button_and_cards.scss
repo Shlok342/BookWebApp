@@ -1,0 +1,227 @@
+/* ── Card Buttons ──────────────────────────────────────── */
+.card-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .open-btn,
+  .quotes-btn,
+  .notes-btn,
+  .update-btn {
+    padding: 7px 16px;
+    border-radius: var(--radius-btn);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.80rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.24s var(--ease-out);
+    border: 1.5px solid transparent;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+  }
+  
+  /* Open → outlined warm */
+  .open-btn {
+    background: transparent;
+    border-color: var(--sand);
+    color: var(--text-mid);
+  }
+  
+  .open-btn:hover {
+    background: linear-gradient(120deg, var(--cream), var(--parchment-mid));
+    border-color: var(--bark-light);
+    color: var(--bark);
+    box-shadow: 0 2px 8px rgba(107, 79, 46, 0.12);
+    transform: translateY(-1px);
+  }
+  
+  /* Quotes → outlined warm, same as open */
+  .quotes-btn {
+    background: transparent;
+    border-color: var(--sand);
+    color: var(--text-mid);
+  }
+  
+  .quotes-btn:hover {
+    background: linear-gradient(120deg, var(--cream), var(--parchment-mid));
+    border-color: var(--bark-light);
+    color: var(--bark);
+    box-shadow: 0 2px 8px rgba(107, 79, 46, 0.12);
+    transform: translateY(-1px);
+  }
+  
+  /* Update Progress → dashed moss */
+  .update-btn {
+    background: transparent;
+    border: 1.5px dashed rgba(86, 117, 74, 0.60);
+    color: var(--moss);
+    font-style: italic;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+  }
+  
+  .update-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--forest), var(--moss));
+    opacity: 0;
+    transition: opacity 0.24s ease;
+    border-radius: inherit;
+    z-index: -1;
+  }
+  
+  .update-btn:hover {
+    color: #f2ead6;
+    border-style: solid;
+    border-color: var(--forest);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 12px rgba(44, 72, 39, 0.22);
+  }
+  
+  .update-btn:hover::before {
+    opacity: 1;
+  }
+  
+  .update-btn .btn-label {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Notes → forest filled */
+  .notes-btn {
+    background: linear-gradient(135deg, var(--forest), var(--forest-mid));
+    border-color: transparent;
+    color: #f2ead6;
+    box-shadow: 0 3px 10px rgba(44, 72, 39, 0.22);
+  }
+  
+  .notes-btn:hover {
+    background: linear-gradient(135deg, var(--forest-mid), var(--moss));
+    transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba(44, 72, 39, 0.30);
+  }
+  
+  /* Delete → soft red */
+  .delete-btn {
+    background: linear-gradient(135deg, #e07070, #d45555);
+    color: #fff9f5;
+    border: none;
+    padding: 7px 14px;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.80rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: all 0.24s var(--ease-out);
+    box-shadow: 0 3px 10px rgba(180, 60, 60, 0.18);
+  }
+  
+  .delete-btn:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, #d45555, #bb3333);
+    box-shadow: 0 5px 16px rgba(180, 60, 60, 0.28);
+  }
+  
+  .tag-btn {
+    padding: 5px 12px;
+    border-radius: var(--radius-btn);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.80rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.24s var(--ease-out);
+    border: 1.2px solid transparent;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  
+  .tag-btn {
+    background: rgba(73, 57, 90, 0.06);
+    border-color: var(--purple);
+    color: var(--text-mid);
+  }
+  
+  .tag-btn:hover {
+    background: linear-gradient(135deg,
+        rgba(48, 64, 53, 0.95),
+        rgba(63, 45, 82, 0.92));
+  
+    border-color: rgba(121, 96, 145, 0.75);
+  
+    color: #f3efe8;
+  
+    box-shadow:
+      0 4px 12px rgba(41, 29, 54, 0.18),
+      0 2px 6px rgba(30, 48, 39, 0.16);
+  
+    transform: translateY(-1px);
+  
+    letter-spacing: 0.03em;
+  }
+  
+  #saveTagsBtn {
+    padding: 6px 13px;
+  
+    margin-top: 18px;
+    display: inline-block;
+  
+    border-radius: 12px;
+    border: 1px solid rgba(92, 112, 88, 0.28);
+    backdrop-filter: blur(4px);
+    background: linear-gradient(135deg,
+        rgba(45, 61, 50, 0.96),
+        rgba(58, 42, 74, 0.92));
+  
+    color: #f4efe7;
+  
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  
+    cursor: pointer;
+  
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.22s ease,
+      border-color 0.22s ease;
+  }
+  
+  #saveTagsBtn:hover {
+    transform: translateY(-1px);
+  
+    border-color: rgba(132, 109, 156, 0.6);
+  
+    box-shadow:
+      0 4px 10px rgba(39, 28, 52, 0.18),
+      0 2px 5px rgba(36, 58, 44, 0.14);
+  }
+  .title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .title-row h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .open-book-author {
+    font-style: italic;
+    color: var(--text-faint);
+    margin-top: -8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.80rem;
+    letter-spacing: 0.03em;
+  }

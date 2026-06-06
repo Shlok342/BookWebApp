@@ -1,0 +1,144 @@
+#statusFilter,
+#genreFilter,
+#sortOption {
+  /* Typography & Colors */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #2c2c2c;
+  /* Premium charcoal text (softer than pure black) */
+  background-color: #ffffff;
+  /* Crisp white background to pop against the cream canvas */
+
+  /* Borders & Radii */
+  border: 1px solid #e2dcd5;
+  /* Soft, warm-toned border to blend with your theme */
+  border-radius: 8px;
+  /* Clean, modern rounded corners */
+
+  /* Depth & Shadows */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  /* Subtle, elegant drop shadow */
+
+  /* Smooth interaction setup */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover State (When you mouse over them) */
+#statusFilter:hover,
+#genreFilter:hover,
+#sortOption:hover {
+  background-color: #fcfbfa;
+  /* Very slight warm tint shift */
+  border-color: #b3953b;
+  /* Accent gold border color on hover */
+  box-shadow: 0 4px 10px rgba(179, 149, 59, 0.12);
+  /* Soft golden depth shadow */
+}
+
+/* Focus State (When clicked/active) */
+#statusFilter:focus,
+#genreFilter:focus,
+#sortOption:focus {
+  outline: none;
+  /* Removes default browser ring */
+  border-color: #b3953b;
+  box-shadow: 0 0 0 3px rgba(179, 149, 59, 0.25);
+  /* Elegant focus glow ring */
+}
+
+/* MINI STATS */
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: #5f5a4d;
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+.hero-meta em {
+  font-style: italic;
+}
+
+.mini-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 8px 0 24px;
+}
+
+.mini-stat {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(90, 110, 70, 0.12);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.08rem;
+  color: #4e4a3f;
+  font-style: italic;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.mini-stat strong {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-style: normal;
+  color: #2f4e2d;
+  margin-left: 6px;
+}
+
+/* BUTTON ROW */
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* INSIGHTS BUTTON */
+.insights-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 22px;
+  background: #e9e2d3;
+  color: #3d6234;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.insights-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* HIDE OLD GRID ON PAGE */
+.stats-container {
+  display: none;
+}
+/* ── Stats Container (Moved out of media queries) ──────── */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin: 20px;
+  }
+  
+  .stat-card {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  .stat-card h3 {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .stat-card p {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 5px;}

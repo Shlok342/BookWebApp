@@ -164,3 +164,11 @@
   transform: translateY(0px);
   box-shadow: 0 3px 10px rgba(44, 72, 39, 0.22);
 }
+/* ── Quote count hint ──────────────────────────────────── */
+.quote-count-hint {
+  font-size: 0.74rem;
+  color: var(--text-faint);
+  margin-top: 11px;
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.01em;}

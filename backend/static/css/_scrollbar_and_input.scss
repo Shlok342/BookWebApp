@@ -1,0 +1,59 @@
+/* ── Inputs ────────────────────────────────────────────── */
+input,
+textarea {
+  width: 100%;
+  padding: 11px 15px;
+  margin: 7px 0;
+  border: 1.5px solid var(--sand-light);
+  border-radius: var(--radius-input);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.90rem;
+  color: var(--text-dark);
+  background: rgba(255, 252, 245, 0.80);
+  outline: none;
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+  box-sizing: border-box;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--moss);
+  box-shadow:
+    0 0 0 3px rgba(86, 117, 74, 0.13),
+    0 2px 8px rgba(86, 117, 74, 0.08);
+  background: rgba(255, 253, 248, 0.95);
+}
+
+/* ── Scrollbar styling ─────────────────────────────────── */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(220, 205, 180, 0.25);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(160, 130, 90, 0.38);
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(140, 110, 70, 0.55);
+  }
+::selection {
+    background: rgba(90, 122, 69, 0.20);
+    color: var(--text-dark);
+  }

@@ -1,0 +1,196 @@
+/* ── Phones (≤ 600px) ── */
+@media (max-width: 600px) {
+    .topnav {
+      /* keep row layout — column caused Challenges to fall below Dark Mode */
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      padding: 12px 3vw;
+    }
+  
+    .brand {
+      flex-shrink: 0; /* brand never squishes */
+    }
+  
+    .nav-right {
+      gap: 6px;
+      justify-content: flex-end;
+    }
+  
+    /* Shrink nav buttons on phones so they fit in one row */
+    #dark-mode-toggle,
+    #quoteBtn,
+    #challengeBtn {
+      font-size: 0.75rem;
+      padding: 8px 12px;
+    }
+  
+    /* Hide streak badge and quote button on very small phones to save room */
+    #globalStreak {
+      display: none;
+    }
+  
+    .controls {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+  
+    .controls select {
+      width: 100%;
+    }
+  
+    .mood-ring-btn {
+      width: 100%;
+      grid-column: 1 / -1;
+    }
+  
+    .books-container {
+      grid-template-columns: 1fr;
+    }
+  
+    .book-card {
+      padding: 1.2rem;
+    }
+  
+    .card-buttons {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .open-btn,
+    .quotes-btn,
+    .notes-btn,
+    .update-btn,
+    .delete-btn,
+    .tag-btn {
+      width: 100%;
+    }
+  
+    /* Modals */
+    .modal-content,
+    .quotes-modal-content,
+    .notes-modal-content,
+    #addBookModal .modal-content {
+      width: 95vw;
+      max-width: none;
+      margin: 5vh auto;
+      padding: 1.5rem 1.2rem;
+      max-height: 90vh;
+    }
+  
+    .title-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  
+    .tags {
+      max-width: 100%;
+    }
+  
+    #tagsContainer {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* ── Small Phones (≤ 480px) ── */
+  @media (max-width: 480px) {
+    .hero-title {
+      font-size: clamp(1.5rem, 8vw, 2rem);
+    }
+  
+    .hero-meta {
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: center;
+    }
+  
+    .mini-stat {
+      padding: 0.6rem 1rem;
+      font-size: 0.95rem;
+    }
+  
+    .add-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 0.8rem;
+      font-size: 0.9rem;
+    }
+  
+    .brand-sans,
+    .brand-serif {
+      font-size: 1rem;  /* slightly smaller on very small phones */
+    }
+  
+    /* On very small phones, hide quote btn — leave dark mode + challenges */
+    #quoteBtn {
+      display: none;
+    }
+  
+    .hero-actions {
+      width: 100%;
+      flex-direction: column;
+    }
+  
+    .hero-actions>* {
+      width: 100%;
+      text-align: center;
+    }
+  
+    .sanctuary-panel {
+      width: 100%;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+    }
+  
+    /* Mobile adjustments for delete popup */
+    .delete-confirm-popup {
+      width: 92vw;
+      padding: 26px 20px 22px;
+    }
+  
+    .delete-confirm-title {
+      font-size: 1.3rem;
+    }
+  
+    .delete-confirm-actions {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+  
+  /* ── Very Small Phones (≤ 360px) ── */
+  @media (max-width: 360px) {
+    .topnav {
+      padding: 1rem 2vw;
+    }
+  
+    .controls {
+      grid-template-columns: 1fr;
+    }
+  
+    .book-card {
+      padding: 1rem;
+    }
+  
+    .book-card h2 {
+      font-size: 1rem;
+    }
+  
+    .pages-row .current-page {
+      font-size: 1.1rem;
+    }
+  
+    .card-buttons {
+      gap: 0.4rem;
+    }
+  
+    .modal-content {
+      padding: 1.2rem 0.8rem;
+    }
+  }
