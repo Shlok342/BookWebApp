@@ -236,25 +236,29 @@ function createCell(date, pages, maxPages) {
         )
     );
 
-cell.addEventListener(
-    "mousemove",
-    (e) => {
-
-        tooltip.style.left =
-            `${e.clientX + 15}px`;
-
-        tooltip.style.top =
-            `${e.clientY + 15}px`;
-    }
-);
-
-cell.addEventListener(
-    "mouseleave",
-    () => {
-
-        tooltip.style.opacity = "0";
-    }
-);
+    cell.addEventListener(
+        "mousemove",
+        (e) => {
+    
+            const tooltip = getTooltip();
+    
+            tooltip.style.left =
+                `${e.clientX + 15}px`;
+    
+            tooltip.style.top =
+                `${e.clientY + 15}px`;
+        }
+    );
+    
+    cell.addEventListener(
+        "mouseleave",
+        () => {
+    
+            const tooltip = getTooltip();
+    
+            tooltip.style.opacity = "0";
+        }
+    );
     
 
     cell.classList.add(getIntensityClass(pages,maxPages));
