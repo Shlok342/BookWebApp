@@ -771,6 +771,7 @@ footer {
 
 /* Layer 1: The High-Intensity Golden Core & Aura */
 footer::before {
+  
   content: '';
   position: absolute;
   width: 520px; 
@@ -796,6 +797,7 @@ footer::before {
   
   /* Forces the glow colors to vividly interact and brighten the underlying graphics */
   mix-blend-mode: screen; 
+  opacity: 0;
 }
 
 /* Layer 2: The Subliminal Golden Lotus Watermark */
