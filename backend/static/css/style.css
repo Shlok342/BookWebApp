@@ -764,80 +764,82 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3.5rem 1rem; 
+  padding: 5rem 1rem; /* Slightly more breathing room for the bloom */
   background: transparent;
   overflow: hidden;
 }
 
-/* Layer 1: The High-Intensity Golden Core & Aura */
+/* Layer 1: The Multi-Petal Radial Bloom Aura */
 footer::before {
-  
   content: '';
   position: absolute;
-  width: 520px; 
-  height: 180px; 
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  pointer-events: none;
-  
-  /* Multi-layered gradient: Sharp golden core melting into a wide warm amber radiance */
-  background:
-  radial-gradient(
-    ellipse at center,
-    rgba(255, 235, 170, 0.55) 0%,
-    rgba(255, 205, 110, 0.22) 35%,
-    rgba(255, 170, 70, 0.08) 65%,
-    transparent 100%
-  );
-  
-  /* Sharpens the light and makes it vibrant against the dark brown ground */
-  filter: blur(22px); 
-  
-  /* Forces the glow colors to vividly interact and brighten the underlying graphics */
-  mix-blend-mode: screen; 
-  opacity: 0;
-}
-
-/* Layer 2: The Subliminal Golden Lotus Watermark */
-footer::after {
-  content: '';
-  position: absolute;
-  width: 70px; 
-  height: 70px;
-  bottom: 15%; 
+  width: 600px; 
+  height: 240px; 
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
   pointer-events: none;
   
-  /* Upgraded color and opacity so it catches the light without looking like a harsh graphic */
-  background-color: #ffd269; 
-  opacity: 0.06; 
-  filter: blur(0.5px) drop-shadow(0 2px 4px rgba(255, 180, 50, 0.3));
+  /* Stacking 4 distinct radial gradients creates an organic, blooming "lotus shape" out of pure light */
+  background: 
+    /* Central high-intensity golden core */
+    radial-gradient(circle at 50% 70%, rgba(255, 243, 204, 0.7) 0%, rgba(255, 214, 145, 0.3) 25%, transparent 60%),
+    /* Left side soft petal glow */
+    radial-gradient(circle at 40% 65%, rgba(255, 215, 130, 0.25) 0%, transparent 50%),
+    /* Right side soft petal glow */
+    radial-gradient(circle at 60% 65%, rgba(255, 215, 130, 0.25) 0%, transparent 50%),
+    /* Wide, bottom warming aura that blends into the landscape */
+    radial-gradient(ellipse at 50% 90%, rgba(255, 183, 115, 0.15) 0%, transparent 70%);
   
-  -webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://w3.org'><path d='M50,25 C43,45 47,75 50,85 C53,75 57,45 50,25 Z M50,45 C30,50 25,70 50,85 C38,68 42,55 50,45 Z M50,45 C70,50 75,70 50,85 C62,68 58,55 50,45 Z M50,58 C15,62 20,80 50,85 C25,77 38,68 50,58 Z M50,58 C85,62 80,80 50,85 C75,77 62,68 50,58 Z'/></svg>") center/contain no-repeat;
-  mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://w3.org'><path d='M50,25 C43,45 47,75 50,85 C53,75 57,45 50,25 Z M50,45 C30,50 25,70 50,85 C38,68 42,55 50,45 Z M50,45 C70,50 75,70 50,85 C62,68 58,55 50,45 Z M50,58 C15,62 20,80 50,85 C25,77 38,68 50,58 Z M50,58 C85,62 80,80 50,85 C75,77 62,68 50,58 Z'/></svg>") center/contain no-repeat;
+  /* Smooths out the overlapping gradients into a flawless, dreamlike aura */
+  filter: blur(28px); 
+  
+  /* Turned on! Blends beautifully over your warm meadow/forest background */
+  mix-blend-mode: normal; 
+  opacity: 0.9;
 }
 
-/* The Quote Text - Needs to stay sharply legible over the brighter glow */
+/* Layer 2: Pure CSS Glowing Central Petal (No SVG) */
+footer::after {
+  content: '';
+  position: absolute;
+  width: 50px; 
+  height: 50px;
+  bottom: 10%; 
+  left: 50%;
+  /* Rotated 45deg + specific border-radius creates a perfect leaf/petal shape */
+  transform: translateX(-50%) rotate(45deg);
+  z-index: 1;
+  pointer-events: none;
+  
+  border-radius: 100% 0% 100% 0%;
+  
+  /* A glowing translucent peach-to-gold gradient for the physical petal */
+  background: linear-gradient(135deg, rgba(255, 245, 215, 0.45) 0%, rgba(255, 190, 100, 0.15) 100%);
+  
+  /* Softens the edges of the petal so it looks like it is emitting light */
+  filter: blur(1.5px) drop-shadow(0 0 12px rgba(255, 200, 110, 0.6));
+  opacity: 0.7; 
+}
+
+/* The Quote Text - Radiates warmth while maintaining maximum readability */
 .footer-quote {
   text-shadow:
-  0 0 8px rgba(255, 220, 140, 0.35),
-  0 0 18px rgba(255, 200, 100, 0.15);
+    0 2px 10px rgba(255, 255, 255, 0.8), /* Crisp white backing so text pops over the gold */
+    0 0 20px rgba(255, 218, 148, 0.4);
   position: relative;
   z-index: 2;
   margin: 0;
   font-family: "Georgia", serif;
   font-style: italic;
-  font-size: 1.1rem;
-  line-height: 1.5;
+  font-size: 1.15rem;
+  line-height: 1.6;
   text-align: center;
-  color: #2b1a0e; /* Deep rich espresso brown keeps contrast high over the new bright gold backdrop */
-  letter-spacing: 0.01em;
+  color: #2b1a0e; /* Deep rich espresso brown keeps contrast high over the light backdrop */
+  letter-spacing: 0.02em;
+  max-width: 600px;
 }
-
 
 .no-books-msg {
   grid-column: 1/-1;
