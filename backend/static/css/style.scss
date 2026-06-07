@@ -30,18 +30,18 @@
   pointer-events: none;
   z-index: 1;
   overflow: hidden;
-  /* Smoothly fades the bottom of the landscape into your app's base background */
+  /* Smoothly fades into the base cream background */
   mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 15%, black 60%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 15%, black 60%);
 }
 
-/* Layer 1 — Far mountains (Misty Sage & Soft Forest) */
+/* Layer 1 — Far mountains (Warm Misty Morning) */
 .mountain-bg::before {
   content: "";
   position: absolute;
   inset: -20px;
-  /* A misty, desaturated gradient that bridges your cream UI to the greens */
-  background: linear-gradient(160deg, #cbd5c0 20%, #94a684 80%);
+  /* Soft, pale golden-green fading into a muted sage to simulate distance and morning mist */
+  background: linear-gradient(160deg, #e3e9d2 20%, #9cb392 80%);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cpath d='M0,240 C60,205 140,172 240,178 C320,183 400,148 510,130 C620,112 710,138 820,122 C930,106 1030,132 1140,124 C1250,116 1360,140 1440,130 L1440,400 L0,400 Z' fill='black'/%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cpath d='M0,240 C60,205 140,172 240,178 C320,183 400,148 510,130 C620,112 710,138 820,122 C930,106 1030,132 1140,124 C1250,116 1360,140 1440,130 L1440,400 L0,400 Z' fill='black'/%3E%3C/svg%3E");
   mask-size: 100% 100%;
@@ -50,19 +50,18 @@
   -webkit-mask-repeat: no-repeat;
   mask-position: bottom;
   -webkit-mask-position: bottom;
-  /* Reduced blur slightly so the shape doesn't get completely lost */
   filter: blur(8px);
   opacity: 0.85;
   transition: background var(--speed-slow) var(--ease-smooth);
 }
 
-/* Layer 2 — Mid/Foreground mountains (Sunlit Meadow Green) */
+/* Layer 2 — Mid/Foreground mountains (Sunlit Meadow to Cozy Forest) */
 .mountain-bg::after {
   content: "";
   position: absolute;
   inset: -10px;
-  /* Dynamic light green gradient mimicking a sun-kissed meadow sloping into deep moss */
-  background: linear-gradient(115deg, #bce3be 10%, #a4cb9e 45%, #688f6c 90%);
+  /* A rich, earthy gradient: Sunny yellow-green at the peaks, dropping into a deep, cozy moss green */
+  background: linear-gradient(115deg, #d4e0a3 10%, #9ab573 45%, #5d7a4d 90%);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cpath d='M0,285 C70,258 170,235 290,244 C400,252 490,218 618,226 C746,234 848,256 968,248 C1088,240 1210,256 1320,248 C1390,243 1430,252 1440,248 L1440,400 L0,400 Z' fill='black'/%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cpath d='M0,285 C70,258 170,235 290,244 C400,252 490,218 618,226 C746,234 848,256 968,248 C1088,240 1210,256 1320,248 C1390,243 1430,252 1440,248 L1440,400 L0,400 Z' fill='black'/%3E%3C/svg%3E");
   mask-size: 100% 100%;
@@ -71,7 +70,6 @@
   -webkit-mask-repeat: no-repeat;
   mask-position: bottom;
   -webkit-mask-position: bottom;
-  /* Crisp edge reduction lets the hill look closer and more defined */
   filter: blur(2px);
   opacity: 0.95;
   transition: background var(--speed-slow) var(--ease-smooth);
