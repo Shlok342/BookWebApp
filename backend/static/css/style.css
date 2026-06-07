@@ -846,6 +846,11 @@ footer::after {
   color: #2b1a0e; 
   letter-spacing: 0.02em;
   max-width: 600px;
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+}
+.footer-quote.fade-out {
+  opacity: 0;
 }
 
 .no-books-msg {
