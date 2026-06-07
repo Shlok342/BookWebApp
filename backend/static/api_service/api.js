@@ -92,12 +92,8 @@ export const API = {
       return res.json();
     },
   
-    // ─── QUOTE OF THE DAY ─────────────────────────────
-    async getQuote() {
-      const res = await fetch("/quote");
-      if (!res.ok) throw new Error("Failed to fetch quote");
-      return res.json();
-    },
+    
+    
     async getHeatmap() {
       const res = await fetch("/heatmap");
   

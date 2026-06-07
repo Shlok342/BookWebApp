@@ -1,4 +1,8 @@
-import { API } from "../api_service/api.js";
+async function getQuote() {
+    const res = await fetch("/quote");
+    if (!res.ok) throw new Error("Failed to fetch quote");
+    return res.json();
+  }
 async function loadAndDisplayQuote() {
     const quoteElement = document.querySelector('.footer-quote');
     if (!quoteElement) return;
