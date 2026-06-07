@@ -760,20 +760,83 @@ body.dark-theme {
 
 /* ── Footer ────────────────────────────────────────────── */
 footer {
-  text-align: center;
-  padding: 30px 40px;
   position: relative;
-  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3.5rem 1rem; 
+  background: transparent;
+  overflow: hidden;
 }
 
-.footer-quote {
-  font-family: "Cormorant Garamond", serif;
-  font-style: italic;
-  font-size: 0.97rem;
-  color: var(--text-faint);
-  letter-spacing: 0.02em;
-  line-height: 1.6;
+/* Layer 1: The High-Intensity Golden Core & Aura */
+footer::before {
+  content: '';
+  position: absolute;
+  width: 520px; 
+  height: 180px; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+  
+  /* Multi-layered gradient: Sharp golden core melting into a wide warm amber radiance */
+  background:
+  radial-gradient(
+    ellipse at center,
+    rgba(255, 235, 170, 0.55) 0%,
+    rgba(255, 205, 110, 0.22) 35%,
+    rgba(255, 170, 70, 0.08) 65%,
+    transparent 100%
+  );
+  
+  /* Sharpens the light and makes it vibrant against the dark brown ground */
+  filter: blur(22px); 
+  
+  /* Forces the glow colors to vividly interact and brighten the underlying graphics */
+  mix-blend-mode: screen; 
 }
+
+/* Layer 2: The Subliminal Golden Lotus Watermark */
+footer::after {
+  content: '';
+  position: absolute;
+  width: 55px; 
+  height: 55px;
+  bottom: 15%; 
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+  
+  /* Upgraded color and opacity so it catches the light without looking like a harsh graphic */
+  background-color: #ffd269; 
+  opacity: 0.06; 
+  filter: blur(0.5px) drop-shadow(0 2px 4px rgba(255, 180, 50, 0.3));
+  
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://w3.org'><path d='M50,25 C43,45 47,75 50,85 C53,75 57,45 50,25 Z M50,45 C30,50 25,70 50,85 C38,68 42,55 50,45 Z M50,45 C70,50 75,70 50,85 C62,68 58,55 50,45 Z M50,58 C15,62 20,80 50,85 C25,77 38,68 50,58 Z M50,58 C85,62 80,80 50,85 C75,77 62,68 50,58 Z'/></svg>") center/contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://w3.org'><path d='M50,25 C43,45 47,75 50,85 C53,75 57,45 50,25 Z M50,45 C30,50 25,70 50,85 C38,68 42,55 50,45 Z M50,45 C70,50 75,70 50,85 C62,68 58,55 50,45 Z M50,58 C15,62 20,80 50,85 C25,77 38,68 50,58 Z M50,58 C85,62 80,80 50,85 C75,77 62,68 50,58 Z'/></svg>") center/contain no-repeat;
+}
+
+/* The Quote Text - Needs to stay sharply legible over the brighter glow */
+.footer-quote {
+  text-shadow:
+  0 0 8px rgba(255, 220, 140, 0.35),
+  0 0 18px rgba(255, 200, 100, 0.15);
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  font-family: "Georgia", serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  text-align: center;
+  color: #2b1a0e; /* Deep rich espresso brown keeps contrast high over the new bright gold backdrop */
+  letter-spacing: 0.01em;
+}
+
+
 
 .no-books-msg {
   grid-column: 1/-1;
@@ -2503,16 +2566,18 @@ textarea:focus {
   pointer-events: none;
   z-index: 1;
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25) 22%, black 58%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25) 22%, black 58%);
+  /* Smoothly fades the bottom of the landscape into your app's base background */
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 15%, black 60%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 15%, black 60%);
 }
 
-/* Layer 1 — Far mountains */
+/* Layer 1 — Far mountains (Misty Sage & Soft Forest) */
 .mountain-bg::before {
   content: "";
   position: absolute;
   inset: -20px;
-  background: var(--mtn-layer-1);
+  /* A misty, desaturated gradient that bridges your cream UI to the greens */
+  background: linear-gradient(160deg, #cbd5c0 20%, #94a684 80%);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cpath d='M0,240 C60,205 140,172 240,178 C320,183 400,148 510,130 C620,112 710,138 820,122 C930,106 1030,132 1140,124 C1250,116 1360,140 1440,130 L1440,400 L0,400 Z' fill='black'/%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cpath d='M0,240 C60,205 140,172 240,178 C320,183 400,148 510,130 C620,112 710,138 820,122 C930,106 1030,132 1140,124 C1250,116 1360,140 1440,130 L1440,400 L0,400 Z' fill='black'/%3E%3C/svg%3E");
   mask-size: 100% 100%;
@@ -2521,17 +2586,19 @@ textarea:focus {
   -webkit-mask-repeat: no-repeat;
   mask-position: bottom;
   -webkit-mask-position: bottom;
-  filter: blur(14px);
-  opacity: var(--mtn-opacity-1);
+  /* Reduced blur slightly so the shape doesn't get completely lost */
+  filter: blur(8px);
+  opacity: 0.85;
   transition: background var(--speed-slow) var(--ease-smooth);
 }
 
-/* Layer 2 — Mid mountains */
+/* Layer 2 — Mid/Foreground mountains (Sunlit Meadow Green) */
 .mountain-bg::after {
   content: "";
   position: absolute;
   inset: -10px;
-  background: var(--mtn-layer-2);
+  /* Dynamic light green gradient mimicking a sun-kissed meadow sloping into deep moss */
+  background: linear-gradient(115deg, #bce3be 10%, #a4cb9e 45%, #688f6c 90%);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cpath d='M0,285 C70,258 170,235 290,244 C400,252 490,218 618,226 C746,234 848,256 968,248 C1088,240 1210,256 1320,248 C1390,243 1430,252 1440,248 L1440,400 L0,400 Z' fill='black'/%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400' preserveAspectRatio='none'%3E%3Cpath d='M0,285 C70,258 170,235 290,244 C400,252 490,218 618,226 C746,234 848,256 968,248 C1088,240 1210,256 1320,248 C1390,243 1430,252 1440,248 L1440,400 L0,400 Z' fill='black'/%3E%3C/svg%3E");
   mask-size: 100% 100%;
@@ -2540,8 +2607,9 @@ textarea:focus {
   -webkit-mask-repeat: no-repeat;
   mask-position: bottom;
   -webkit-mask-position: bottom;
-  filter: blur(5px);
-  opacity: var(--mtn-opacity-2);
+  /* Crisp edge reduction lets the hill look closer and more defined */
+  filter: blur(2px);
+  opacity: 0.95;
   transition: background var(--speed-slow) var(--ease-smooth);
 }
 
