@@ -236,19 +236,17 @@ function createCell(date, pages, maxPages) {
         )
     );
 
-    cell.addEventListener(
-        "mousemove",
-        (e) => {
+    cell.addEventListener("mousemove", (e) => {
+        const tooltip = getTooltip();
     
-            const tooltip = getTooltip();
+        console.log(
+            "X:", e.clientX,
+            "Y:", e.clientY
+        );
     
-            tooltip.style.left =
-                `${e.clientX + 15}px`;
-    
-            tooltip.style.top =
-                `${e.clientY + 15}px`;
-        }
-    );
+        tooltip.style.left = `${e.clientX + 15}px`;
+        tooltip.style.top = `${e.clientY + 15}px`;
+    });
     
     cell.addEventListener(
         "mouseleave",
