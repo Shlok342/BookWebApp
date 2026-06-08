@@ -9,6 +9,7 @@ import { createBookCard } from "./render_helpers/createBookCard.js";
 import { addBookModal } from "./circular_import_helper.js";
 import { initMain } from "./integration_handler/init.js";
 import { openActivityModal } from "./heatmap/heatmapModal.js";
+
 store.books = [];
 store.activeBookId = null;
 store.lastKnownGlobalStreak = 0;

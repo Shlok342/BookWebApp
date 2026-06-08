@@ -5,13 +5,14 @@ import {initQuotesModal} from "../modal_helper/quotesModal.js";
 import {initNotesModal} from "../modal_helper/notesModal.js";
 import { initThemeToggle,} from "../theme.js";
 import { scheduleMidnightCheck, getGlobalStreak } from "../streak_helper/streak_helper.js";
+import { loadAndDisplayQuote } from "../frontend_helpers/quote_of_the_day.js";
 export function initMain(){
     initThemeToggle();
     
     initQuotesModal();
 // ─── NOTES MODAL ──────────────────────────────────────────────────────────────
     initNotesModal();
-    
+    loadAndDisplayQuote();
     getBooks();
     getChallenges();
     getStats();

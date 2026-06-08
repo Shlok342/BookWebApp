@@ -3,12 +3,12 @@ async function getQuote() {
     if (!res.ok) throw new Error("Failed to fetch quote");
     return res.json();
   }
-async function loadAndDisplayQuote() {
+export async function loadAndDisplayQuote() {
     const quoteElement = document.querySelector('.footer-quote');
     if (!quoteElement) return;
   
     try {
-      const data = await API.getQuote(); // Works perfectly as a standalone function now
+      const data = await getQuote(); // Works perfectly as a standalone function now
       const formattedQuote = `“${data.quote}” — ${data.author}`;
       
       quoteElement.classList.add('fade-out');
@@ -23,4 +23,4 @@ async function loadAndDisplayQuote() {
     }
   }
   
-  document.addEventListener('DOMContentLoaded', loadAndDisplayQuote);
+  
