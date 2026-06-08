@@ -27,7 +27,109 @@
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  padding: 5rem 1rem; 
+  background: transparent;
+  overflow: hidden;
+}
 
+/* Layer 1: The Multi-Petal Radial Bloom Aura */
+/* Layer 1: The 5-Petal Pink Lotus Bloom (Pure Gradients) */
+footer::before {
+  content: '';
+  position: absolute;
+  width: 600px; 
+  height: 240px; 
+  bottom: 0;
+  width: 650px; 
+  height: 260px; 
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+
+  /* Stacking 4 distinct radial gradients creates an organic, blooming "lotus shape" out of pure light */
+  /* Stacking specific ellipses to carve out a distinct, radial 5-petal lotus silhouette */
+  background: 
+     
+    /* 1. Core/Center Petal (Tall & Bright Rose Gold) */
+    radial-gradient(ellipse 15% 90% at 50% 80%, rgba(255, 160, 185, 0.7) 0%, transparent 70%),
+    
+    /* 2. Left Mid-Petal (Soft Magenta) */
+    radial-gradient(ellipse 20% 70% at 36% 85%, rgba(245, 112, 155, 0.45) 0%, transparent 65%),
+    
+    /* 3. Right Mid-Petal (Soft Magenta) */
+    radial-gradient(ellipse 20% 70% at 64% 85%, rgba(245, 112, 155, 0.45) 0%, transparent 65%),
+    
+    /* 4. Left Outer Petal (Wide Blush Pink) */
+    radial-gradient(ellipse 25% 50% at 22% 95%, rgba(255, 190, 210, 0.25) 0%, transparent 65%),
+    
+    /* 5. Right Outer Petal (Wide Blush Pink) */
+    radial-gradient(ellipse 25% 50% at 78% 95%, rgba(255, 190, 210, 0.25) 0%, transparent 65%),
+    
+    /* Base Glowing Heart (Warm peach/cream to tie it to the meadow) */
+    radial-gradient(ellipse 50% 60% at 50% 100%, rgba(255, 235, 240, 0.6) 0%, transparent 70%);
+
+  /* Turned on! Blends beautifully over your warm meadow/forest background */
+  /* Reduced blur so the distinct petal shapes actually show through */
+  filter: blur(14px); 
+  mix-blend-mode: normal; 
+  
+  opacity: 0.95;
+}
+
+/* Layer 2: Pure CSS Glowing Central Petal (No SVG) */
+/* Layer 2: The Physical Lotus Bud Anchor (Pure CSS) */
+footer::after {
+  content: '';
+  position: absolute;
+  
+  width: 45px; 
+  height: 45px;
+  bottom: 8%; 
+  left: 50%;
+ 
+  /* Rotated square creates a sharp petal shape at the absolute center */
+  transform: translateX(-50%) rotate(45deg);
+  z-index: 1;
+  pointer-events: none;
+
+  border-radius: 100% 0% 100% 0%;
+
+
+  /* Deep pink fading into warm gold */
+  background: linear-gradient(135deg, rgba(255, 175, 200, 0.6) 0%, rgba(255, 120, 150, 0.15) 100%);
+
+  
+  /* Soft outer pink glow to make the anchor look illuminated */
+  filter: blur(1px) drop-shadow(0 0 14px rgba(255, 130, 170, 0.7));
+  opacity: 0.85; 
+}
+
+
+/* The Quote Text - Kept grounded with warm shadows */
+.footer-quote {
+  text-shadow:
+    
+    0 2px 10px rgba(255, 255, 255, 0.9), 
+    0 0 20px rgba(255, 170, 200, 0.5); /* Pink-tinted text shadow to blend into the bloom */
+    position: relative;
+    z-index: 2;
+    margin: 0;
+ footer::after {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  text-align: center;
+  
+  color: #2b1a0e; 
+  letter-spacing: 0.02em;
+  max-width: 600px;
+}
 .mountain-bg {
   position: fixed;
   bottom: 0;
@@ -92,7 +194,7 @@
   opacity: 0.98;
 }
 
-
+}
 
 
 
