@@ -311,7 +311,6 @@ def update_global_streak(cursor, pages_read):
         "H_freeze",
     )
     # #endregion
-
     if qualified:
         if g_last is None or g_streak == 0:
             new_streak = 1
@@ -325,6 +324,11 @@ def update_global_streak(cursor, pages_read):
             new_streak = 1
 
         new_last = today
+
+        # 🎁 Earn a freeze at major milestones
+        if new_streak in (7, 30, 100):
+            g_freeze += 1
+
     else:
         new_streak = g_streak
         new_last = g_last
