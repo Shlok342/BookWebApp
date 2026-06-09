@@ -22,7 +22,7 @@ export function renderBooks(filteredBooks = store.books) {
   container.innerHTML = "";
 
   if (!filteredBooks || filteredBooks.length === 0) {
-    container.innerHTML = "<p>No books found. Add one!</p>";
+    container.innerHTML = "<p>No books found matching this filter!</p>";
     return;
   }
 

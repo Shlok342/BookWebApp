@@ -47,7 +47,7 @@ export function renderQuotesList(quotes) {
 
   document.getElementById("quotesList").innerHTML =
     quotes.length === 0
-      ? `<p class="no-quotes">No quotes yet. Add one below.</p>`
+      ? `<p class="no-quotes">No quotes yet. Harvest the first one below.</p>`
       : quotes
           .map(
             q => `

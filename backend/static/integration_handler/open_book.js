@@ -13,11 +13,11 @@ export async function openBookModal(book) {
 
   const quotesDiv = document.getElementById("openBookQuotes");
   quotesDiv.innerHTML = !book.quotes || book.quotes.length === 0
-    ? "<p>No quotes yet.</p>"
+    ? "<p>Beautiful quotes await.</p>"
     : book.quotes.map(q => `<p>"${q}"</p>`).join("");
 
   const notes = book.notes?.trim();
-  document.getElementById("openBookNotes").textContent = notes || "No notes yet.";
+  document.getElementById("openBookNotes").textContent = notes || "No notes yet.Thoughts are hollow.";
 
 
 }
