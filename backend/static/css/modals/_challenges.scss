@@ -1,11 +1,37 @@
 .challenge-card {
-    background: #f7f7f7;
-    padding: 18px;
-    border-radius: 14px;
-    margin-top: 14px;
-    text-align: cent er;
-    transition: 0.3s;
-  }
+  background: #f7f7f7;
+  padding: 18px;
+  border-radius: 14px;
+  margin-top: 14px;
+
+  transition: all 0.3s ease;
+}
+
+.challenge-card h3 {
+  margin: 0 0 8px 0;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 1.1rem;
+}
+
+.challenge-card p {
+  margin: 0;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.challenge-card.done {
+  background: #e6f7ec;
+  border: 1px solid #4caf50;
+}
+
+.challenge-status {
+  margin-top: 12px;
+  font-size: 1.2rem;
+}
   #challengeBtn {
     display: inline-flex;
     align-items: center;
@@ -40,27 +66,7 @@
     box-shadow: 0 2px 6px rgba(120, 130, 255, 0.1);
   }
   
-  .challenge-card.done {
-    background: #e6f7ec;
-    border: 1px solid #4caf50;
-  }
   
-  .challenge-status {
-    margin-top: 8px;
-    font-weight: 500;
-  }
   
-  /* reuse the existing progress bar style */
-  .progress-bar {
-    background: #ddd;
-    height: 8px;
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 10px 0;
-  }
-  
-  .progress {
-    height: 100%;
-    background: #4caf50;
-  }
+
   

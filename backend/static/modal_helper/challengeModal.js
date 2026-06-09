@@ -30,58 +30,37 @@ export async function getChallenges() {
 }
 
 // ─── RENDER CHALLENGES ─────────────────────────────────────────────────────
-function renderChallenges(data) {
-
-  const progressPercent = Math.min(
-    (data.monthly.progress / 2) * 100,
-    100
-  );
 
   // ─── DAILY ───────────────────────────────────────────────────────────────
-  document.getElementById("dailyChallenge").innerHTML = `
+  function renderChallenges(challenges) {
 
-    <div class="challenge-card ${
-      data.daily.completed ? "done" : ""
-    }">
-
-      <h3>📅 Daily Challenge</h3>
-
-      <p>
-        ${
-          data.daily.completed
-            ? "✅ Completed!"
-            : "Read 20 pages in one session"
-        }
-      </p>
-
-    </div>
-
-  `;
-
-  // ─── MONTHLY ─────────────────────────────────────────────────────────────
-  document.getElementById("monthlyChallenge").innerHTML = `
-
-    <div class="challenge-card ${
-      data.monthly.completed ? "done" : ""
-    }">
-
-      <h3>📚 Monthly Challenge</h3>
-
-      <div class="progress-bar">
-
-        <div
-          class="progress"
-          style="width:${progressPercent}%"
-        ></div>
-
+    const container =
+      document.getElementById("challengesContainer");
+  
+    container.innerHTML = challenges.map(challenge => `
+  
+      <div class="challenge-card ${
+        challenge.completed ? "done" : ""
+      }">
+  
+        <h3>
+          ${
+            challenge.completed
+              ? "☀️"
+              : "📖"
+          }
+          ${challenge.title}
+        </h3>
+  
+        <p>
+          ${challenge.description}
+        </p>
+  
       </div>
-
-      <p>${data.monthly.progress} / 2 books</p>
-
-    </div>
-
-  `;
-}
+  
+    `).join("");
+  
+  }
 
 // ─── OPEN MODAL ────────────────────────────────────────────────────────────
 challengeBtn.addEventListener(
