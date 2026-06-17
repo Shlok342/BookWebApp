@@ -17,8 +17,11 @@ def register_user(email: str, password: str) -> dict:
             user = cursor.fetchone()
             conn.commit()
             return dict(user)
-        except Exception:
-            raise HTTPException(status_code=400, detail="Email already registered")
+        except Exception as e:
+            raise HTTPException(
+                status_code=400,
+                detail=str(e)
+            )
 
 def login_user(email: str, password: str) -> dict:
     with get_db() as conn:

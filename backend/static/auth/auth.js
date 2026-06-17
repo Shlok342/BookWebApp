@@ -23,7 +23,14 @@ export const Auth = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     });
-    if (!res.ok) throw new Error("Registration failed");
+    
+    if (!res.ok) {
+      console.log("STATUS:", res.status);
+      console.log("BODY:", await res.text());
+      const error = await res.json();
+      throw new Error(error.detail || "Registration failed");
+    }
+  
     const { access_token } = await res.json();
     Auth.setToken(access_token);
   },
