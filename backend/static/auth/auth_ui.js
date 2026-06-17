@@ -27,7 +27,7 @@ submitBtn.addEventListener("click", async () => {
     if (mode === "login") await Auth.login(email, password);
     else await Auth.register(email, password);
     modal.style.display = "none";
-    document.getElementById("app").style.display = "";
+    
     initMain();
   } catch (e) {
     errorEl.textContent = e.message;
@@ -35,11 +35,9 @@ submitBtn.addEventListener("click", async () => {
 });
 
 export function initAuth() {
-  if (Auth.isLoggedIn()) {
-    modal.style.display = "none";
-    document.getElementById("app").style.display = "";
-  } else {
+  if (!Auth.isLoggedIn()) {
     modal.style.display = "flex";
-    document.getElementById("app").style.display = "none";
+  } else {
+    modal.style.display = "none";
   }
 }

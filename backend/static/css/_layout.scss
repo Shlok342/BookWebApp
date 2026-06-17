@@ -319,7 +319,21 @@
     background-size: 28px 28px;
     transition: backdrop-filter var(--speed-mid) ease;
   }
+  .guest-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
+}
 
+.guest-state h2 {
+    margin-bottom: 1rem;
+}
+
+.guest-state p {
+    opacity: 0.85;
+    line-height: 1.6;
+}
 
 .no-books-msg {
   grid-column: 1 / -1;

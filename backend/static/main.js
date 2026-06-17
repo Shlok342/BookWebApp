@@ -17,7 +17,18 @@ store.activeBookId = null;
 store.lastKnownGlobalStreak = 0;
 
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
+function showGuestState() {
+  const guestState = document.getElementById("guestState");
 
+  if (guestState) {
+      guestState.style.display = "block";
+  }
+
+  const bookshelf = document.getElementById("bookshelf");
+  if (bookshelf) {
+      bookshelf.innerHTML = "";
+  }
+}
 
 renderTagOptions();
 export function renderBooks(filteredBooks = store.books) {
@@ -36,8 +47,6 @@ export function renderBooks(filteredBooks = store.books) {
     console.log(store.books[0]); 
   });
 }
-
-
 // ─── ADD BOOK MODAL ───────────────────────────────────────────────────────────
 
 document.querySelector(".add-btn").addEventListener("click", () => {
@@ -69,6 +78,13 @@ document
   .getElementById("saveBook")
   .addEventListener("click", saveBookHandler);
 document.addEventListener("DOMContentLoaded", () => {
+  const guestLoginBtn = document.getElementById("guestLoginBtn");
+
+  if (guestLoginBtn) {
+      guestLoginBtn.addEventListener("click", () => {
+          document.getElementById("authModal").style.display = "flex";
+      });
+}
   // #region agent log
   fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
     method: "POST",

@@ -6,18 +6,25 @@ import {initNotesModal} from "../modal_helper/notesModal.js";
 import { initThemeToggle,} from "../theme.js";
 import { scheduleMidnightCheck, getGlobalStreak } from "../streak_helper/streak_helper.js";
 import { loadAndDisplayQuote } from "../frontend_helpers/quote_of_the_day.js";
+import { Auth } from "../auth/auth.js";
 export function initMain(){
+
     initThemeToggle();
-    
     initQuotesModal();
-// ─── NOTES MODAL ──────────────────────────────────────────────────────────────
     initNotesModal();
     loadAndDisplayQuote();
+
+    if (!Auth.isLoggedIn()) {
+        return;
+    }
+
     getBooks();
     getChallenges();
     getStats();
+
     getGlobalStreak();
     scheduleMidnightCheck();
+
     setInterval(async () => {
         await getGlobalStreak();
     }, 60000);
