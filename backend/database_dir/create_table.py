@@ -1,3 +1,6 @@
+from backend.database_dir.create_user_table import create_user_table
+
+
 def create_tables(cursor):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS books (
@@ -42,5 +45,7 @@ def create_tables(cursor):
                 streak_count INTEGER DEFAULT 0
             )
             """)
+    # ADD this call at the end of create_tables(), after the last cursor.execute
+    create_user_table(cursor)
     
     

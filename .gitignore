@@ -7,7 +7,8 @@ __pycache__/
 
 # Virtual environment
 venv/
-.env/
+backend/.env
+
 
 # OS junk
 .DS_Store

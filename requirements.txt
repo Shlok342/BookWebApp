@@ -3,3 +3,5 @@ uvicorn
 psycopg2-binary
 python-dotenv
 jinja2
+python-jose[cryptography]
+passlib[bcrypt]

@@ -12,6 +12,11 @@ from backend.routers.stats import router as stat_router
 from backend.routers.book_update import router as books_router
 from backend.routers.challenges import router as challenges_router
 from backend.routers.quotes import router as quote_router
+# ADD to imports block
+from backend.routers.auth_router import router as auth_router
+
+# ADD after the other app.include_router() calls
+
 BASE_DIR = Path(__file__).resolve().parent
 from backend.routers.heatmap_router import router as heatmap_router
 TEMPLATES_DIR = BASE_DIR / "static" / "templates"
@@ -31,6 +36,7 @@ app.include_router(books_router)
 app.include_router(core_book_functionality)
 app.include_router(challenges_router)
 app.include_router(quote_router)
+app.include_router(auth_router)
 app.mount("/static", StaticFiles(directory=BASE_DIR/"static"), name="static")
 init_db()
 
@@ -63,8 +69,5 @@ def home(request: Request):
     return templates.TemplateResponse(request, "index.html")
 
 
-@app.get("/test")
-def test():
-    return {"files": os.listdir()}
 
 

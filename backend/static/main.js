@@ -9,6 +9,8 @@ import { createBookCard } from "./render_helpers/createBookCard.js";
 import { addBookModal } from "./circular_import_helper.js";
 import { initMain } from "./integration_handler/init.js";
 import { openActivityModal } from "./heatmap/heatmapModal.js";
+import { initAuth } from "./auth/auth_ui.js";
+import { Auth } from "./auth/auth.js";
 
 store.books = [];
 store.activeBookId = null;
@@ -104,7 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }),
   }).catch(() => {});
   // #endregion
-
+  initAuth();
+  document.getElementById("logoutBtn")
+  .addEventListener("click", () => Auth.logout());
   initMain();
   document
     .getElementById("activityBtn")
