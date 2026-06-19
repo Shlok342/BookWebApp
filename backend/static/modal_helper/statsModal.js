@@ -7,11 +7,7 @@ export async function getStats() {
 
   try {
 
-    console.log("Fetching stats...");
-
     const data = await API.getStats();
-
-    console.log("DATA:", data);
 
     // ─── MAIN STATS ────────────────────────────────────────────────────────
     document.getElementById("totalBooks").textContent =
@@ -36,10 +32,6 @@ export async function getStats() {
     document.getElementById("miniMonth").textContent =
       data.pages_this_month;
 
-    console.log("Old stats done ✅");
-
-    console.log("Trying new stats...");
-
     // ─── STREAK STATS ──────────────────────────────────────────────────────
     document.getElementById("streakPages").textContent =
       data.streak_pages_read;
@@ -49,8 +41,6 @@ export async function getStats() {
 
     document.getElementById("streakAvg").textContent =
       data.avg_streak_pages_per_month;
-
-    console.log("New stats done ✅");
 
   } catch (err) {
 

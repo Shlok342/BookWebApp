@@ -2,6 +2,8 @@ from backend.database_dir.create_user_table import create_user_table
 
 
 def create_tables(cursor):
+    create_user_table(cursor)
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS books (
             id SERIAL PRIMARY KEY,
@@ -15,7 +17,8 @@ def create_tables(cursor):
             streak_count INTEGER DEFAULT 0,
             genre TEXT DEFAULT '',
             cover_url TEXT DEFAULT '',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            user_id INTEGER REFERENCES users(id)
         )
     """)
     cursor.execute("""
@@ -45,7 +48,4 @@ def create_tables(cursor):
                 streak_count INTEGER DEFAULT 0
             )
             """)
-    # ADD this call at the end of create_tables(), after the last cursor.execute
-    create_user_table(cursor)
-    
     

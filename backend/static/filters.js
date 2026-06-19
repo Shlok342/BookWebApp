@@ -7,7 +7,6 @@ export function applyFilters() {
   const genreValue = document.getElementById("genreFilter").value.toLowerCase();
 
   let filtered = store.books.filter(book => {
-    console.log(store.books.map(b => ({ title: b.title, genre: b.genre })));
     const matchesSearch = book.title.toLowerCase().includes(searchValue);
     const matchesGenre =
     !genreValue ||

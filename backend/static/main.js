@@ -34,6 +34,11 @@ renderTagOptions();
 export function renderBooks(filteredBooks = store.books) {
   container.innerHTML = "";
 
+  if (!store.books || store.books.length === 0) {
+    container.innerHTML = "<p>No books added to sanctuary yet, please add one</p>";
+    return;
+  }
+
   if (!filteredBooks || filteredBooks.length === 0) {
     container.innerHTML = "<p>No books found matching this filter!</p>";
     return;
@@ -44,7 +49,6 @@ export function renderBooks(filteredBooks = store.books) {
   filteredBooks.forEach(book => {
     const card = createBookCard(book);
     container.appendChild(card);
-    console.log(store.books[0]); 
   });
 }
 // ─── ADD BOOK MODAL ───────────────────────────────────────────────────────────
@@ -85,43 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("authModal").style.display = "flex";
       });
 }
-  // #region agent log
-  fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "f3a808" },
-    body: JSON.stringify({
-      sessionId: "f3a808",
-      location: "script.js:DOMContentLoaded:filters",
-      message: "filters DOMContentLoaded fired",
-      data: {},
-      hypothesisId: "H_init",
-      timestamp: Date.now(),
-    }),
-  }).catch(() => { });
-  // #endregion
   document.getElementById("searchInput").addEventListener("input", applyFilters);
   document.getElementById("statusFilter").addEventListener("change", applyFilters);
   document.getElementById("sortOption").addEventListener("change", applyFilters);
 });
 document.addEventListener("DOMContentLoaded", () => {
-
-  // #region agent log
-  fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Debug-Session-Id": "f3a808"
-    },
-    body: JSON.stringify({
-      sessionId: "f3a808",
-      location: "script.js:DOMContentLoaded:init",
-      message: "main init DOMContentLoaded fired",
-      data: {},
-      hypothesisId: "H_init",
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
   initAuth();
   document.getElementById("logoutBtn")
   .addEventListener("click", () => Auth.logout());

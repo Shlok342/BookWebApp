@@ -13,7 +13,6 @@ export function scheduleMidnightCheck() {
   
       setTimeout(async () => {
         try {
-          console.log("🌙 Midnight hit — updating streak");
           await getGlobalStreak();
         } finally {
           scheduleNext();
@@ -26,24 +25,6 @@ export function scheduleMidnightCheck() {
   export async function getGlobalStreak() {
   try {
       const data = await API.getGlobalStreak();
-      // #region agent log
-      fetch("http://127.0.0.1:7490/ingest/dc227871-b4dc-4521-8755-f48980c0dcae", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "f3a808" },
-        body: JSON.stringify({
-          sessionId: "f3a808",
-          location: "script.js:getGlobalStreak",
-          message: "GET /streak response",
-          data: {
-            streak_count: data.streak_count,
-            last_read_date: data.last_read_date,
-            freeze_count: data.freeze_count,
-          },
-          hypothesisId: "H_streak_ui",
-          timestamp: Date.now(),
-        }),
-      }).catch(() => { });
-      // #endregion
       renderGlobalStreak(data.streak_count, data.last_read_date, data.freeze_count);
     }catch (err) {
       console.error("Failed to fetch global streak:", err);

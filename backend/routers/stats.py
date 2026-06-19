@@ -6,4 +6,4 @@ router = APIRouter()
 
 @router.get("/stats")
 def get_stats(user_id: int = Depends(get_current_user_id)):
-    return get_stats_data()
+    return get_stats_data(user_id)

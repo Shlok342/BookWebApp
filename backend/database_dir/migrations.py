@@ -51,6 +51,30 @@ def do_migrations(cursor):
             END IF;
         END $$;
         """)
-    
-    
+
+    cursor.execute("""
+        ALTER TABLE books
+        ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id)
+        """)
+    cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_books_user_id ON books(user_id)
+        """)
+
+    cursor.execute("""
+        ALTER TABLE user_streak
+        ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id)
+        """)
+    cursor.execute("""
+        CREATE UNIQUE INDEX IF NOT EXISTS user_streak_user_id_unique
+        ON user_streak(user_id) WHERE user_id IS NOT NULL
+        """)
+
+    cursor.execute("""
+        ALTER TABLE user_challenges
+        ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id)
+        """)
+    cursor.execute("""
+        CREATE UNIQUE INDEX IF NOT EXISTS user_challenges_user_id_unique
+        ON user_challenges(user_id) WHERE user_id IS NOT NULL
+        """)
 

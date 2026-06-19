@@ -1,138 +1,90 @@
-import json
-import os
-import time
 from datetime import date
-from pathlib import Path
 from fastapi import HTTPException
 from backend.db.connection import get_connection
 from psycopg2.extras import RealDictCursor
 
-_AGENT_LOG_PATH = Path(__file__).resolve().parent.parent.parent / "debug-f3a808.log"
-
-
-def _agent_log(location: str, message: str, data: dict, hypothesis_id: str) -> None:
-    # #region agent log
-    # Local Cursor debug file + optional NDJSON line to stderr (visible in Render "Logs").
-    try:
-        payload = {
-            "sessionId": "f3a808",
-            "location": location,
-            "message": message,
-            "data": data,
-            "hypothesisId": hypothesis_id,
-            "timestamp": int(time.time() * 1000),
-        }
-        line = json.dumps(payload, default=str) + "\n"
-        try:
-            with open(_AGENT_LOG_PATH, "a", encoding="utf-8") as f:
-                f.write(line)
-        except Exception:
-            pass
-        # RENDER_EXTERNAL_URL is set on Render Web Services (see Render env docs).
-        if os.environ.get("AGENT_DEBUG_STDERR") == "1" or os.environ.get(
-            "RENDER_EXTERNAL_URL"
-        ):
-            print(line, end="", flush=True)
-    except Exception:
-        pass
-    # #endregion
-
 MIN_PAGES_FOR_STREAK = 2
+
+
 def compute_qualified(pages_read: int) -> bool:
     return pages_read >= MIN_PAGES_FOR_STREAK
 
-# ─── MAIN SERVICE FUNCTION ─────────────────────────────────────────────
-def update_progress_service(book_id: int, update):
+
+def update_progress_service(book_id: int, update, user_id: int):
     with get_connection() as conn:
         cursor = conn.cursor(cursor_factory=RealDictCursor)
 
-        # ── 1. Get book ──
-        book = get_book(cursor, book_id)
+        book = get_book(cursor, book_id, user_id)
 
         if update.current_page < 0:
             raise HTTPException(400, "Page cannot be negative")
 
         if update.current_page > book["total_pages"]:
-            update.current_page = book["total_pages"]   # clamp instead of error
+            update.current_page = book["total_pages"]
 
-        # ── 2. Calculate pages read ──
         pages_read = calculate_pages_read(book["current_page"], update.current_page)
         qualified = pages_read >= MIN_PAGES_FOR_STREAK
-        # #region agent log
-        _agent_log(
-            "book_services.update_progress_service",
-            "progress patch",
-            {
-                "book_id": book_id,
-                "old_page": book["current_page"],
-                "new_page": update.current_page,
-                "pages_read": pages_read,
-                "qualified": qualified,
-            },
-            "H_zero_patch",
-        )
-        # #endregion
 
-        # ── 3. Update per-book streak ──
         new_streak, new_last_read = update_streak_logic(
             book["last_read_date"],
             book["streak_count"],
-            pages_read
+            pages_read,
         )
 
-        # ── 4. Update book ──
         if pages_read > 0:
-            update_book(cursor, book_id, update.current_page, new_last_read, new_streak)
-        
+            update_book(cursor, book_id, user_id, update.current_page, new_last_read, new_streak)
 
-        # ── 5. Challenges ──
-        handle_challenges(cursor, pages_read, book_id, book["current_page"], update.current_page)
+        handle_challenges(
+            cursor,
+            user_id,
+            pages_read,
+            book_id,
+            book["current_page"],
+            update.current_page,
+        )
 
-        # ── 6. Reading session ──
         log_reading_session(cursor, book_id, pages_read)
-
-        # ── 7. Global streak ──
-        global_streak, freeze_count = update_global_streak(cursor, pages_read)
+        global_streak, freeze_count = update_global_streak(cursor, user_id, pages_read)
 
         conn.commit()
 
     return {
-    "success": True,
-    "data": {
-        "pages_logged": pages_read,
-        "streak_count": new_streak,
-        "global_streak": global_streak,
-        "freeze_count": freeze_count,
-        "qualified_for_streak": qualified
+        "success": True,
+        "data": {
+            "pages_logged": pages_read,
+            "streak_count": new_streak,
+            "global_streak": global_streak,
+            "freeze_count": freeze_count,
+            "qualified_for_streak": qualified,
+        },
     }
-}
 
 
-# ─── HELPERS ───────────────────────────────────────────────────────────
-
-def get_book(cursor, book_id):
+def get_book(cursor, book_id, user_id):
     cursor.execute(
-        "SELECT current_page, last_read_date, streak_count, total_pages FROM books WHERE id = %s",
-        (book_id,)
+        """
+        SELECT current_page, last_read_date, streak_count, total_pages
+        FROM books
+        WHERE id = %s AND user_id = %s
+        """,
+        (book_id, user_id),
     )
     row = cursor.fetchone()
 
     if not row:
         raise HTTPException(status_code=404, detail="Book not found")
 
-    current_page = row["current_page"]
     last_read_date = row["last_read_date"]
-    streak_count = row["streak_count"]
-
     if last_read_date and not isinstance(last_read_date, date):
         last_read_date = date.fromisoformat(str(last_read_date))
 
     return {
-        "current_page": current_page,
+        "current_page": row["current_page"],
         "last_read_date": last_read_date,
-        "streak_count": streak_count, 
-        "total_pages": row["total_pages"]
+        "streak_count": row["streak_count"],
+        "total_pages": row["total_pages"],
     }
+
 
 def calculate_pages_read(old, new):
     return max(0, new - old)
@@ -157,36 +109,43 @@ def update_streak_logic(last_read_date, streak_count, pages_read):
     return 1, today
 
 
-def update_book(cursor, book_id, current_page, last_read_date, streak):
+def update_book(cursor, book_id, user_id, current_page, last_read_date, streak):
     cursor.execute(
         """
         UPDATE books
         SET current_page = %s,
             last_read_date = %s,
             streak_count = %s
-        WHERE id = %s
+        WHERE id = %s AND user_id = %s
         """,
-        (current_page, last_read_date, streak, book_id)
+        (current_page, last_read_date, streak, book_id, user_id),
     )
 
 
-# ─── CHALLENGES ────────────────────────────────────────────────────────
-
-def handle_challenges(cursor, pages_read, book_id, old_page, new_page):
+def handle_challenges(cursor, user_id, pages_read, book_id, old_page, new_page):
     today = date.today()
-    today_str = today.isoformat()
     current_month = today.strftime("%Y-%m")
 
     cursor.execute(
-        "SELECT daily_completed, daily_date, monthly_completed_books, current_month FROM user_challenges WHERE id = 1"
+        """
+        SELECT daily_completed, daily_date, monthly_completed_books, current_month
+        FROM user_challenges
+        WHERE user_id = %s
+        """,
+        (user_id,),
     )
     challenge = cursor.fetchone()
 
     if challenge is None:
-        cursor.execute("""
-            INSERT INTO user_challenges (id, daily_completed, daily_date, monthly_completed_books, current_month)
-            VALUES (1, FALSE, NULL, 0, %s)
-        """, (current_month,))
+        cursor.execute(
+            """
+            INSERT INTO user_challenges (
+                id, user_id, daily_completed, daily_date, monthly_completed_books, current_month
+            )
+            VALUES (%s, %s, FALSE, NULL, 0, %s)
+            """,
+            (user_id, user_id, current_month),
+        )
         daily_completed, daily_date, monthly_books, saved_month = False, None, 0, current_month
     else:
         daily_completed = challenge["daily_completed"]
@@ -194,7 +153,6 @@ def handle_challenges(cursor, pages_read, book_id, old_page, new_page):
         monthly_books = challenge["monthly_completed_books"]
         saved_month = challenge["current_month"]
 
-    # reset
     if daily_date != today:
         daily_completed = False
 
@@ -202,57 +160,66 @@ def handle_challenges(cursor, pages_read, book_id, old_page, new_page):
         monthly_books = 0
         saved_month = current_month
 
-    # daily challenge
     if pages_read >= 20:
         daily_completed = True
         daily_date = today
 
-    # monthly challenge
     if new_page > old_page:
-        cursor.execute("SELECT total_pages FROM books WHERE id = %s", (book_id,))
-        total_pages = cursor.fetchone()["total_pages"]
+        cursor.execute(
+            "SELECT total_pages FROM books WHERE id = %s AND user_id = %s",
+            (book_id, user_id),
+        )
+        row = cursor.fetchone()
+        if row:
+            total_pages = row["total_pages"]
+            if old_page < total_pages and new_page >= total_pages:
+                monthly_books += 1
 
-        if old_page < total_pages and new_page >= total_pages:
-            monthly_books += 1
-
-    cursor.execute("""
+    cursor.execute(
+        """
         UPDATE user_challenges
         SET daily_completed = %s,
             daily_date = %s,
             monthly_completed_books = %s,
             current_month = %s
-        WHERE id = 1
-    """, (daily_completed, daily_date, monthly_books, saved_month))
+        WHERE user_id = %s
+        """,
+        (daily_completed, daily_date, monthly_books, saved_month, user_id),
+    )
 
-
-# ─── READING SESSION ───────────────────────────────────────────────────
 
 def log_reading_session(cursor, book_id, pages_read):
     if pages_read > 0:
         cursor.execute(
             "INSERT INTO reading_sessions (book_id, pages_read) VALUES (%s, %s)",
-            (book_id, pages_read)
+            (book_id, pages_read),
         )
 
 
-# ─── GLOBAL STREAK ─────────────────────────────────────────────────────
-
-def update_global_streak(cursor, pages_read):
+def update_global_streak(cursor, user_id, pages_read):
     today = date.today()
     qualified = pages_read >= MIN_PAGES_FOR_STREAK
 
     cursor.execute(
-        "SELECT last_read_date, streak_count, freeze_count FROM user_streak WHERE id = 1"
+        """
+        SELECT last_read_date, streak_count, freeze_count
+        FROM user_streak
+        WHERE user_id = %s
+        """,
+        (user_id,),
     )
     g = cursor.fetchone()
 
     if g is None:
         cursor.execute(
-            "INSERT INTO user_streak (id, last_read_date, streak_count, freeze_count) VALUES (1, NULL, 0, 2)"
+            """
+            INSERT INTO user_streak (id, user_id, last_read_date, streak_count, freeze_count)
+            VALUES (%s, %s, NULL, 0, 2)
+            """,
+            (user_id, user_id),
         )
         g_last, g_streak, g_freeze = None, 0, 2
     else:
-        # ✅ Correct
         g_last = g["last_read_date"]
         g_streak = g["streak_count"]
         g_freeze = g["freeze_count"]
@@ -262,55 +229,15 @@ def update_global_streak(cursor, pages_read):
 
     gap = (today - g_last).days if g_last else 0
 
-    # No pages logged — do not mutate global streak (avoids decay on no-op PATCH).
     if pages_read <= 0:
-        # #region agent log
-        _agent_log(
-            "book_services.update_global_streak:skip",
-            "skip global streak (pages_read<=0)",
-            {
-                "pages_read": pages_read,
-                "gap": gap,
-                "g_streak": g_streak,
-                "g_freeze": g_freeze,
-            },
-            "H_zero_patch",
-        )
-        # #endregion
         return g_streak, g_freeze
 
-    # #region agent log
-    _agent_log(
-        "book_services.update_global_streak:before_decay",
-        "global streak state",
-        {
-            "pages_read": pages_read,
-            "qualified": qualified,
-            "gap": gap,
-            "g_last": str(g_last) if g_last else None,
-            "g_streak": g_streak,
-            "g_freeze": g_freeze,
-        },
-        "H_freeze",
-    )
-    # #endregion
-
-    # Missed-day handling: gap==2 => last activity two calendar days ago (one skipped day).
-    # Freeze covers that single skip only; longer gaps break the streak without consuming freezes.
     if g_last and gap > 1:
         if gap == 2 and g_freeze > 0:
             g_freeze -= 1
         else:
             g_streak = 0
 
-    # #region agent log
-    _agent_log(
-        "book_services.update_global_streak:after_decay",
-        "after missed-day handling",
-        {"gap": gap, "g_streak": g_streak, "g_freeze": g_freeze},
-        "H_freeze",
-    )
-    # #endregion
     if qualified:
         if g_last is None or g_streak == 0:
             new_streak = 1
@@ -325,28 +252,11 @@ def update_global_streak(cursor, pages_read):
 
         new_last = today
 
-        # 🎁 Earn a freeze at major milestones
         if new_streak in (7, 30, 100):
             g_freeze += 1
-
     else:
         new_streak = g_streak
         new_last = g_last
-
-    # #region agent log
-    _agent_log(
-        "book_services.update_global_streak:result",
-        "computed next streak",
-        {
-            "qualified": qualified,
-            "gap": gap,
-            "new_streak": new_streak,
-            "new_last": str(new_last) if new_last else None,
-            "freeze_after": g_freeze,
-        },
-        "H_freeze",
-    )
-    # #endregion
 
     cursor.execute(
         """
@@ -354,9 +264,9 @@ def update_global_streak(cursor, pages_read):
         SET last_read_date = %s,
             streak_count = %s,
             freeze_count = %s
-        WHERE id = 1
+        WHERE user_id = %s
         """,
-        (new_last, new_streak, g_freeze)
+        (new_last, new_streak, g_freeze, user_id),
     )
 
     return new_streak, g_freeze

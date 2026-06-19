@@ -6,4 +6,4 @@ router = APIRouter()
 
 @router.get("/challenges")
 def get_challenges_router(user_id: int = Depends(get_current_user_id)):
-    return get_challenges()
+    return get_challenges(user_id)
