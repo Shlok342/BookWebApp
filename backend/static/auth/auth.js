@@ -43,8 +43,8 @@ const _fetch = window.fetch;
 window.fetch = async (...args) => {
   const res = await _fetch(...args);
   const url = args[0]?.toString() || "";
-  if (res.status === 401 && !url.includes("/auth/login") && !url.includes("/auth/register")) {
+  if (res.status === 401 && Auth.getToken() && !url.includes("/auth/login") && !url.includes("/auth/register")) {
     Auth.logout();
-  }
+ }
   return res;
 };
