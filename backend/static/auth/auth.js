@@ -23,20 +23,28 @@ export const Auth = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     });
-    
+
     if (!res.ok) {
-      console.log("STATUS:", res.status);
-      console.log("BODY:", await res.text());
-      const error = await res.json();
-      throw new Error(error.detail || "Registration failed");
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.detail || `Registration failed (${res.status})`);
     }
-  
+
     const { access_token } = await res.json();
     Auth.setToken(access_token);
-  },
+},
 
   logout() {
     Auth.clearToken();
     window.location.reload();
   }
+};
+// ─── GLOBAL 401 INTERCEPTOR ─────────────────────────────
+const _fetch = window.fetch;
+window.fetch = async (...args) => {
+  const res = await _fetch(...args);
+  const url = args[0]?.toString() || "";
+  if (res.status === 401 && !url.includes("/auth/login") && !url.includes("/auth/register")) {
+    Auth.logout();
+  }
+  return res;
 };
