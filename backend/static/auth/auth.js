@@ -39,12 +39,28 @@ export const Auth = {
   }
 };
 // ─── GLOBAL 401 INTERCEPTOR ─────────────────────────────
+function requestSentAuth(options) {
+  if (!options?.headers) return false;
+  const headers = options.headers;
+  if (headers instanceof Headers) {
+    return headers.has("Authorization");
+  }
+  return Boolean(headers.Authorization || headers.authorization);
+}
+
 const _fetch = window.fetch;
 window.fetch = async (...args) => {
   const res = await _fetch(...args);
   const url = args[0]?.toString() || "";
-  if (res.status === 401 && Auth.getToken() && !url.includes("/auth/login") && !url.includes("/auth/register")) {
+  const options = args[1];
+  if (
+    res.status === 401 &&
+    Auth.getToken() &&
+    requestSentAuth(options) &&
+    !url.includes("/auth/login") &&
+    !url.includes("/auth/register")
+  ) {
     Auth.logout();
- }
+  }
   return res;
 };

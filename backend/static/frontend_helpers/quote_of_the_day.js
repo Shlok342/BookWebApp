@@ -1,5 +1,7 @@
+import { API } from "../api_service/api.js";
+
 async function getQuote() {
-    const res = await fetch("/quote");
+    const res = await fetch("/quote", { headers: API._headers() });
     if (!res.ok) throw new Error("Failed to fetch quote");
     return res.json();
   }
