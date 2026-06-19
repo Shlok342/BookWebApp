@@ -1,15 +1,16 @@
-<!-- templates/components/auth_modal.html -->
-
 <div id="authModal" class="modal" style="display:flex; align-items:center; justify-content:center;">
-    <div class="modal-content" style="text-align:center;">
-      <h2>Bibliotheca</h2>
-      <input id="authEmail" type="email" placeholder="Email">
-      <input id="authPassword" type="password" placeholder="Password">
-      <p id="authError" style="color:red; font-size:13px;"></p>
-      <button id="authSubmit">Login</button>
-      <br>
-      <button id="authToggle" style="background:none; border:none; cursor:pointer; color:var(--sage);">
-        No account? Register
-      </button>
-    </div>
-  </div>
+  <!-- Changed container from div to form -->
+  <form id="authForm" class="modal-content" style="text-align:center; margin:0;">
+    <h2>Bibliotheca</h2>
+    <input id="authEmail" type="email" placeholder="Email" required>
+    <input id="authPassword" type="password" placeholder="Password" required>
+    <p id="authError" style="color:red; font-size:13px;"></p>
+    <!-- Changed button type to submit -->
+    <button id="authSubmit" type="submit">Login</button>
+    <br>
+    <!-- Explicitly type="button" so clicking it doesn't accidentally submit the form -->
+    <button id="authToggle" type="button" style="background:none; border:none; cursor:pointer; color:var(--sage);">
+      No account? Register
+    </button>
+  </form>
+</div>
