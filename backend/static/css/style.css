@@ -1635,6 +1635,51 @@ main {
   white-space: nowrap;
 }
 
+#logoutBtn {
+  background-color: transparent;
+  color: #5c5c5c; /* Soft dark gray to match the text vibe */
+  border: 1.5px solid #d3cfc8; /* Soft beige/gray border */
+  border-radius: 8px; /* Smooth corners, but not a full pill to keep it distinct */
+  padding: 6px 14px; /* Tight padding to keep it navbar-friendly */
+  font-size: 14px;
+  font-family: inherit; /* Inherits your nice sans-serif font */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease; /* Smooth transition for the hover */
+}
+
+#logoutBtn:hover {
+  background-color: rgba(0, 0, 0, 0.04); /* Very subtle dark tint on hover */
+  color: #333333; /* Darkens the text slightly */
+  border-color: #b8b3ab; /* Darkens the border slightly */
+}
+
+.primary-btn {
+  background-color: #383430; /* Deep, professional dark charcoal/brown to match your heading */
+  color: #fcfaf5; /* Clean, soft off-white text */
+  border: 1px solid #383430;
+  border-radius: 8px; /* Consistent smooth corners */
+  padding: 10px 24px; /* Comfortable click area, but not overly large */
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 600; /* Slightly bolder so it reads clearly as a primary action */
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Very subtle shadow for depth */
+  transition: all 0.2s ease;
+}
+
+.primary-btn:hover {
+  background-color: #4a4540; /* Slightly lighter on hover so it feels interactive */
+  border-color: #4a4540;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12); /* Shadow expands slightly */
+  transform: translateY(-1px); /* Gives it a nice tactile "lift" effect */
+}
+
+.primary-btn:active {
+  transform: translateY(0); /* Pushes down when clicked */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
 .mini-progress-popup {
   position: fixed;
   top: 50%;
