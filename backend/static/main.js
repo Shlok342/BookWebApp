@@ -1,4 +1,6 @@
 const container = document.querySelector(".books-container");
+import { quotesModal } from "./modal_helper/quotesModal.js";
+import { notesModal } from "./modal_helper/notesModal.js";
 import { applyFilters } from "./filters.js";
 import { store } from "./store.js";
 import {clearTheme } from "./theme.js";
@@ -81,41 +83,26 @@ window.addEventListener("click", (event) => {
 document
   .getElementById("saveBook")
   .addEventListener("click", saveBookHandler);
-document.addEventListener("DOMContentLoaded", () => {
-  const guestLoginBtn = document.getElementById("guestLoginBtn");
 
-  if (guestLoginBtn) {
+  document.addEventListener("DOMContentLoaded", () => {
+    const guestLoginBtn = document.getElementById("guestLoginBtn");
+    if (guestLoginBtn) {
       guestLoginBtn.addEventListener("click", () => {
-          document.getElementById("authModal").style.display = "flex";
+        document.getElementById("authModal").style.display = "flex";
       });
-}
-  document.getElementById("searchInput").addEventListener("input", applyFilters);
-  document.getElementById("statusFilter").addEventListener("change", applyFilters);
-  document.getElementById("sortOption").addEventListener("change", applyFilters);
-});
-document.addEventListener("DOMContentLoaded", () => {
-  initAuth();
-  document.getElementById("logoutBtn")
-  .addEventListener("click", () => Auth.logout());
-  initMain();
-  document
-    .getElementById("activityBtn")
-    .addEventListener("click", openActivityModal);
-
-  document
-    .getElementById("searchInput")
-    .addEventListener("input", applyFilters);
-
-  document
-    .getElementById("statusFilter")
-    .addEventListener("change", applyFilters);
-
-  document
-    .getElementById("sortOption")
-    .addEventListener("change", applyFilters);
+    }
   
-  document
-    .getElementById("genreFilter")
-    .addEventListener("change", applyFilters);
-
-});
+    initAuth();
+  
+    if (!Auth.isLoggedIn()) {
+      showGuestState();  // ← THE MISSING CALL
+    }
+  
+    document.getElementById("logoutBtn").addEventListener("click", () => Auth.logout());
+    initMain();
+    document.getElementById("activityBtn").addEventListener("click", openActivityModal);
+    document.getElementById("searchInput").addEventListener("input", applyFilters);
+    document.getElementById("statusFilter").addEventListener("change", applyFilters);
+    document.getElementById("sortOption").addEventListener("change", applyFilters);
+    document.getElementById("genreFilter").addEventListener("change", applyFilters);
+  });

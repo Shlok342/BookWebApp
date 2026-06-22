@@ -12,12 +12,12 @@ export function initMain(){
     initThemeToggle();
     initQuotesModal();
     initNotesModal();
-    loadAndDisplayQuote();
 
     if (!Auth.isLoggedIn()) {
         return;
     }
 
+    loadAndDisplayQuote();
     getBooks();
     getChallenges();
     getStats();

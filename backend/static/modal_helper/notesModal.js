@@ -15,7 +15,7 @@ import { getBooks } from "./getBooks.js";
 
 
 
-const notesModal = document.getElementById("notesModal");
+export const notesModal = document.getElementById("notesModal");
 
 
 

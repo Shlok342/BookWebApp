@@ -12,7 +12,7 @@ import {
 
 import { getBooks } from "./getBooks.js";
 
-const quotesModal = document.getElementById("quotesModal");
+export const quotesModal = document.getElementById("quotesModal");
 
 
 
