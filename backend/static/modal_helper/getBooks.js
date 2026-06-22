@@ -7,7 +7,9 @@ export async function getBooks() {
       store.books = await API.getBooks() || [];
       applyFilters();
     } catch (error) {
-      console.error("Failed to fetch books:", error);
+      console.error("Failed to fetch books:", error.message);  // already there
+      // ADD THIS:
+      console.error("Response status hint — check Network tab for /books status code");
       container.innerHTML = "<p>Could not load books. Is the server running?</p>";
     }
   }
