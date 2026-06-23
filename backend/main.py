@@ -12,6 +12,9 @@ from backend.routers.stats import router as stat_router
 from backend.routers.book_update import router as books_router
 from backend.routers.challenges import router as challenges_router
 from backend.routers.quotes import router as quote_router
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 # ADD to imports block
 from backend.routers.auth_router import router as auth_router
 
@@ -37,6 +40,14 @@ app.include_router(core_book_functionality)
 app.include_router(challenges_router)
 app.include_router(quote_router)
 app.include_router(auth_router)
+limiter = Limiter(key_func=get_remote_address)
+
+app.state.limiter = limiter
+
+app.add_exception_handler(
+    RateLimitExceeded,
+    _rate_limit_exceeded_handler
+)
 app.mount("/static", StaticFiles(directory=BASE_DIR/"static"), name="static")
 init_db()
 

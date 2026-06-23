@@ -8,7 +8,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+if not SECRET_KEY:
+    raise RuntimeError(
+        "SECRET_KEY must be set"
+    )
 ALGORITHM = "HS256"
 EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 

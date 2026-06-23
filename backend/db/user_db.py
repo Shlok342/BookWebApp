@@ -22,9 +22,9 @@ def register_user(email: str, password: str) -> dict:
             return dict(user)
         except Exception as e:
             raise HTTPException(
-                status_code=400,
-                detail=str(e)
-            )
+            status_code=400,
+            detail="Database operation failed"
+        )
 
 def login_user(email: str, password: str) -> dict:
     with get_db() as conn:
