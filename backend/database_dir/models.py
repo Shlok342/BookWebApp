@@ -19,6 +19,7 @@ class User(Base):
     books     = relationship("Book", back_populates="user")
     streak    = relationship("UserStreak", back_populates="user", uselist=False)
     challenge = relationship("UserChallenge", back_populates="user", uselist=False)
+    reading_sessions = relationship("ReadingSession", back_populates="user", cascade="all, delete")
 
 
 class Book(Base):
@@ -74,7 +75,8 @@ class ReadingSession(Base):
     book_id    = Column(Integer, ForeignKey("books.id", ondelete="CASCADE"))
     pages_read = Column(Integer)
     created_at = Column(DateTime, server_default=func.now())
-
+    user_id    = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+    user       = relationship("User", back_populates="reading_sessions")
     book = relationship("Book", back_populates="reading_sessions")
 
     __table_args__ = (
