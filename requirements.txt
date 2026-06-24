@@ -7,3 +7,4 @@ python-jose[cryptography]
 bcrypt>=5.0.0
 email-validator>=2.0.0
 slowapi
+sqlalchemy

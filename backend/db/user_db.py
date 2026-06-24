@@ -1,46 +1,31 @@
-import bcrypt  # <-- Changed library import
-from psycopg2.extras import RealDictCursor
+import bcrypt
 from fastapi import HTTPException
 from backend.db.connection import get_db
+from backend.database_dir.models import User
+
 
 def register_user(email: str, password: str) -> dict:
-    # bcrypt requires raw bytes instead of a plain string
-    pwd_bytes = password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    # Generate the hash and convert it back to a readable string format
-    hashed = bcrypt.hashpw(pwd_bytes, salt).decode('utf-8')
-    
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
+    hashed = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+    with get_db() as session:
         try:
-            cursor.execute(
-                "INSERT INTO users (email, password_hash) VALUES (%s, %s) RETURNING id, email",
-                (email, hashed)
-            )
-            user = cursor.fetchone()
-            conn.commit()
-            return dict(user)
-        except Exception as e:
-            raise HTTPException(
-            status_code=400,
-            detail="Database operation failed"
-        )
+            user = User(email=email, password_hash=hashed)
+            session.add(user)
+            session.commit()
+            session.refresh(user)
+            return {"id": user.id, "email": user.email}
+        except Exception:
+            raise HTTPException(status_code=400, detail="Database operation failed")
+
 
 def login_user(email: str, password: str) -> dict:
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-        user = cursor.fetchone()
-        
+    with get_db() as session:
+        user = session.query(User).filter(User.email == email).first()
+
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-        
-    # Convert inputs to required bytes to match against the stored hash safely
-    plain_bytes = password.encode('utf-8')
-    hashed_bytes = user["password_hash"].encode('utf-8')
-    
-    # Check password match natively without passlib
-    if not bcrypt.checkpw(plain_bytes, hashed_bytes):
+
+    if not bcrypt.checkpw(password.encode("utf-8"), user.password_hash.encode("utf-8")):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-        
-    return dict(user)
+
+    return {"id": user.id, "email": user.email, "password_hash": user.password_hash}

@@ -1,19 +1,16 @@
 from datetime import date
 from sqlalchemy.orm import Session
 from backend.database2 import engine, Base
-from backend.database_dir.models import UserChallenge, UserStreak  # noqa: F401 — needed for Base.metadata
+from .models import UserChallenge, UserStreak  # noqa: F401 — needed for Base.metadata
+
 
 def init_db():
-    # 1. This replaces create_tables, do_migrations, and do_indices!
-    Base.metadata.create_all(engine)  
-    
-    # 2. This replaces do_insertion!
+    Base.metadata.create_all(engine)  # creates all tables + indexes from models
     _seed_defaults()
 
+
 def _seed_defaults():
-    # Opens a clean SQLAlchemy session to handle the default data safely
     with Session(engine) as session:
-        # Check if the row already exists so we don't duplicate data
         if not session.get(UserChallenge, 1):
             session.add(UserChallenge(
                 id=1,
@@ -21,9 +18,6 @@ def _seed_defaults():
                 monthly_completed_books=0,
                 current_month=date.today().strftime("%Y-%m"),
             ))
-            
         if not session.get(UserStreak, 1):
             session.add(UserStreak(id=1, last_read_date=None, streak_count=0))
-            
-        # Commit the changes to the database
         session.commit()

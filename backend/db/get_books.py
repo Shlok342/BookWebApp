@@ -1,86 +1,71 @@
-from backend.db.connection import get_db
 import json
-from psycopg2.extras import RealDictCursor
-from backend.schemas.schemas import PageUpdate
 from fastapi import HTTPException
-from backend.schemas.schemas import Book
+from backend.db.connection import get_db
+from backend.database_dir.models import Book as BookModel
+from backend.schemas.schemas import Book, PageUpdate
+from sqlalchemy import desc
 
 
-def row_to_book(row):
+def model_to_dict(book: BookModel) -> dict:
     return {
-        "id":             row["id"],
-        "title":          row["title"],
-        "author":         row.get("author") or "",
-        "total_pages":    row["total_pages"],
-        "current_page":   row["current_page"],
-        "quotes":         json.loads(row["quotes"]) if row.get("quotes") else [],
-        "notes":          row.get("notes") or "",
-        "last_read_date": str(row["last_read_date"]) if row.get("last_read_date") else None,
-        "streak_count":   row.get("streak_count") or 0,
-        "created_at":     str(row["created_at"]) if row.get("created_at") else None,
-        "genre":          row.get("genre") or "",
-        "cover_url":      row.get("cover_url") or "",
-        "tags":           json.loads(row["tags"]) if row.get("tags") else [],
+        "id":             book.id,
+        "title":          book.title,
+        "author":         book.author or "",
+        "total_pages":    book.total_pages,
+        "current_page":   book.current_page,
+        "quotes":         json.loads(book.quotes) if book.quotes else [],
+        "notes":          book.notes or "",
+        "last_read_date": str(book.last_read_date) if book.last_read_date else None,
+        "streak_count":   book.streak_count or 0,
+        "created_at":     str(book.created_at) if book.created_at else None,
+        "genre":          book.genre or "",
+        "cover_url":      book.cover_url or "",
+        "tags":           json.loads(book.tags) if book.tags else [],
     }
 
 
 def get_books(user_id: int):
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute(
-            """
-            SELECT id, title, author, total_pages, current_page, quotes, notes,
-                   last_read_date, streak_count, created_at, genre, cover_url, tags
-            FROM books
-            WHERE user_id = %s
-            ORDER BY created_at DESC
-            """,
-            (user_id,),
+    with get_db() as session:
+        books = (
+            session.query(BookModel)
+            .filter(BookModel.user_id == user_id)
+            .order_by(desc(BookModel.created_at))
+            .all()
         )
-        rows = cursor.fetchall()
-    return [row_to_book(row) for row in rows]
+        return [model_to_dict(b) for b in books]
 
 
 def add_book(book: Book, user_id: int):
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
+    with get_db() as session:
         try:
-            cursor.execute(
-                """
-                INSERT INTO books (
-                    title, author, total_pages, current_page, genre, cover_url, tags, user_id
-                )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                """,
-                (
-                    book.title,
-                    book.author,
-                    book.total_pages,
-                    book.current_page,
-                    book.genre,
-                    book.cover_url,
-                    "[]",
-                    user_id,
-                ),
+            new_book = BookModel(
+                title=book.title,
+                author=book.author,
+                total_pages=book.total_pages,
+                current_page=book.current_page,
+                genre=book.genre,
+                cover_url=book.cover_url,
+                tags="[]",
+                user_id=user_id,
             )
-            conn.commit()
+            session.add(new_book)
+            session.commit()
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e))
 
 
 def delete_books(book_id: int, user_id: int):
-    with get_db() as conn:
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
+    with get_db() as session:
+        book = session.query(BookModel).filter(
+            BookModel.id == book_id,
+            BookModel.user_id == user_id,
+        ).first()
 
-        cursor.execute(
-            "SELECT id FROM books WHERE id = %s AND user_id = %s",
-            (book_id, user_id),
-        )
-        if not cursor.fetchone():
+        if not book:
             raise HTTPException(status_code=404, detail="Book not found")
 
-        cursor.execute("DELETE FROM books WHERE id = %s AND user_id = %s", (book_id, user_id))
-        conn.commit()
+        session.delete(book)
+        session.commit()
 
     return {"message": "Book deleted"}
 
