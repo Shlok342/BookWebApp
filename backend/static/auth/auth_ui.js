@@ -23,7 +23,7 @@ toggleBtn.addEventListener("click", () => {
 
 // Changed from submitBtn click to authForm submit
 authForm.addEventListener("submit", async (e) => {
-  e.preventDefault(); // Critical: Prevents the page from reloading on form submit
+  e.preventDefault();
   
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
@@ -36,11 +36,19 @@ authForm.addEventListener("submit", async (e) => {
       await Auth.register(email, password);
     }
     modal.style.display = "none";
+    
+    // Fix: Clear the layout state so books aren't covered up
+    const guestState = document.getElementById("guestState");
+    if (guestState) guestState.style.display = "none";
+    const bookshelf = document.getElementById("bookshelf");
+    if (bookshelf) bookshelf.style.display = "block";
+
     initMain();
   } catch (e) {
     errorEl.textContent = e.message;
   }
 });
+
 
 export function initAuth() {
   if (!Auth.isLoggedIn()) {

@@ -19,18 +19,24 @@ store.activeBookId = null;
 store.lastKnownGlobalStreak = 0;
 
 // ─── FETCH ALL BOOKS ──────────────────────────────────────────────────────────
+// Modify your existing function to explicitly toggle views
 function showGuestState() {
   const guestState = document.getElementById("guestState");
-
-  if (guestState) {
-      guestState.style.display = "block";
-  }
+  if (guestState) guestState.style.display = "block";
 
   const bookshelf = document.getElementById("bookshelf");
-  if (bookshelf) {
-      bookshelf.innerHTML = "";
-  }
+  if (bookshelf) bookshelf.style.display = "none"; // Hide main container
 }
+
+// Add this new function right below it
+function hideGuestState() {
+  const guestState = document.getElementById("guestState");
+  if (guestState) guestState.style.display = "none"; // Hide guest UI
+
+  const bookshelf = document.getElementById("bookshelf");
+  if (bookshelf) bookshelf.style.display = "block"; // Show main container
+}
+
 
 renderTagOptions();
 export function renderBooks(filteredBooks = store.books) {
@@ -94,11 +100,15 @@ document
   
     initAuth();
   
+    // Fix: Explicitly manage the guest view wrapper on load
     if (!Auth.isLoggedIn()) {
-      showGuestState();  // ← THE MISSING CALL
+      showGuestState();
+    } else {
+      hideGuestState();
     }
   
     document.getElementById("logoutBtn").addEventListener("click", () => Auth.logout());
+    
     initMain();
     document.getElementById("activityBtn").addEventListener("click", openActivityModal);
     document.getElementById("searchInput").addEventListener("input", applyFilters);
