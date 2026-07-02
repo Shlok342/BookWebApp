@@ -1537,39 +1537,82 @@ main {
   box-shadow: 0 2px 6px rgba(120, 130, 255, 0.1);
 }
 
-#activityBtn {
-  /* Layout & Alignment */
-  display: inline-flex;
+/* ==========================================================================
+   1. MODAL OVERLAY & CANVAS BACKGROUNDS
+   ========================================================================== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(37, 28, 13, 0.45); /* Elegant dark bark backdrop blend */
+  backdrop-filter: blur(8px);
+  display: none; /* Dynamic control via your JS */
+  justify-content: center;
   align-items: center;
-  gap: 6px; /* Reduced from 8px so the smaller text doesn't look detached */
-  padding: 5px 14px; /* Trimmed padding down from 8px 18px */
-  /* Botanical Typography */
-  font-family: inherit;
-  font-size: 0.85rem; /* Reduced font size from 0.95rem */
-  font-weight: 500;
-  color: #3b4a30;
-  /* Cozy Aesthetics */
-  background-color: #fbfbf9;
-  border: 1px solid #dce3d6;
-  border-radius: 100vh; /* Changed from 999px to clean 100vh for a perfect curved rectangular look */
-  /* Soft Interaction */
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--modal-bg, #f9f3e5); /* Premium warm cream canvas */
+  border: 1px solid rgba(122, 150, 112, 0.25); /* Subtle border matching your paneling */
+  border-radius: 24px;
+  padding: 32px;
+  width: min(92%, 780px);
+  box-shadow: var(--shadow-lg, 0 12px 48px rgba(70, 45, 15, 0.15));
+  position: relative;
+  font-family: "DM Sans", sans-serif;
+}
+
+/* Modal Close Cross Button */
+.close {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  font-size: 1.5rem;
+  color: var(--text-muted, #9a8060);
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(75, 94, 64, 0.06);
-  transition: all 0.2s ease-in-out;
+  transition: color var(--speed-fast, 0.22s) ease;
 }
 
-/* Gentle hover effect */
-#activityBtn:hover {
-  background-color: #f2f7ec;
-  border-color: #c5d1bb;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(75, 94, 64, 0.08);
+.close:hover {
+  color: var(--bark, #6b4f2e);
 }
 
-/* Satisfying click effect */
-#activityBtn:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 2px rgba(75, 94, 64, 0.04);
+/* ==========================================================================
+   2. TYPOGRAPHY & HEADER DESIGNS
+   ========================================================================== */
+.modal-content h2 {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-dark, #251c0d);
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+
+/* Month labels alignment wrapping */
+#heatmap-months {
+  position: relative;
+  height: 20px;
+  margin-bottom: 8px;
+}
+
+.month-label {
+  position: absolute;
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted, #9a8060);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   3. FIXED LAYOUT ENGINE (DO NOT TOUCH DIMENSIONS / PLACEMENT)
+   ========================================================================== */
+#heatmap-wrapper {
+  position: relative;
 }
 
 #heatmap-container {
@@ -1581,63 +1624,32 @@ main {
   margin-top: 1rem;
 }
 
-.heatmap-cell {
+/* Grid & Legend Cells sizing specs */
+.heatmap-cell,
+.legend-cell {
   width: 12px;
   height: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 2px;
 }
 
-#heatmap-wrapper {
-  position: relative;
+.heatmap-cell {
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-#heatmap-months {
-  position: relative;
-  height: 20px;
-  margin-bottom: 8px;
-}
-
-.heatmap-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.heatmap-stat {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.stat-label {
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-.stat-value {
-  font-weight: 700;
-  font-size: 0.8;
-}
-
-.month-label {
-  position: absolute;
-  font-size: 12px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
+/* Highlight & Dim Interaction Mechanics */
 .month-highlight {
-  outline: 2px solid var(--accent-color);
+  outline: 2px solid var(--moss, #56754a);
   outline-offset: 1px;
 }
 
 .month-dim {
   opacity: 0.25;
-  transition: 0.15s ease;
+  transition: opacity 0.15s ease;
 }
 
+/* ==========================================================================
+   4. GITHUB HEATMAP CELL THEMES
+   ========================================================================== */
 .level-0 {
   background: #ebedf0;
 }
@@ -1658,34 +1670,117 @@ main {
   background: #216e39;
 }
 
+/* ==========================================================================
+   5. LEGEND & FLOATING TOOLTIP
+   ========================================================================== */
 .heatmap-legend {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 4 px;
+  gap: 4px;
   margin-top: 1rem;
-  font-size: 0.8rem;
-  opacity: 0.8;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted, #9a8060);
 }
 
-.legend-cell {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
+.heatmap-legend span {
+  padding: 0 2px;
 }
 
+/* High Contrast Technical Floating Tooltip */
 #heatmap-tooltip {
   position: fixed;
   z-index: 9999;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: var(--text-dark, #251c0d); /* Charcoal dark contrast fill */
+  color: var(--parchment, #f7f0e2); /* Light cream notation ink */
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
   white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+}
+
+/* ==========================================================================
+   6. BOTTOM READING STATISTICS GRID
+   ========================================================================== */
+.heatmap-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(92, 69, 48, 0.1); /* Subtle partition rule */
+}
+
+.heatmap-stat {
+  background: rgba(255, 255, 255, 0.4); /* Pure paper-glaze background fill */
+  border: 1px solid rgba(212, 192, 154, 0.3);
+  padding: 14px 16px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+/* Metric Display Numbers (Targets span IDs directly) */
+.heatmap-stat span {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--forest, #2c4827); /* Accents metrics using deep forest green */
+  line-height: 1.2;
+}
+
+/* Metric Descriptive Labels */
+.heatmap-stat p {
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted, #9a8060);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* ==========================================================================
+   7. INTERACTIVE ENTRY BUTTON
+   ========================================================================== */
+#activityBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #3b4a30;
+  background-color: #fbfbf9;
+  border: 1px solid #dce3d6;
+  border-radius: 100vh;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(75, 94, 64, 0.06);
+  transition: all 0.2s ease-in-out;
+}
+
+#activityBtn:hover {
+  background-color: #f2f7ec;
+  border-color: #c5d1bb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(75, 94, 64, 0.08);
+}
+
+#activityBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(75, 94, 64, 0.04);
 }
 
 #logoutBtn {
