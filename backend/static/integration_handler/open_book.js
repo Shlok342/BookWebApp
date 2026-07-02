@@ -17,7 +17,7 @@ export async function openBookModal(book) {
     : book.quotes.map(q => `<p>"${q}"</p>`).join("");
 
   const notes = book.notes?.trim();
-  document.getElementById("openBookNotes").textContent = notes || "No notes yet.Thoughts are hollow.";
+  document.getElementById("openBookNotes").textContent = notes || "No notes yet. Thoughts are hollow.";
 
 
 }
