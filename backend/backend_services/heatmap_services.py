@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 class HeatmapService:
     def __init__(self, session: Session):
         self._session = session
-
+    
     def get_heatmap_data(self, user_id: int):
         rows = self._session.execute(
             text("""

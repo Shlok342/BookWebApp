@@ -43,4 +43,9 @@ body.dark-theme {
     --mtn-opacity-1: 0.90;
     --mtn-layer-2: linear-gradient(180deg, #253340 0%, #0d131a 100%);
     --mtn-opacity-2: 1.0;
+    
+      /* Smoothly animates colors and backgrounds over 0.4 seconds */
+      transition: background-color 0.4s ease, background 0.4s ease, color 0.4s ease;
+    
+    
   }

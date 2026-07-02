@@ -124,38 +124,81 @@
     border-radius: 6px;
   }
   .mood-ring-btn {
-    /* Maximum roundness and plush padding! */
+    /* Layout & Spacing */
     padding: 14px 32px;
     border-radius: 50px;
-  
-    /* Matching the gorgeous forest vibe */
+    
+    /* Dynamic Background using Theme Variables */
     background: linear-gradient(135deg, var(--forest), var(--moss));
-    color: #f2ead6;
-    border: none;
-  
-    /* Typography */
+    border: 1px solid var(--moss-light);
+    
+    /* Accessible Theme Typography */
     font-family: 'DM Sans', sans-serif;
     font-size: 1rem;
     font-weight: 600;
+    color: var(--text-dark);
+    
+    /* Micro-interactions & Smooth Transitions */
     cursor: pointer;
-  
-  
-    box-shadow: 0 4px 15px rgba(44, 72, 39, 0.25);
+    backdrop-filter: blur(var(--glass-blur));
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    /* Adaptive Glow/Shadow using Theme Variables */
+    box-shadow: 
+      0 4px 15px var(--glow-bottom-left), 
+      0 0 0 2px var(--sage-pale);
   }
   
-  /* Make it float when you hover! */
+  /* Float & Intensify Glow on Hover */
   .mood-ring-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(44, 72, 39, 0.35);
+    color: var(--bark);
+    border-color: var(--bark-light);
     background: linear-gradient(135deg, var(--moss), var(--forest-mid));
+    box-shadow: 
+      0 8px 25px var(--glow-top-right), 
+      0 0 15px var(--moss-light);
   }
   
-  /* Squish it when clicked! */
+  /* Squish & Compress Shadow on Active Click */
   .mood-ring-btn:active {
     transform: translateY(1px) scale(0.98);
-    box-shadow: 0 2px 10px rgba(44, 72, 39, 0.3);
+    color: var(--bark-pale);
+    background: linear-gradient(135deg, var(--forest-mid), var(--sand));
+    box-shadow: 0 2px 10px var(--glow-bottom-left);
   }
+  
+  /* Focus Indicator for Keyboard Accessibility */
+  .mood-ring-btn:focus-visible {
+    outline: 3px solid var(--bark);
+    outline-offset: 3px;
+  }
+  
+  /* 
+    Bonus UI Boost: Utilizing the rest of your 31 architecture variables 
+    to build the ultimate "Really Good Dark Theme" canvas.
+  */
+  body.dark-theme {
+    background: 
+      var(--noise-texture),
+      radial-gradient(circle at top right, var(--glow-top-right), transparent),
+      radial-gradient(circle at bottom left, var(--glow-bottom-left), transparent),
+      linear-gradient(180deg, var(--bg-gradient-top), var(--bg-gradient-mid), var(--bg-gradient-bottom));
+    background-blend-mode: overlay;
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+  
+  /* Mountain Silhouette Previews using your variables */
+  .mountain-backdrop {
+    background: var(--mtn-layer-1);
+    opacity: var(--mtn-opacity-1);
+  }
+  .mountain-foreground {
+    background: var(--mtn-layer-2);
+    opacity: var(--mtn-opacity-2);
+  }
+  
 /* ── Brand ─────────────────────────────────────────────── */
 .brand {
     display: flex;

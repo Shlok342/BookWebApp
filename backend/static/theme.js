@@ -147,18 +147,34 @@ export function clearTheme(modal) {
 }
 export function initThemeToggle() {
   const toggleBtn = document.getElementById('dark-mode-toggle');
-
   if (!toggleBtn) return;
 
-  toggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark-theme');
+  // 1. Check localStorage for a saved theme preference on page load
+  const savedTheme = localStorage.getItem('theme');
+  
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+    toggleBtn.textContent = '☀️ My eyes! Go back!';
+  } else {
+    // Keeps it light if empty or explicitly set to 'light'
+    document.body.classList.remove('dark-theme');
+    toggleBtn.textContent = '🌙 Go Dark!';
+  }
 
-    toggleBtn.textContent =
-      document.body.classList.contains('dark-theme')
-        ? '☀️ My eyes! Go back!'
-        : '🌙 Go Dark!';
+  // 2. Listen for clicks to toggle and save the new preference
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark-theme');
+
+    if (isDark) {
+      localStorage.setItem('theme', 'dark');
+      toggleBtn.textContent = '☀️ My eyes! Go back!';
+    } else {
+      localStorage.setItem('theme', 'light');
+      toggleBtn.textContent = '🌙 Go Dark!';
+    }
   });
 }
+
 export function getProgressColor(pct) {
   const hue = (pct / 100) * 270;
   return `hsl(${hue}, 80%, 50%)`;
