@@ -1,40 +1,41 @@
 #activityBtn {
-    /* Layout & Alignment */
-    display: inline-flex;
-    align-items: center;
-    gap: 8px; /* Gives the emojis room to breathe */
-    padding: 8px 18px; /* Creates that soft, touchable pill shape */
-    
-    /* Botanical Typography */
-    font-family: inherit;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #3b4a30; /* Deep, grounded olive green text */
-    
-    /* Cozy Aesthetics */
-    background-color: #fbfbf9; /* An incredibly soft, warm off-white */
-    border: 1px solid #dce3d6; /* A gentle sage-green outline */
-    border-radius: 999px; /* Matches the pill-shape of your other buttons */
-    
-    /* Soft Interaction */
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(75, 94, 64, 0.06); /* A slightly green-tinted shadow */
-    transition: all 0.2s ease-in-out;
-  }
+  /* Layout & Alignment */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* Reduced from 8px so the smaller text doesn't look detached */
+  padding: 5px 14px; /* Trimmed padding down from 8px 18px */
   
-  /* Gentle hover effect */
-  #activityBtn:hover {
-    background-color: #f2f7ec; /* Shifts to a very pale sage on hover */
-    border-color: #c5d1bb;
-    transform: translateY(-1px); /* Slight floating effect */
-    box-shadow: 0 4px 8px rgba(75, 94, 64, 0.08);
-  }
+  /* Botanical Typography */
+  font-family: inherit;
+  font-size: 0.85rem; /* Reduced font size from 0.95rem */
+  font-weight: 500;
+  color: #3b4a30; 
   
-  /* Satisfying click effect */
-  #activityBtn:active {
-    transform: translateY(1px); /* Presses into the page */
-    box-shadow: 0 1px 2px rgba(75, 94, 64, 0.04);
-  }
+  /* Cozy Aesthetics */
+  background-color: #fbfbf9; 
+  border: 1px solid #dce3d6; 
+  border-radius: 100vh; /* Changed from 999px to clean 100vh for a perfect curved rectangular look */
+  
+  /* Soft Interaction */
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(75, 94, 64, 0.06); 
+  transition: all 0.2s ease-in-out;
+}
+
+/* Gentle hover effect */
+#activityBtn:hover {
+  background-color: #f2f7ec; 
+  border-color: #c5d1bb;
+  transform: translateY(-1px); 
+  box-shadow: 0 4px 8px rgba(75, 94, 64, 0.08);
+}
+
+/* Satisfying click effect */
+#activityBtn:active {
+  transform: translateY(1px); 
+  box-shadow: 0 1px 2px rgba(75, 94, 64, 0.04);
+}
+
   #heatmap-container {
     display: grid;
   

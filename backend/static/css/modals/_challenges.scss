@@ -1,72 +1,96 @@
+/* --- Base Challenge Card --- */
 .challenge-card {
   background: #f7f7f7;
   padding: 18px;
   border-radius: 14px;
   margin-top: 14px;
-
+  border: 1px solid transparent; /* Prep for theme borders */
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .challenge-card h3 {
   margin: 0 0 8px 0;
-
   display: flex;
   align-items: center;
   gap: 8px;
-
   font-size: 1.1rem;
+  color: #2c2c2c;
 }
 
 .challenge-card p {
   margin: 0;
   line-height: 1.5;
   opacity: 0.85;
-}
-
-.challenge-card.done {
-  background: #e6f7ec;
-  border: 1px solid #4caf50;
+  color: #4a4a4a;
 }
 
 .challenge-status {
   margin-top: 12px;
   font-size: 1.2rem;
 }
-  #challengeBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  
-    padding: 10px 18px;
-    border-radius: 14px;
-  
-    background: linear-gradient(135deg, #fdfbff, #eef1ff);
-    color: #4a4a6a;
-  
-    font-size: 16px;
-    font-weight: 500;
-  
-    border: 1px solid #e0e4ff;
-    cursor: pointer;
-  
-    box-shadow: 0 4px 12px rgba(120, 130, 255, 0.12);
-    transition: all 0.2s ease;
-  }
-  
-  /* hover = gentle lift */
-  #challengeBtn:hover {
-    background: #eef1ff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(120, 130, 255, 0.18);
-  }
-  
-  /* click = soft press */
-  #challengeBtn:active {
-    transform: scale(0.96);
-    box-shadow: 0 2px 6px rgba(120, 130, 255, 0.1);
-  }
-  
-  
-  
 
+/* --- Completed State (Matches 'completed: True' from Python) --- */
+.challenge-card.done {
+  background: #e6f7ec;
+  border: 1px solid #4caf50;
+}
+
+.challenge-card.done h3 {
+  color: #2e7d32;
+}
+
+/* --- Thematic Classes (Optional: To match your Python titles!) --- */
+
+/* 🔥 For "Flame of Consistency" & "Everlasting Flame" */
+.challenge-card.theme-flame {
+  background: linear-gradient(to right, #fff5f0, #f7f7f7);
+  border-left: 4px solid #ff7043;
+}
+
+/* ❄️ For "Guardian of Frost" */
+.challenge-card.theme-frost {
+  background: linear-gradient(to right, #f0f8ff, #f7f7f7);
+  border-left: 4px solid #4fc3f7;
+}
+
+/* 🌙 For "Moonlit Reader" */
+.challenge-card.theme-moon {
+  background: linear-gradient(to right, #f5f0ff, #f7f7f7);
+  border-left: 4px solid #ab47bc;
+}
+
+/* 📚 For "Wandering Through Pages", "Master of Chapters", etc. */
+.challenge-card.theme-book {
+  background: linear-gradient(to right, #fdf8e9, #f7f7f7);
+  border-left: 4px solid #ffca28;
+}
+
+/* --- Challenge Button --- */
+#challengeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fdfbff, #eef1ff);
+  color: #4a4a6a;
+  font-size: 16px;
+  font-weight: 500;
+  border: 1px solid #e0e4ff;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(120, 130, 255, 0.12);
+  transition: all 0.2s ease;
+}
   
+#challengeBtn:hover {
+  background: #eef1ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(120, 130, 255, 0.18);
+}
+  
+#challengeBtn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(120, 130, 255, 0.1);
+}

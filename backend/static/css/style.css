@@ -1460,12 +1460,16 @@ main {
   background-color: rgba(255, 253, 248, 0.95);
 }
 
+/* --- Base Challenge Card --- */
 .challenge-card {
   background: #f7f7f7;
   padding: 18px;
   border-radius: 14px;
   margin-top: 14px;
+  border: 1px solid transparent; /* Prep for theme borders */
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .challenge-card h3 {
@@ -1474,17 +1478,14 @@ main {
   align-items: center;
   gap: 8px;
   font-size: 1.1rem;
+  color: #2c2c2c;
 }
 
 .challenge-card p {
   margin: 0;
   line-height: 1.5;
   opacity: 0.85;
-}
-
-.challenge-card.done {
-  background: #e6f7ec;
-  border: 1px solid #4caf50;
+  color: #4a4a4a;
 }
 
 .challenge-status {
@@ -1492,6 +1493,42 @@ main {
   font-size: 1.2rem;
 }
 
+/* --- Completed State (Matches 'completed: True' from Python) --- */
+.challenge-card.done {
+  background: #e6f7ec;
+  border: 1px solid #4caf50;
+}
+
+.challenge-card.done h3 {
+  color: #2e7d32;
+}
+
+/* --- Thematic Classes (Optional: To match your Python titles!) --- */
+/* 🔥 For "Flame of Consistency" & "Everlasting Flame" */
+.challenge-card.theme-flame {
+  background: linear-gradient(to right, #fff5f0, #f7f7f7);
+  border-left: 4px solid #ff7043;
+}
+
+/* ❄️ For "Guardian of Frost" */
+.challenge-card.theme-frost {
+  background: linear-gradient(to right, #f0f8ff, #f7f7f7);
+  border-left: 4px solid #4fc3f7;
+}
+
+/* 🌙 For "Moonlit Reader" */
+.challenge-card.theme-moon {
+  background: linear-gradient(to right, #f5f0ff, #f7f7f7);
+  border-left: 4px solid #ab47bc;
+}
+
+/* 📚 For "Wandering Through Pages", "Master of Chapters", etc. */
+.challenge-card.theme-book {
+  background: linear-gradient(to right, #fdf8e9, #f7f7f7);
+  border-left: 4px solid #ffca28;
+}
+
+/* --- Challenge Button --- */
 #challengeBtn {
   display: inline-flex;
   align-items: center;
@@ -1508,14 +1545,12 @@ main {
   transition: all 0.2s ease;
 }
 
-/* hover = gentle lift */
 #challengeBtn:hover {
   background: #eef1ff;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(120, 130, 255, 0.18);
 }
 
-/* click = soft press */
 #challengeBtn:active {
   transform: scale(0.96);
   box-shadow: 0 2px 6px rgba(120, 130, 255, 0.1);
@@ -1525,34 +1560,34 @@ main {
   /* Layout & Alignment */
   display: inline-flex;
   align-items: center;
-  gap: 8px; /* Gives the emojis room to breathe */
-  padding: 8px 18px; /* Creates that soft, touchable pill shape */
+  gap: 6px; /* Reduced from 8px so the smaller text doesn't look detached */
+  padding: 5px 14px; /* Trimmed padding down from 8px 18px */
   /* Botanical Typography */
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.85rem; /* Reduced font size from 0.95rem */
   font-weight: 500;
-  color: #3b4a30; /* Deep, grounded olive green text */
+  color: #3b4a30;
   /* Cozy Aesthetics */
-  background-color: #fbfbf9; /* An incredibly soft, warm off-white */
-  border: 1px solid #dce3d6; /* A gentle sage-green outline */
-  border-radius: 999px; /* Matches the pill-shape of your other buttons */
+  background-color: #fbfbf9;
+  border: 1px solid #dce3d6;
+  border-radius: 100vh; /* Changed from 999px to clean 100vh for a perfect curved rectangular look */
   /* Soft Interaction */
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(75, 94, 64, 0.06); /* A slightly green-tinted shadow */
+  box-shadow: 0 2px 6px rgba(75, 94, 64, 0.06);
   transition: all 0.2s ease-in-out;
 }
 
 /* Gentle hover effect */
 #activityBtn:hover {
-  background-color: #f2f7ec; /* Shifts to a very pale sage on hover */
+  background-color: #f2f7ec;
   border-color: #c5d1bb;
-  transform: translateY(-1px); /* Slight floating effect */
+  transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(75, 94, 64, 0.08);
 }
 
 /* Satisfying click effect */
 #activityBtn:active {
-  transform: translateY(1px); /* Presses into the page */
+  transform: translateY(1px);
   box-shadow: 0 1px 2px rgba(75, 94, 64, 0.04);
 }
 
@@ -1839,16 +1874,16 @@ main {
 .streak-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px; /* Reduced gap from 5px to keep it tight */
   background: linear-gradient(120deg, rgba(255, 200, 100, 0.28), rgba(255, 160, 60, 0.2));
   border: 1px solid rgba(210, 130, 40, 0.35);
-  border-radius: 50px;
-  padding: 4px 12px;
-  font-size: 0.74rem;
+  border-radius: 100vh; /* Dynamic radius ensures perfect pill shape at small sizes */
+  padding: 2px 8px; /* Reduced padding from 4px 12px */
+  font-size: 0.68rem; /* Reduced font size from 0.74rem */
   font-weight: 600;
   color: #8a5010;
   letter-spacing: 0.03em;
-  margin-bottom: 13px;
+  margin-bottom: 10px; /* Reduced margin slightly to match the smaller footprint */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 2px 6px rgba(180, 100, 20, 0.1);
   font-family: "DM Sans", sans-serif;
   transition: background 0.22s ease, border-color 0.22s ease;
