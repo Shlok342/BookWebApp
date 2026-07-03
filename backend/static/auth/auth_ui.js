@@ -49,7 +49,7 @@ authForm.addEventListener("submit", async (e) => {
   }
 });
 
-
+Auth.clearToken(); 
 export function initAuth() {
   if (!Auth.isLoggedIn()) {
     modal.style.display = "flex";
