@@ -112,10 +112,10 @@ def handle_challenges(session, user_id, pages_read, book_id, old_page, new_page)
         session.execute(
             text("""
                 INSERT INTO user_challenges
-                    (id, user_id, daily_completed, daily_date, monthly_completed_books, current_month)
-                VALUES (:id, :user_id, FALSE, NULL, 0, :current_month)
+                    (user_id, daily_completed, daily_date, monthly_completed_books, current_month)
+                VALUES (:user_id, FALSE, NULL, 0, :current_month)
             """),
-            {"id": user_id, "user_id": user_id, "current_month": current_month},
+            {"user_id": user_id, "current_month": current_month},
         )
         daily_completed, daily_date, monthly_books, saved_month = False, None, 0, current_month
     else:
@@ -177,10 +177,10 @@ def update_global_streak(session, user_id, pages_read):
     if g is None:
         session.execute(
             text("""
-                INSERT INTO user_streak (id, user_id, last_read_date, streak_count, freeze_count)
-                VALUES (:id, :user_id, NULL, 0, 2)
+                INSERT INTO user_streak (user_id, last_read_date, streak_count, freeze_count)
+                VALUES (:user_id, NULL, 0, 2)
             """),
-            {"id": user_id, "user_id": user_id},
+            {"user_id": user_id},
         )
         g_last, g_streak, g_freeze = None, 0, 2
     else:
