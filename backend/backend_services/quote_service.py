@@ -16,7 +16,7 @@ class QuoteService:
     async def get_quote(self):
         def _fetch_quote():
             req = urllib.request.Request(
-                "https://zenquotes.i/api/today",#zenquotes.io
+                "https://zenquotes.io/api/today",
                 headers={"User-Agent": "BookWebApp/1.0"},
                 method="GET",
             )
