@@ -51,7 +51,7 @@ class Book(Base):
 class UserChallenge(Base):
     __tablename__ = "user_challenges"
 
-    id                      = Column(Integer, primary_key=True)  # not SERIAL, inserted as 1
+    id = Column(Integer, primary_key=True, autoincrement=True)
     daily_completed         = Column(Boolean, default=False)
     daily_date              = Column(Date)
     monthly_completed_books = Column(Integer, default=0)
@@ -87,7 +87,8 @@ class ReadingSession(Base):
 class UserStreak(Base):
     __tablename__ = "user_streak"
 
-    id             = Column(Integer, primary_key=True)  # not SERIAL
+    
+    id = Column(Integer, primary_key=True, autoincrement=True) # not SERIAL
     last_read_date = Column(Date, default=None)
     streak_count   = Column(Integer, default=0)
     freeze_count   = Column(Integer, default=2)
