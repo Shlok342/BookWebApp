@@ -526,7 +526,6 @@ body.dark-theme {
 
 /* 4. Adding the Emoji via CSS */
 .global-streak-badge::before {
-  content: "🔥";
   font-size: 16px;
 }
 

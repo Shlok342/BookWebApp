@@ -163,6 +163,7 @@ export function initThemeToggle() {
 
   // 2. Listen for clicks to toggle and save the new preference
   toggleBtn.addEventListener('click', () => {
+    console.log('toggleBtn clicked');
     const isDark = document.body.classList.toggle('dark-theme');
 
     if (isDark) {
