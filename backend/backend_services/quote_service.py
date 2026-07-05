@@ -1,13 +1,22 @@
 import asyncio
 import json
+import random
 import urllib.request
+from pathlib import Path
 
+# 1. Load your local quotes safely
+json_path = Path(__file__).parent / "hard_coded_quotes.json"
 
+with open(json_path, "r", encoding="utf-8") as file:
+    local_quotes = json.load(file)
+
+# 2. Define the Quote Service
 class QuoteService:
+
     async def get_quote(self):
         def _fetch_quote():
             req = urllib.request.Request(
-                "https://zenquotes.io/api/today",
+                "https://zenquotes.i/api/today",#zenquotes.io
                 headers={"User-Agent": "BookWebApp/1.0"},
                 method="GET",
             )
@@ -26,8 +35,8 @@ class QuoteService:
             }
 
         except Exception as e:
-            print("Quote fetch failed:", e)
-            return {
-                "quote": "A reader lives a thousand lives before he dies.",
-                "author": "George R.R. Martin",
-            }
+            print("Online quote fetch failed, picking a random local fallback. Error:", e)
+            
+            # Use random.choice to pull a random key from your hard_coded_quotes.json
+            random_key = random.choice(list(local_quotes.keys()))
+            return local_quotes[random_key]

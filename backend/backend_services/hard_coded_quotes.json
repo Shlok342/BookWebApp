@@ -1,0 +1,46 @@
+{
+    "martin": {
+        "quote": "A reader lives a thousand lives before he dies.",
+        "author": "George R.R. Martin"
+    },
+    "tolkien": {
+        "quote": "Not all those who wander are lost.",
+        "author": "J.R.R. Tolkien"
+    },
+    "twain": {
+        "quote": "The secret of getting ahead is getting started.",
+        "author": "Mark Twain"
+    },
+    "dumbledore": {
+        "quote": "It takes a great deal of bravery to stand up to our enemies, but just as much to stand up to our friends",
+        "author": "Albus Dumbledore"
+    },
+    "lincoln" : {
+        "quote":"Nearly all men can stand adversity, but if you want to test a man's character, give him power.",
+        "author": "Abraham Lincoln"
+    },
+    "newton":{
+        "quote":"What we know is a drop, what we don't know is an ocean.",
+        "author":"Issac Newton"
+    },
+    "michael":{
+        "quote":"If you want to make the world a better place, take a look at yourself, and make a change.",
+        "author":"Michael Jackson"
+    },
+    "william":{
+        "quote":"Love all, trust a few, do wrong to none.",
+        "author":"William Shakespeare"
+    },
+    "vajpayee":{
+        "quote":"Education, in the truest sense of the term, is a process of self-discovery. It is the art of self-sculpture.",
+        "author":"Atal Bihari Vajpayee"
+    },
+    "gandhi":{
+        "quote":"You must be the change you wish to see in the world.",
+        "author":"Mahatma Gandhi"
+    },
+    "karl":{
+        "quote":"From each according to his ability, to each according to his needs",
+        "author":"Karl Marx"
+    }
+}
