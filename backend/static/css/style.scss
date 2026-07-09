@@ -130,7 +130,7 @@ footer::after {
   /* Multilayered dream shadow for readability over the glow */
   text-shadow:
     0 2px 8px rgba(255, 255, 255, 1), 
-    0 4px 14px rgba(255, 255, 255, 0.7),
+    0 4px 14px color-mix(in srgb, var(--parchment) 70%, transparent),
     0 0 20px rgba(255, 170, 200, 0.4); 
 }
 .mountain-bg {

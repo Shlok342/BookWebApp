@@ -56,7 +56,7 @@
     margin: 0 auto 16px;
     box-shadow:
       0 3px 10px rgba(107, 79, 46, 0.10),
-      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      inset 0 1px 0 color-mix(in srgb, var(--parchment) 70%, transparent);
   }
   
   .modal-content h2 {
@@ -71,20 +71,20 @@
   
   /* 🔥 STRICT CONSTRAINT: PRESERVE EXACT MODAL TYPOGRAPHY OVERRIDES 🔥 */
   .modal-content {
-    color: #a8bf9a;
+    color: var(--sage);
     /* 🔥 makes ALL text white */
   }
   
   .modal-content input,
   .modal-content textarea {
-    color: rgba(255, 255, 255, 0.7);
+    color: color-mix(in srgb, var(--parchment) 70%, transparent);
     background: rgba(0, 0, 0, 0.65);
     /* 🔥 dark glass effect */
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
   
   .modal-content textarea::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+    color: color-mix(in srgb, var(--parchment) 70%, transparent);
   }
   
   .modal-content {
@@ -131,7 +131,7 @@
   margin-top: 14px;
   padding: 12px;
   background: linear-gradient(135deg, var(--forest) 0%, var(--forest-mid) 100%);
-  color: #a8bf9a;
+  color: var(--sage);
   border: none;
   border-radius: var(--radius-btn);
   font-family: 'DM Sans', sans-serif;

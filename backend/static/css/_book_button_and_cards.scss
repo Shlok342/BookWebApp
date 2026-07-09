@@ -75,7 +75,7 @@
   }
   
   .update-btn:hover {
-    color: #f2ead6;
+    color: var(--parchment-mid);
     border-style: solid;
     border-color: var(--forest);
     transform: translateY(-1px);
@@ -95,7 +95,7 @@
   .notes-btn {
     background: linear-gradient(135deg, var(--forest), var(--forest-mid));
     border-color: transparent;
-    color: #f2ead6;
+    color: var(--parchment-mid);
     box-shadow: 0 3px 10px rgba(44, 72, 39, 0.22);
   }
   

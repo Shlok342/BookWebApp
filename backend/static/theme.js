@@ -64,7 +64,7 @@ export async function applyThemeFromCover(book, modal) {
       color-mix(in srgb, ${accent} 25%, transparent)
     `;
 
-    modal.style.color = "#ffffff";
+    modal.style.color = "var(--parchment)";
 
     modal.querySelectorAll(
       "h1,h2,h3,h4,h5,h6"
@@ -76,12 +76,12 @@ export async function applyThemeFromCover(book, modal) {
     modal.querySelectorAll(
       "p,span,label,li,textarea,input"
     ).forEach(el => {
-      el.style.color = "#ffffff";
+      el.style.color = "var(--parchment)";
     });
 
     modal.querySelectorAll("button").forEach(btn => {
       btn.style.background = accent;
-      btn.style.color = "#ffffff";
+      btn.style.color = "var(--parchment)";
       btn.style.border = `
         1px solid
         color-mix(in srgb, ${highlight} 30%, transparent)
@@ -108,12 +108,12 @@ export async function applyThemeFromCover(book, modal) {
       "1px solid rgba(255,255,255,0.1)";
 
     modal.style.color =
-      "#ffffff";
+      "var(--parchment)";
 
     modal.querySelectorAll(
       "h1,h2,h3,h4,h5,h6"
     ).forEach(h => {
-      h.style.color = "#ffffff";
+      h.style.color = "var(--parchment)";
       h.style.textShadow = "";
     });
 

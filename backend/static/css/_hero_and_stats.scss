@@ -5,7 +5,7 @@
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: #2c2c2c;
   /* Premium charcoal text (softer than pure black) */
-  background-color: #ffffff;
+  background-color: var(--parchment);
   /* Crisp white background to pop against the cream canvas */
 
   /* Borders & Radii */
@@ -15,7 +15,7 @@
   /* Clean, modern rounded corners */
 
   /* Depth & Shadows */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--bark) 4%, transparent);
   /* Subtle, elegant drop shadow */
 
   /* Smooth interaction setup */
@@ -71,7 +71,7 @@
 }
 
 .mini-stat {
-  background: rgba(255, 255, 255, 0.55);
+  background: color-mix(in srgb, var(--parchment) 55%, transparent);
   border: 1px solid rgba(90, 110, 70, 0.12);
   border-radius: 999px;
   padding: 10px 16px;
@@ -79,7 +79,7 @@
   font-size: 1.08rem;
   color: #4e4a3f;
   font-style: italic;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--bark) 4%, transparent);
 }
 
 .mini-stat strong {
@@ -126,10 +126,10 @@
   }
   
   .stat-card {
-    background: #ffffff;
+    background: var(--parchment);
     padding: 15px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px var(--shadow-md);
     text-align: center;
   }
   

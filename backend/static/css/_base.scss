@@ -16,18 +16,18 @@
     --forest-mid: #3a5e33;
     --moss: #56754a;
     --moss-light: #7a9e6c;
-    --sage: #a8bf9a;
+    --sage: var(--sage);
     --sage-pale: #d4e3cc;
   
     /* Surfaces */
     --card-bg: #fdf8ee;
     --card-bg-alt: #faf4e8;
-    --modal-bg: #f9f3e5;
+    --modal-bg: var(--modal-bg);
   
     /* Text */
-    --text-dark: #251c0d;
+    --text-dark: var(--text-dark);
     --text-mid: #5c4530;
-    --text-muted: #9a8060;
+    --text-muted: var(--text-muted);
     --text-faint: #030303;
   
   

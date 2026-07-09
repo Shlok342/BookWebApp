@@ -1,6 +1,6 @@
 /* --- Base Challenge Card --- */
 .challenge-card {
-  background: #f7f7f7;
+  background: var(--parchment-mid);
   padding: 18px;
   border-radius: 14px;
   margin-top: 14px;
@@ -45,25 +45,25 @@
 
 /* 🔥 For "Flame of Consistency" & "Everlasting Flame" */
 .challenge-card.theme-flame {
-  background: linear-gradient(to right, #fff5f0, #f7f7f7);
+  background: linear-gradient(to right, #fff5f0, var(--parchment-mid));
   border-left: 4px solid #ff7043;
 }
 
 /* ❄️ For "Guardian of Frost" */
 .challenge-card.theme-frost {
-  background: linear-gradient(to right, #f0f8ff, #f7f7f7);
+  background: linear-gradient(to right, #f0f8ff, var(--parchment-mid));
   border-left: 4px solid #4fc3f7;
 }
 
 /* 🌙 For "Moonlit Reader" */
 .challenge-card.theme-moon {
-  background: linear-gradient(to right, #f5f0ff, #f7f7f7);
+  background: linear-gradient(to right, #f5f0ff, var(--parchment-mid));
   border-left: 4px solid #ab47bc;
 }
 
 /* 📚 For "Wandering Through Pages", "Master of Chapters", etc. */
 .challenge-card.theme-book {
-  background: linear-gradient(to right, #fdf8e9, #f7f7f7);
+  background: linear-gradient(to right, #fdf8e9, var(--parchment-mid));
   border-left: 4px solid #ffca28;
 }
 

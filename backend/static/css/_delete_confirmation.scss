@@ -41,7 +41,7 @@
   
     /* parchment texture matching the existing design */
     background:
-      radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.55) 0%, transparent 28%),
+      radial-gradient(circle at 15% 15%, color-mix(in srgb, var(--parchment) 55%, transparent) 0%, transparent 28%),
       radial-gradient(circle at 85% 25%, rgba(255, 255, 255, 0.35) 0%, transparent 22%),
       radial-gradient(circle at 50% 85%, rgba(214, 194, 160, 0.20) 0%, transparent 35%),
       linear-gradient(145deg, #f8f2e6, #efe5d3);

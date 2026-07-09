@@ -12,7 +12,7 @@
 }
 
 #logoutBtn:hover {
-    background-color: rgba(0, 0, 0, 0.04); /* Very subtle dark tint on hover */
+    background-color: color-mix(in srgb, var(--bark) 4%, transparent); /* Very subtle dark tint on hover */
     color: #333333; /* Darkens the text slightly */
     border-color: #b8b3ab; /* Darkens the border slightly */
 }
@@ -26,7 +26,7 @@
     font-family: inherit;
     font-weight: 600; /* Slightly bolder so it reads clearly as a primary action */
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Very subtle shadow for depth */
+    box-shadow: 0 2px 4px var(--shadow-md); /* Very subtle shadow for depth */
     transition: all 0.2s ease;
 }
 
@@ -39,5 +39,5 @@
 
 .primary-btn:active {
     transform: translateY(0); /* Pushes down when clicked */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 4px var(--shadow-md);
 }

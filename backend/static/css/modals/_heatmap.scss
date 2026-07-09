@@ -16,7 +16,7 @@
   }
   
   .modal-content {
-    background-color: var(--modal-bg, #f9f3e5); /* Premium warm cream canvas */
+    background-color: var(--modal-bg, var(--modal-bg)); /* Premium warm cream canvas */
     border: 1px solid rgba(122, 150, 112, 0.25); /* Subtle border matching your paneling */
     border-radius: 24px;
     padding: 32px;
@@ -32,7 +32,7 @@
     top: 24px;
     right: 28px;
     font-size: 1.5rem;
-    color: var(--text-muted, #9a8060);
+    color: var(--text-muted, var(--text-muted));
     cursor: pointer;
     transition: color var(--speed-fast, 0.22s) ease;
   }
@@ -48,7 +48,7 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 1.35rem;
     font-weight: 700;
-    color: var(--text-dark, #251c0d);
+    color: var(--text-dark, var(--text-dark));
     margin-bottom: 24px;
     letter-spacing: -0.01em;
   }
@@ -65,7 +65,7 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 11px;
     font-weight: 500;
-    color: var(--text-muted, #9a8060);
+    color: var(--text-muted, var(--text-muted));
     white-space: nowrap;
   }
   
@@ -129,7 +129,7 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 0.72rem;
     font-weight: 500;
-    color: var(--text-muted, #9a8060);
+    color: var(--text-muted, var(--text-muted));
   }
   
   .heatmap-legend span {
@@ -142,7 +142,7 @@
     z-index: 9999;
     padding: 6px 12px;
     border-radius: 6px;
-    background: var(--text-dark, #251c0d); /* Charcoal dark contrast fill */
+    background: var(--text-dark, var(--text-dark)); /* Charcoal dark contrast fill */
     color: var(--parchment, #f7f0e2);      /* Light cream notation ink */
     font-family: 'DM Sans', sans-serif;
     font-size: 0.72rem;
@@ -192,7 +192,7 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-muted, #9a8060);
+    color: var(--text-muted, var(--text-muted));
     text-transform: uppercase;
     letter-spacing: 0.04em;
     margin: 0;
