@@ -1,3 +1,4 @@
+console.log("main.js loaded");
 const container = document.querySelector(".books-container");
 import { quotesModal } from "./modal_helper/quotesModal.js";
 import { notesModal } from "./modal_helper/notesModal.js";
@@ -90,7 +91,7 @@ document
   .getElementById("saveBook")
   .addEventListener("click", saveBookHandler);
 
-  document.addEventListener("DOMContentLoaded", () => {
+
     const guestLoginBtn = document.getElementById("guestLoginBtn");
     if (guestLoginBtn) {
       guestLoginBtn.addEventListener("click", () => {
@@ -115,4 +116,4 @@ document
     document.getElementById("statusFilter").addEventListener("change", applyFilters);
     document.getElementById("sortOption").addEventListener("change", applyFilters);
     document.getElementById("genreFilter").addEventListener("change", applyFilters);
-  });
+  

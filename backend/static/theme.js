@@ -158,15 +158,30 @@ export function initThemeToggle() {
       ? "☀️ My eyes! Go back!"
       : "🌙 Go Dark!";
 
-  toggleBtn.addEventListener("click", () => {
-      const dark = root.classList.toggle("dark-theme");
-
-      localStorage.setItem("theme", dark ? "dark" : "light");
-
-      toggleBtn.textContent = dark
-          ? "☀️ My eyes! Go back!"
-          : "🌙 Go Dark!";
-  });
+     toggleBtn.addEventListener("click", () => {
+      console.log("=== THEME TOGGLE CLICKED ===");
+    
+        console.log("Before:", document.documentElement.className);
+    
+        document.documentElement.classList.toggle("dark-theme");
+    
+        console.log("After:", document.documentElement.className);
+    
+        console.log(
+            "--forest =",
+            getComputedStyle(document.documentElement)
+                .getPropertyValue("--forest")
+                .trim()
+        );
+    
+        const dark = document.documentElement.classList.contains("dark-theme");
+    
+        localStorage.setItem("theme", dark ? "dark" : "light");
+    
+        toggleBtn.textContent = dark
+            ? "☀️ My eyes! Go back!"
+            : "🌙 Go Dark!";
+    });
 }
 
 export function getProgressColor(pct) {
