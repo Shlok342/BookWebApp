@@ -157,20 +157,7 @@
     Bonus UI Boost: Utilizing the rest of your 31 architecture variables 
     to build the ultimate "Really Good Dark Theme" canvas.
   */
-  body.dark-theme {
-    background:
-        var(--noise-texture),
-        radial-gradient(circle at top right, var(--glow-top-right), transparent),
-        radial-gradient(circle at bottom left, var(--glow-bottom-left), transparent),
-        linear-gradient(
-            180deg,
-            var(--bg-gradient-top),
-            var(--bg-gradient-mid),
-            var(--bg-gradient-bottom)
-        );
-
-    color: var(--text-dark);
-}
+  
   
   /* Mountain Silhouette Previews using your variables */
   .mountain-backdrop {

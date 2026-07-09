@@ -167,19 +167,32 @@ html {
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background-color: #e8ddc8;
-  background-image:
-    linear-gradient(160deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 55%, var(--bg-gradient-bottom) 100%),
-    var(--noise-texture);
+
+  /* Dynamic background driven entirely by CSS variables */
+  background:
+    var(--noise-texture),
+    radial-gradient(circle at top right, var(--glow-top-right), transparent 68%),
+    radial-gradient(circle at bottom left, var(--glow-bottom-left), transparent 70%),
+    linear-gradient(
+      180deg,
+      var(--bg-gradient-top) 0%,
+      var(--bg-gradient-mid) 55%,
+      var(--bg-gradient-bottom) 100%
+    );
+
   background-attachment: fixed;
   color: var(--text-dark);
+
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-  transition: background-image var(--speed-slow) var(--ease-smooth), background-color var(--speed-slow) var(--ease-smooth);
+
+  transition:
+    background var(--speed-slow) var(--ease-smooth),
+    color var(--speed-slow) var(--ease-smooth);
 }
 
-/* Soft ambient light blob top-right */
+/* Ambient glow - top right */
 body::before {
   content: "";
   position: fixed;
@@ -187,13 +200,20 @@ body::before {
   right: -80px;
   width: 450px;
   height: 450px;
-  background: radial-gradient(circle, var(--glow-top-right) 0%, transparent 68%);
+
+  background: radial-gradient(
+    circle,
+    var(--glow-top-right) 0%,
+    transparent 68%
+  );
+
   z-index: 0;
   pointer-events: none;
+
   transition: background var(--speed-slow) var(--ease-smooth);
 }
 
-/* Soft warm glow bottom-left */
+/* Ambient glow - bottom left */
 body::after {
   content: "";
   position: fixed;
@@ -201,8 +221,15 @@ body::after {
   left: -60px;
   width: 360px;
   height: 360px;
-  background: radial-gradient(circle, var(--glow-bottom-left) 0%, transparent 70%);
+
+  background: radial-gradient(
+    circle,
+    var(--glow-bottom-left) 0%,
+    transparent 70%
+  );
+
   z-index: 0;
   pointer-events: none;
+
   transition: background var(--speed-slow) var(--ease-smooth);
 }

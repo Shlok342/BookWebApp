@@ -150,31 +150,20 @@ export function initThemeToggle() {
   if (!toggleBtn) return;
 
   const root = document.documentElement;
-  const body = document.body;
 
-  // Apply saved theme
-  const savedTheme = localStorage.getItem("theme");
+  const isDark = localStorage.getItem("theme") === "dark";
+  root.classList.toggle("dark-theme", isDark);
 
-  if (savedTheme === "dark") {
-      root.classList.add("dark-theme");
-      body.classList.add("dark-theme");
-      toggleBtn.textContent = "☀️ My eyes! Go back!";
-  } else {
-      root.classList.remove("dark-theme");
-      body.classList.remove("dark-theme");
-      toggleBtn.textContent = "🌙 Go Dark!";
-  }
+  toggleBtn.textContent = isDark
+      ? "☀️ My eyes! Go back!"
+      : "🌙 Go Dark!";
 
-  // Toggle on click
   toggleBtn.addEventListener("click", () => {
-      const isDark = root.classList.toggle("dark-theme");
+      const dark = root.classList.toggle("dark-theme");
 
-      // Keep body in sync
-      body.classList.toggle("dark-theme", isDark);
+      localStorage.setItem("theme", dark ? "dark" : "light");
 
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-
-      toggleBtn.textContent = isDark
+      toggleBtn.textContent = dark
           ? "☀️ My eyes! Go back!"
           : "🌙 Go Dark!";
   });
