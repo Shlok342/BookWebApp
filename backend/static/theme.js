@@ -146,35 +146,37 @@ export function clearTheme(modal) {
   });
 }
 export function initThemeToggle() {
-  document.body.classList.toggle("dark-theme", isDark);
-
   const toggleBtn = document.getElementById("dark-mode-toggle");
   if (!toggleBtn) return;
 
   const root = document.documentElement;
-  document.body.classList.toggle("dark-theme", isDark);
-  // Load saved preference
+  const body = document.body;
+
+  // Apply saved theme
   const savedTheme = localStorage.getItem("theme");
 
   if (savedTheme === "dark") {
       root.classList.add("dark-theme");
+      body.classList.add("dark-theme");
       toggleBtn.textContent = "☀️ My eyes! Go back!";
   } else {
       root.classList.remove("dark-theme");
+      body.classList.remove("dark-theme");
       toggleBtn.textContent = "🌙 Go Dark!";
   }
 
-  // Toggle theme
+  // Toggle on click
   toggleBtn.addEventListener("click", () => {
       const isDark = root.classList.toggle("dark-theme");
 
+      // Keep body in sync
+      body.classList.toggle("dark-theme", isDark);
+
       localStorage.setItem("theme", isDark ? "dark" : "light");
+
       toggleBtn.textContent = isDark
           ? "☀️ My eyes! Go back!"
           : "🌙 Go Dark!";
-
-      console.log(root.className);
-      console.log(getComputedStyle(root).getPropertyValue("--forest"));
   });
 }
 
