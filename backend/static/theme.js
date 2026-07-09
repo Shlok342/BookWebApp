@@ -162,17 +162,28 @@ export function initThemeToggle() {
   }
 
   // 2. Listen for clicks to toggle and save the new preference
-  toggleBtn.addEventListener('click', () => {
-    console.log('toggleBtn clicked');
-    const isDark = document.body.classList.toggle('dark-theme');
+  // toggleBtn.addEventListener('click', () => {
+  //   console.log('toggleBtn clicked');
+  //   const isDark = document.body.classList.toggle('dark-theme');
 
-    if (isDark) {
-      localStorage.setItem('theme', 'dark');
-      toggleBtn.textContent = '☀️ My eyes! Go back!';
-    } else {
-      localStorage.setItem('theme', 'light');
-      toggleBtn.textContent = '🌙 Go Dark!';
-    }
+  //   if (isDark) {
+  //     localStorage.setItem('theme', 'dark');
+  //     toggleBtn.textContent = '☀️ My eyes! Go back!';
+  //   } else {
+  //     localStorage.setItem('theme', 'light');
+  //     toggleBtn.textContent = '🌙 Go Dark!';
+  //   }
+  // });
+  toggleBtn.addEventListener("click", () => {
+    console.log("START");
+
+    document.body.classList.add("dark-theme");
+
+    console.log(document.body.className);
+    console.log(document.body.classList.contains("dark-theme"));
+    console.log(getComputedStyle(document.body).getPropertyValue("--forest"));
+
+    console.log("END");
   });
 }
 
