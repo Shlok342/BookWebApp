@@ -158,15 +158,19 @@
     to build the ultimate "Really Good Dark Theme" canvas.
   */
   body.dark-theme {
-    background: 
-      var(--noise-texture),
-      radial-gradient(circle at top right, var(--glow-top-right), transparent),
-      radial-gradient(circle at bottom left, var(--glow-bottom-left), transparent),
-      linear-gradient(180deg, var(--bg-gradient-top), var(--bg-gradient-mid), var(--bg-gradient-bottom));
-    background-blend-mode: overlay;
+    background:
+        var(--noise-texture),
+        radial-gradient(circle at top right, var(--glow-top-right), transparent),
+        radial-gradient(circle at bottom left, var(--glow-bottom-left), transparent),
+        linear-gradient(
+            180deg,
+            var(--bg-gradient-top),
+            var(--bg-gradient-mid),
+            var(--bg-gradient-bottom)
+        );
+
     color: var(--text-dark);
-    min-height: 100vh;
-  }
+}
   
   /* Mountain Silhouette Previews using your variables */
   .mountain-backdrop {

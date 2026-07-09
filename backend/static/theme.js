@@ -146,44 +146,35 @@ export function clearTheme(modal) {
   });
 }
 export function initThemeToggle() {
-  const toggleBtn = document.getElementById('dark-mode-toggle');
+  document.body.classList.toggle("dark-theme", isDark);
+
+  const toggleBtn = document.getElementById("dark-mode-toggle");
   if (!toggleBtn) return;
 
-  // 1. Check localStorage for a saved theme preference on page load
-  const savedTheme = localStorage.getItem('theme');
-  
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-theme');
-    toggleBtn.textContent = '☀️ My eyes! Go back!';
+  const root = document.documentElement;
+  document.body.classList.toggle("dark-theme", isDark);
+  // Load saved preference
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "dark") {
+      root.classList.add("dark-theme");
+      toggleBtn.textContent = "☀️ My eyes! Go back!";
   } else {
-    // Keeps it light if empty or explicitly set to 'light'
-    document.body.classList.remove('dark-theme');
-    toggleBtn.textContent = '🌙 Go Dark!';
+      root.classList.remove("dark-theme");
+      toggleBtn.textContent = "🌙 Go Dark!";
   }
 
-  // 2. Listen for clicks to toggle and save the new preference
-  // toggleBtn.addEventListener('click', () => {
-  //   console.log('toggleBtn clicked');
-  //   const isDark = document.body.classList.toggle('dark-theme');
-
-  //   if (isDark) {
-  //     localStorage.setItem('theme', 'dark');
-  //     toggleBtn.textContent = '☀️ My eyes! Go back!';
-  //   } else {
-  //     localStorage.setItem('theme', 'light');
-  //     toggleBtn.textContent = '🌙 Go Dark!';
-  //   }
-  // });
+  // Toggle theme
   toggleBtn.addEventListener("click", () => {
-    console.log("START");
+      const isDark = root.classList.toggle("dark-theme");
 
-    document.body.classList.add("dark-theme");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      toggleBtn.textContent = isDark
+          ? "☀️ My eyes! Go back!"
+          : "🌙 Go Dark!";
 
-    console.log(document.body.className);
-    console.log(document.body.classList.contains("dark-theme"));
-    console.log(getComputedStyle(document.body).getPropertyValue("--forest"));
-
-    console.log("END");
+      console.log(root.className);
+      console.log(getComputedStyle(root).getPropertyValue("--forest"));
   });
 }
 
