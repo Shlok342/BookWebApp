@@ -1,7 +1,7 @@
 #logoutBtn {
     background-color: transparent;
-    color: #5c5c5c; /* Soft dark gray to match the text vibe */
-    border: 1.5px solid #d3cfc8; /* Soft beige/gray border */
+    color: var(--text-mid); /* Soft dark gray to match the text vibe */
+    border: 1.5px solid var(--sand); /* Soft beige/gray border */
     border-radius: 8px; /* Smooth corners, but not a full pill to keep it distinct */
     padding: 6px 14px; /* Tight padding to keep it navbar-friendly */
     font-size: 14px;
@@ -13,13 +13,13 @@
 
 #logoutBtn:hover {
     background-color: color-mix(in srgb, var(--bark) 4%, transparent); /* Very subtle dark tint on hover */
-    color: #333333; /* Darkens the text slightly */
-    border-color: #b8b3ab; /* Darkens the border slightly */
+    color: var(--text-mid); /* Darkens the text slightly */
+    border-color: var(--sand); /* Darkens the border slightly */
 }
 .primary-btn {
-    background-color: #383430; /* Deep, professional dark charcoal/brown to match your heading */
-    color: #fcfaf5; /* Clean, soft off-white text */
-    border: 1px solid #383430;
+    background-color: var(--card-bg); /* Deep, professional dark charcoal/brown to match your heading */
+    color: var(--card-bg); /* Clean, soft off-white text */
+    border: 1px solid var(--card-bg);
     border-radius: 8px; /* Consistent smooth corners */
     padding: 10px 24px; /* Comfortable click area, but not overly large */
     font-size: 15px;
@@ -31,8 +31,8 @@
 }
 
 .primary-btn:hover {
-    background-color: #4a4540; /* Slightly lighter on hover so it feels interactive */
-    border-color: #4a4540;
+    background-color: var(--card-bg); /* Slightly lighter on hover so it feels interactive */
+    border-color: var(--card-bg);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12); /* Shadow expands slightly */
     transform: translateY(-1px); /* Gives it a nice tactile "lift" effect */
 }

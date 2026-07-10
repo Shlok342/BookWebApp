@@ -14,7 +14,7 @@
   
     font-family: 'Cormorant Garamond', serif;
     text-align: center;
-    color: #3d3527;
+    color : var(--text-dark);
   
     /* parchment texture */
     background:
@@ -64,7 +64,7 @@
     margin: 0;
     font-size: 38px;
     line-height: 1;
-    color: #36502f;
+    color :var(--forest);
     font-weight: 700;
     letter-spacing: 0.4px;
   }
@@ -73,7 +73,7 @@
   .mini-progress-popup p {
     margin: 10px 0 14px;
     font-size: 19px;
-    color: #7b684d;
+    color : var(--text-mid);
   }
   
   /* input wrapper vibe */
@@ -90,7 +90,7 @@
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(247, 242, 232, 0.9));
   
-    color: #2f2a22;
+    color: var(--text-dark);
     font-size: 24px;
     font-weight: 700;
     text-align: center;

@@ -147,7 +147,10 @@ export function clearTheme(modal) {
 }
 export function initThemeToggle() {
   const toggleBtn = document.getElementById("dark-mode-toggle");
-  if (!toggleBtn) return;
+  if (!toggleBtn || toggleBtn.dataset.themeInit) return;
+  toggleBtn.dataset.themeInit = "true";
+  
+  
 
   const root = document.documentElement;
 

@@ -209,8 +209,8 @@
     font-family: inherit;
     font-size: 0.85rem;
     font-weight: 500;
-    color: #3b4a30; 
-    background-color: #fbfbf9; 
+    color : var(--text-dark) ;
+    background-color: var(--card-bg); 
     border: 1px solid #dce3d6; 
     border-radius: 100vh;
     cursor: pointer;

@@ -3,7 +3,7 @@
 #sortOption {
   /* Typography & Colors */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #2c2c2c;
+  color: var(--text-dark);
   /* Premium charcoal text (softer than pure black) */
   background-color: var(--parchment);
   /* Crisp white background to pop against the cream canvas */

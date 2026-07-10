@@ -150,8 +150,8 @@
   
   /* cancel */
   .cancel-btn {
-    color: #6d5d45;
-    background: linear-gradient(145deg, #ece4d5, #e2d8c6);
+    color :var(--text-mid);
+    background: var(--card-bg);
   }
   
   .cancel-btn:hover {
