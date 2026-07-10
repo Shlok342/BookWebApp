@@ -3,7 +3,7 @@ import { openBookModal} from "../integration_handler/open_book.js";
 import { openQuotesModal} from "../modal_helper/quotesModal.js";
 import { showDeleteConfirm } from "../frontend_helpers/show_delete_popup.js";
 import { renderTagOptions } from "../modal_helper/tagsModal.js";
-import { getStats} from "../modal_helper/statsModal.js";
+
 import { getBooks } from "../modal_helper/getBooks.js";
 import { API } from "../api_service/api.js";
 import { TOAST } from "../shows_message/toast.js";
@@ -50,7 +50,7 @@ export function createCardButtons(book){
             await API.deleteBook(book.id);
     
             await getBooks();
-            await getStats();
+            window.dispatchEvent(new CustomEvent("refresh-stats"));
     
         } catch (err) {
             console.error("Delete failed:", err);

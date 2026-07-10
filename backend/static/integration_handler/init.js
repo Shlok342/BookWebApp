@@ -1,4 +1,4 @@
-import { getStats } from "../modal_helper/statsModal.js";
+
 import { getChallenges } from "../modal_helper/challengeModal.js";
 import { getBooks } from "../modal_helper/getBooks.js";
 import {initQuotesModal} from "../modal_helper/quotesModal.js";

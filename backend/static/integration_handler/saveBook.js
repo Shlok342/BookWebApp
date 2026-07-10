@@ -1,13 +1,13 @@
 import { TOAST } from "../shows_message/toast.js";
 import { API } from "../api_service/api.js";
 import { getBooks } from "../modal_helper/getBooks.js";
-import { getStats } from "../modal_helper/statsModal.js";
+
 import { addBookModal } from "../circular_import_helper.js";
 import { closeModal } from "../close.js";
 export async function saveBookHandler() {
 
   const saveBookBtn =
-    document.getElementById("saveBook");
+    document.getElementById("saveBook") 
 
   const totalPages = parseInt(
     document.getElementById("totalPagesInput").value
@@ -60,7 +60,8 @@ export async function saveBookHandler() {
     closeModal(addBookModal);
 
     await getBooks();
-    await getStats();
+    window.dispatchEvent(new CustomEvent("refresh-stats"));
+    
 
   } catch (err) {
 

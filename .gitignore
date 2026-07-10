@@ -9,6 +9,9 @@ __pycache__/
 echo ".venv/" >> .gitignore
 backend/.env
 
+#node-modules
+backend/static/node_modules/
+
 
 # OS junk
 .DS_Store

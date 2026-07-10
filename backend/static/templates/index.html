@@ -48,14 +48,20 @@
   
 
 </div>
-{% include "modals/stats_modal.html" %}
+<div id="react-stats-modal"></div>
 {% include "components/footer.html" %}
 
 {% include "modals/add_book_modal.html" %}
 {% include "modals/quotes_modal.html" %}
 {% include "modals/notes_modal.html" %}
 {% include "modals/tags_modal.html" %}
+
 <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"></script>
+
+<script type="module" src="/static/dist/stats-modal-bundle.js"></script>
+
+
+<!-- Your existing vanilla layout script stays exactly the same -->
 <script type="module" src="/static/main.js"></script>
 </body>
 </html>
